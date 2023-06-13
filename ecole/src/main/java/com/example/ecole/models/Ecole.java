@@ -1,6 +1,6 @@
-package models;
-import jakarta.persistence.*;
+package com.example.ecole.models;
 
+import jakarta.persistence.*;
 @Entity
 @Table(name="ecole")
 public class Ecole {
@@ -68,4 +68,9 @@ public class Ecole {
         this.type = type;
     }
 
+    public  Ecole(){
+
+    }
+
 }
+
