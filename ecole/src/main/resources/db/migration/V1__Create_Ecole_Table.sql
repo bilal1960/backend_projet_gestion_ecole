@@ -5,3 +5,5 @@ CREATE TABLE ecole (
   nombre_etudiants INT NOT NULL,
   type VARCHAR(30) NOT NULL
 );
+
+
