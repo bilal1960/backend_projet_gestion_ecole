@@ -3,5 +3,6 @@
   <component name="JpaLiquibaseChangesConfig">
     <exclude-change idName="personne" tagName="createTable" />
     <exclude-change idName="personne#prenom, nom" tagName="addUniqueConstraint" />
+    <exclude-change idName="ecole" tagName="createTable" />
   </component>
 </project>
