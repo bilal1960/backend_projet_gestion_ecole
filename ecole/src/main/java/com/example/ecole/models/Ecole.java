@@ -1,13 +1,16 @@
 package com.example.ecole.models;
 
 import jakarta.persistence.*;
+
+import java.util.UUID;
+
 @Entity
 @Table(name="ecole")
 public class Ecole {
     @Id
-    @Column(name="ecoleid")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name="id")
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
     @Basic
     @Column(length=30, nullable=false)
     private String nom;
@@ -28,7 +31,7 @@ public class Ecole {
         this.type = type;
     }
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
@@ -48,7 +51,7 @@ public class Ecole {
         return type;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
