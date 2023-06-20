@@ -1,2 +1,4 @@
-GET http://localhost:8080/add/ecole
+
+GET  http://localhost:8080/add/personnes
 accept: application/json
+

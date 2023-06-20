@@ -1,13 +1,10 @@
 package com.example.ecole.repository;
-import com.example.ecole.models.Ecole;
+import com.example.ecole.models.Personne;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
-
 import java.util.UUID;
 
-@Repository
-public interface EcoleRepository extends JpaRepository<Ecole, UUID> {
-    Page<Ecole> findAll(Pageable pageable);
+public interface PersonneRepository extends JpaRepository<Personne, UUID> {
+    Page<Personne> findAll(Pageable pageable);
 }
