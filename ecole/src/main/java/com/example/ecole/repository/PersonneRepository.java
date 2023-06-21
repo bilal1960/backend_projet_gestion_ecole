@@ -8,3 +8,4 @@ import java.util.UUID;
 public interface PersonneRepository extends JpaRepository<Personne, UUID> {
     Page<Personne> findAll(Pageable pageable);
 }
+

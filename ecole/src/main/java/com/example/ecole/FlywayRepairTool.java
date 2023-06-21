@@ -5,7 +5,7 @@ public class FlywayRepairTool {
     public static void main(String[] args) {
         // Configuration de Flyway
         Flyway flyway = Flyway.configure()
-                .dataSource("jdbc:h2:C:/Users/bilal/Desktop/DB_projet", "bilal", "lolo")
+                .dataSource("jdbc:h2:mem:41f6e242-3f46-4867-ad5c-793ff0142a47", "bilal", "lolo")
                 .load();
 
         // Réparation de la base de données

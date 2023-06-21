@@ -17,7 +17,6 @@ public class PersonneAjouterController {
     public PersonneAjouterController(PersonneRepository personneRepository) {
         this.personneRepository = personneRepository;
     }
-
     @GetMapping("/personnes")
     public ResponseEntity<List<Personne>> getAllPersonnes(Authentication authentication) {
         // Récupérer les données de votre base de données ou de votre source de données
@@ -26,8 +25,22 @@ public class PersonneAjouterController {
         // Retourner les données sous forme de ResponseEntity
         return ResponseEntity.ok(personnes);
     }
+    @PostMapping("/personnes")
+    public ResponseEntity<Personne> addPersonne(@RequestBody Personne personne, UriComponentsBuilder builder) {
+        // Gérer l'ajout de la personne en utilisant le modèle et le référentiel appropriés
+        personne.setId(UUID.randomUUID()); // Générez un ID unique pour la personne
 
-    // Autres méthodes pour ajouter, supprimer ou mettre à jour les données
+        // Enregistrez la personne dans votre base de données ou source de données
+        personneRepository.save(personne);
+
+        // Construire l'URI de la nouvelle personne créée
+        URI location = builder.path("/add/personnes/{id}").buildAndExpand(personne.getId()).toUri();
+
+        // Retourner une réponse avec l'URI de la nouvelle personne créée
+        return ResponseEntity.created(location).body(personne);
+    }
+
+
 
 }
 
