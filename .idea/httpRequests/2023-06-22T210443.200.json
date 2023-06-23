@@ -1,0 +1,20 @@
+[
+  {
+    "id": "e064d9b2-359e-4a94-9665-7f6a7adf6d85",
+    "prenom": "lolu",
+    "nom": "Curto",
+    "naissance": "2000-07-09",
+    "nationalite": "Belge",
+    "adresse": "place",
+    "sexe": "male"
+  },
+  {
+    "id": "d5484ce3-7d49-49ba-bc5a-1bc01a4e5c85",
+    "prenom": "lalu0",
+    "nom": "Curto",
+    "naissance": "2000-07-09",
+    "nationalite": "Belge",
+    "adresse": "place",
+    "sexe": "male"
+  }
+]

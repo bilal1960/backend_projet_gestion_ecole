@@ -1,6 +1,7 @@
 package com.example.ecole.models;
 import jakarta.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
 import  java.util.UUID;
 @Entity
 @Table(name="personne", uniqueConstraints = @UniqueConstraint(columnNames = {"prenom", "nom"}))
@@ -22,15 +23,19 @@ public class Personne {
     private  String adresse;
     @Column(name = "sexe", nullable = false)
     private  String sexe;
+    @ManyToMany
+    @JoinTable(name = "personne_matiere", joinColumns = @JoinColumn(name = "personne_id"),
+            inverseJoinColumns = @JoinColumn(name = "matiere_id"))
+    private List<Matiere> matieres;
 
 
-    public Personne(UUID id, String prenom, String nom, LocalDate naissance, String nationalite, String adresse, String sexe) {
-        this.id = id;
+    public Personne( String prenom, String nom, LocalDate naissance, String nationalite, String adresse, String sexe, List<Matiere> matieres) {
         this.prenom = prenom;
         this.nom = nom;
         this.naissance = naissance;
         this.nationalite = nationalite;
         this.adresse = adresse;
+        this.matieres = matieres;
         this.sexe = sexe;
     }
     protected  Personne(){
@@ -92,6 +97,8 @@ public class Personne {
     public void setSexe(String sexe) {
         this.sexe = sexe;
     }
+
+    public List<Matiere> getMatieres(){return  matieres;}
     @Override
     public String toString() {
         return "Personne{" +

@@ -1,0 +1,29 @@
+[
+  {
+    "id": "0a92b231-623d-4280-99ad-70c2f46efda8",
+    "prenom": "bilal",
+    "nom": "Curto",
+    "naissance": "1996-08-09",
+    "nationalite": "Belge",
+    "adresse": "place",
+    "sexe": "male"
+  },
+  {
+    "id": "3b68d585-4317-4c74-b88a-ecaae8eaa117",
+    "prenom": "Roland",
+    "nom": "lolo",
+    "naissance": "2000-07-09",
+    "nationalite": "Belge",
+    "adresse": "ppp",
+    "sexe": "male"
+  },
+  {
+    "id": "85bb6658-e45b-4c36-8343-c78a784fbd24",
+    "prenom": "lolo",
+    "nom": "Louis",
+    "naissance": "2000-07-09",
+    "nationalite": "Belge",
+    "adresse": "place",
+    "sexe": "male"
+  }
+]
