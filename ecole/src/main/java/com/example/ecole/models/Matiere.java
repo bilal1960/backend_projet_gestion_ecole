@@ -15,21 +15,16 @@ public class Matiere {
     @Column(name = "nom", nullable = false)
     private String nom;
     @Column(name = "debut", nullable = false)
+    @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate debut;
     @Column(name = "fin", nullable = false)
+    @JsonFormat(pattern = "dd/MM/yyyy")
     private  LocalDate fin;
     @ManyToMany(mappedBy = "matieres")
     private List<Personne> personnes;
-    public String getUsername() {
-        return nom;
-    }
 
     protected Matiere(){
 
-    }
-
-    public  void  setNom(String nom){
-        this.nom = nom;
     }
 
   public   Matiere(String nom, LocalDate debut, LocalDate fin, List<Personne> personnes){
@@ -53,8 +48,10 @@ public class Matiere {
         this.id = id;
     }
 
+    public String getNom(){return  nom;}
 
-
-
+    public  void  setNom(String nom){
+        this.nom = nom;
+    }
 
 }

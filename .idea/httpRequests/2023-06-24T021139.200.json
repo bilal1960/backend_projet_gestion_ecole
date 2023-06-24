@@ -1,0 +1,50 @@
+[
+  {
+    "id": "b52a5ede-cc1d-4a2e-bda0-6386c6b5d9a2",
+    "nom": "Géo",
+    "debut": "09/09/2023",
+    "fin": "01/01/2024",
+    "personnes": [],
+    "username": "Géo"
+  },
+  {
+    "id": "db01abf9-14ac-47ef-b5ec-3de4883fd8c8",
+    "nom": "Science",
+    "debut": "09/09/2023",
+    "fin": "01/01/2024",
+    "personnes": [],
+    "username": "Science"
+  },
+  {
+    "id": "2b757405-1bcb-4d44-bd98-0c66b1d0f2a4",
+    "nom": "Math",
+    "debut": "09/09/2023",
+    "fin": "01/01/2024",
+    "personnes": [],
+    "username": "Math"
+  },
+  {
+    "id": "8dabc0ab-0724-4b77-9114-1aa742bd79f1",
+    "nom": "Histoire",
+    "debut": "09/09/2023",
+    "fin": "01/01/2024",
+    "personnes": [],
+    "username": "Histoire"
+  },
+  {
+    "id": "49de26bc-6f6a-423d-96a7-8adc458b55d5",
+    "nom": "Géométrie",
+    "debut": "09/09/2023",
+    "fin": "01/01/2024",
+    "personnes": [],
+    "username": "Géométrie"
+  },
+  {
+    "id": "f0a989d0-d021-4b35-9324-375c7b770f81",
+    "nom": "Analyse",
+    "debut": "09/09/2023",
+    "fin": "01/01/2024",
+    "personnes": [],
+    "username": "Analyse"
+  }
+]
