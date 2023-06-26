@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head><title>HTTP Status 400 – Bad Request</title>
+    <style type="text/css">body {
+        font-family: Tahoma, Arial, sans-serif;
+    }
+
+    h1, h2, h3, b {
+        color: white;
+        background-color: #525D76;
+    }
+
+    h1 {
+        font-size: 22px;
+    }
+
+    h2 {
+        font-size: 16px;
+    }
+
+    h3 {
+        font-size: 14px;
+    }
+
+    p {
+        font-size: 12px;
+    }
+
+    a {
+        color: black;
+    }
+
+    .line {
+        height: 1px;
+        background-color: #525D76;
+        border: none;
+    }</style>
+</head>
+<body><h1>HTTP Status 400 – Bad Request</h1>
+<hr class="line"/>
+<p><b>Type</b> Exception Report</p>
+<p><b>Message</b> The HTTP header line [bearer
+    eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InlUZXVfaktnaWdaQ1Y5Uk55Q19OWCJ9.eyJpc3MiOiJodHRwczovL2JpbGFsLXByb2ppbnQtMjIyMy5ldS5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8NjQ4ZWRmZmMzY2VkZjlmM2FkYzdiZmY0IiwiYXVkIjpbImh0dHBzOi8vZWNvbGUvYXBpIiwiaHR0cHM6Ly9iaWxhbC1wcm9qaW50LTIyMjMuZXUuYXV0aDAuY29tL3VzZXJpbmZvIl0sImlhdCI6MTY4NzcwNzg3NCwiZXhwIjoxNjg3Nzk0Mjc0LCJhenAiOiIydTF4SFl6bWZSQ0hpMjhyMDEyR09PbWNXRjA0dTVwcCIsInNjb3BlIjoib3BlbmlkIHdyaXRlOm1hdGllcmUgcmVhZDphbGwtbWF0aWVyZSBvZmZsaW5lX2FjY2VzcyJ9.BN_AGj_VSrZ_yqJkMuK4yX9URuH99lMlWqlS34ZdkjQW77iNvmT3gMyIPrcrbr1VcSX0-iqCxbpYWY83vM25qjL135b-96CtXJavzLc4lv7BWkhC9a7o9eiXqPo1d7PySdomL7C4BIQyWNHNGTteX1tbAIlyqSgvnBBkrUb3Ydl75YdAquxeUrsGFTg8KIvIvNu4O3E5Fc5aI6ymeo2gLdlDzdDNtcFAYEBzZZHnMniXefJzAwV2GIcjJmWFzRWZ43s9oztMCjibl6FlEi8v2zxO1bd6Ojfiq8pLHOfIcGGnsmSy8gBqPE0dBmYQIwEDrUyNqNMCk338KirIauYlWg:
+    ] does not conform to RFC 7230 and has been ignored.</p>
+<p><b>Description</b> The server cannot or will not process the request due to something that is perceived to be a
+    client error (e.g., malformed request syntax, invalid request message framing, or deceptive request routing).</p>
+<p><b>Exception</b></p>
+<pre>java.lang.IllegalArgumentException: The HTTP header line [bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InlUZXVfaktnaWdaQ1Y5Uk55Q19OWCJ9.eyJpc3MiOiJodHRwczovL2JpbGFsLXByb2ppbnQtMjIyMy5ldS5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8NjQ4ZWRmZmMzY2VkZjlmM2FkYzdiZmY0IiwiYXVkIjpbImh0dHBzOi8vZWNvbGUvYXBpIiwiaHR0cHM6Ly9iaWxhbC1wcm9qaW50LTIyMjMuZXUuYXV0aDAuY29tL3VzZXJpbmZvIl0sImlhdCI6MTY4NzcwNzg3NCwiZXhwIjoxNjg3Nzk0Mjc0LCJhenAiOiIydTF4SFl6bWZSQ0hpMjhyMDEyR09PbWNXRjA0dTVwcCIsInNjb3BlIjoib3BlbmlkIHdyaXRlOm1hdGllcmUgcmVhZDphbGwtbWF0aWVyZSBvZmZsaW5lX2FjY2VzcyJ9.BN_AGj_VSrZ_yqJkMuK4yX9URuH99lMlWqlS34ZdkjQW77iNvmT3gMyIPrcrbr1VcSX0-iqCxbpYWY83vM25qjL135b-96CtXJavzLc4lv7BWkhC9a7o9eiXqPo1d7PySdomL7C4BIQyWNHNGTteX1tbAIlyqSgvnBBkrUb3Ydl75YdAquxeUrsGFTg8KIvIvNu4O3E5Fc5aI6ymeo2gLdlDzdDNtcFAYEBzZZHnMniXefJzAwV2GIcjJmWFzRWZ43s9oztMCjibl6FlEi8v2zxO1bd6Ojfiq8pLHOfIcGGnsmSy8gBqPE0dBmYQIwEDrUyNqNMCk338KirIauYlWg: ] does not conform to RFC 7230 and has been ignored.
+	org.apache.coyote.http11.Http11InputBuffer.skipLine(Http11InputBuffer.java:1070)
+	org.apache.coyote.http11.Http11InputBuffer.parseHeader(Http11InputBuffer.java:900)
+	org.apache.coyote.http11.Http11InputBuffer.parseHeaders(Http11InputBuffer.java:591)
+	org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:286)
+	org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:894)
+	org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1741)
+	org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191)
+	org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	java.base&#47;java.lang.Thread.run(Thread.java:1623)
+</pre>
+<p><b>Note</b> The full stack trace of the root cause is available in the server logs.</p>
+<hr class="line"/>
+<h3>Apache Tomcat/10.1.8</h3></body>
+</html>

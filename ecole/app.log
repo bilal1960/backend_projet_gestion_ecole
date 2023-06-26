@@ -1,3 +1,40 @@
 2023-06-23 13:12:51,701 WARN [main] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration [JpaBaseConfiguration.java:231] spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
 2023-06-23 14:31:30,381 WARN [main] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration [JpaBaseConfiguration.java:231] spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
 2023-06-23 14:41:50,008 WARN [main] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration [JpaBaseConfiguration.java:231] spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-06-26 00:24:13,962 INFO [main] o.s.t.c.s.AnnotationConfigContextLoaderUtils [AnnotationConfigContextLoaderUtils.java:83] Could not detect default configuration classes for test class [com.example.ecole.EcoleApplicationTests]: EcoleApplicationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2023-06-26 00:24:14,398 INFO [main] o.s.b.t.c.SpringBootTestContextBootstrapper [SpringBootTestContextBootstrapper.java:248] Found @SpringBootConfiguration com.example.ecole.EcoleApplication for test class com.example.ecole.EcoleApplicationTests
+2023-06-26 00:24:15,498 INFO [main] c.e.e.EcoleApplicationTests [StartupInfoLogger.java:51] Starting EcoleApplicationTests using Java 20.0.1 with PID 34944 (started by bilal in C:\Users\bilal\IdeaProjects\ecole(1)\ecole)
+2023-06-26 00:24:15,499 INFO [main] c.e.e.EcoleApplicationTests [SpringApplication.java:633] No active profile set, falling back to 1 default profile: "default"
+2023-06-26 00:24:19,903 INFO [main] o.s.d.r.c.RepositoryConfigurationDelegate [RepositoryConfigurationDelegate.java:138] Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-06-26 00:24:20,145 INFO [main] o.s.d.r.c.RepositoryConfigurationDelegate [RepositoryConfigurationDelegate.java:208] Finished Spring Data repository scanning in 160 ms. Found 3 JPA repository interfaces.
+2023-06-26 00:24:24,648 INFO [main] o.f.c.i.l.VersionPrinter [Slf4jLog.java:37] Flyway Community Edition 9.16.3 by Redgate
+2023-06-26 00:24:24,649 INFO [main] o.f.c.i.l.VersionPrinter [Slf4jLog.java:37] See release notes here: https://rd.gt/416ObMi
+2023-06-26 00:24:24,649 INFO [main] o.f.c.i.l.VersionPrinter [Slf4jLog.java:37] 
+2023-06-26 00:24:24,658 INFO [main] c.z.h.HikariDataSource [HikariDataSource.java:110] HikariPool-1 - Starting...
+2023-06-26 00:24:24,965 INFO [main] c.z.h.p.HikariPool [HikariPool.java:565] HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:41f6e242-3f46-4867-ad5c-793ff0142a47 user=BIBI
+2023-06-26 00:24:24,968 INFO [main] c.z.h.HikariDataSource [HikariDataSource.java:123] HikariPool-1 - Start completed.
+2023-06-26 00:24:25,055 INFO [main] o.f.c.i.d.b.BaseDatabaseType [Slf4jLog.java:37] Database: jdbc:h2:mem:41f6e242-3f46-4867-ad5c-793ff0142a47 (H2 2.1)
+2023-06-26 00:24:25,315 INFO [main] o.f.c.i.s.JdbcTableSchemaHistory [Slf4jLog.java:37] Schema history table "PUBLIC"."flyway_schema_history" does not exist yet
+2023-06-26 00:24:25,334 INFO [main] o.f.c.i.c.DbValidate [Slf4jLog.java:37] Successfully validated 4 migrations (execution time 00:00.044s)
+2023-06-26 00:24:25,358 INFO [main] o.f.c.i.s.JdbcTableSchemaHistory [Slf4jLog.java:37] Creating Schema History table "PUBLIC"."flyway_schema_history" ...
+2023-06-26 00:24:25,472 INFO [main] o.f.c.i.c.DbMigrate [Slf4jLog.java:37] Current version of schema "PUBLIC": << Empty Schema >>
+2023-06-26 00:24:25,516 INFO [main] o.f.c.i.c.DbMigrate [Slf4jLog.java:37] Migrating schema "PUBLIC" to version "1 - create ecole"
+2023-06-26 00:24:25,559 INFO [main] o.f.c.i.c.DbMigrate [Slf4jLog.java:37] Migrating schema "PUBLIC" to version "2 - create personne"
+2023-06-26 00:24:25,575 INFO [main] o.f.c.i.c.DbMigrate [Slf4jLog.java:37] Migrating schema "PUBLIC" to version "3 - create table matiere"
+2023-06-26 00:24:25,590 INFO [main] o.f.c.i.c.DbMigrate [Slf4jLog.java:37] Migrating schema "PUBLIC" to version "4 - create table Personne matiere"
+2023-06-26 00:24:25,673 INFO [main] o.f.c.i.c.DbMigrate [Slf4jLog.java:37] Successfully applied 4 migrations to schema "PUBLIC", now at version v4 (execution time 00:00.210s)
+2023-06-26 00:24:26,647 INFO [main] o.h.j.i.u.LogHelper [LogHelper.java:31] HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-06-26 00:24:26,944 INFO [main] o.h.Version [Version.java:44] HHH000412: Hibernate ORM core version 6.2.2.Final
+2023-06-26 00:24:26,997 INFO [main] o.h.c.Environment [Environment.java:191] HHH000406: Using bytecode reflection optimizer
+2023-06-26 00:24:27,709 INFO [main] o.h.b.i.BytecodeProviderInitiator [BytecodeProviderInitiator.java:53] HHH000021: Bytecode provider name : bytebuddy
+2023-06-26 00:24:28,169 INFO [main] o.s.o.j.p.SpringPersistenceUnitInfo [SpringPersistenceUnitInfo.java:87] No LoadTimeWeaver setup: ignoring JPA class transformer
+2023-06-26 00:24:28,317 INFO [main] o.h.o.dialect [DialectFactoryImpl.java:93] HHH035001: Using dialect: org.hibernate.dialect.H2Dialect, version: 2.1.214
+2023-06-26 00:24:28,759 INFO [main] o.h.b.i.BytecodeProviderInitiator [BytecodeProviderInitiator.java:53] HHH000021: Bytecode provider name : bytebuddy
+2023-06-26 00:24:29,801 INFO [main] o.h.e.t.j.p.i.JtaPlatformInitiator [JtaPlatformInitiator.java:51] HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2023-06-26 00:24:29,872 INFO [main] o.s.o.j.LocalContainerEntityManagerFactoryBean [AbstractEntityManagerFactoryBean.java:437] Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-06-26 00:24:33,492 WARN [main] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration [JpaBaseConfiguration.java:231] spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-06-26 00:24:40,827 INFO [main] o.s.s.w.DefaultSecurityFilterChain [DefaultSecurityFilterChain.java:54] Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@4fc1eee5, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@120661d2, org.springframework.security.web.context.SecurityContextHolderFilter@726ee6cf, org.springframework.security.web.header.HeaderWriterFilter@6e4ac3f5, org.springframework.security.web.csrf.CsrfFilter@5b9ca528, org.springframework.security.web.authentication.logout.LogoutFilter@6137dc84, org.springframework.security.oauth2.server.resource.web.authentication.BearerTokenAuthenticationFilter@599fab92, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@624268ab, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@137db13f, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@36618b3b, org.springframework.security.web.access.ExceptionTranslationFilter@6b8683b8, org.springframework.security.web.access.intercept.AuthorizationFilter@2e0de20d]
+2023-06-26 00:24:41,694 INFO [main] c.e.e.EcoleApplicationTests [StartupInfoLogger.java:57] Started EcoleApplicationTests in 27.057 seconds (process running for 31.134)
+2023-06-26 00:24:42,901 INFO [SpringApplicationShutdownHook] o.s.o.j.LocalContainerEntityManagerFactoryBean [AbstractEntityManagerFactoryBean.java:650] Closing JPA EntityManagerFactory for persistence unit 'default'
+2023-06-26 00:24:42,923 INFO [SpringApplicationShutdownHook] c.z.h.HikariDataSource [HikariDataSource.java:350] HikariPool-1 - Shutdown initiated...
+2023-06-26 00:24:42,941 INFO [SpringApplicationShutdownHook] c.z.h.HikariDataSource [HikariDataSource.java:352] HikariPool-1 - Shutdown completed.
