@@ -18,8 +18,6 @@ import com.example.ecole.models.Matiere;
 import static org.springframework.security.authorization.AuthorityReactiveAuthorizationManager.hasAuthority;
 import org.springframework.data.domain.Pageable;
 
-
-
 @RestController
 @RequestMapping("/add")
 public class MatiereController {
@@ -31,7 +29,6 @@ public class MatiereController {
     }
 
     @GetMapping("/matieres")
-
     public ResponseEntity<List<Matiere>> getAllMatieres(Authentication authentication) {
         if (hasAuthority(authentication, "SCOPE_read:matiere")) {
             List<Matiere> matieres = matiererepository.findAll();
@@ -69,15 +66,7 @@ public class MatiereController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
     }
-
-
-
-
     private static boolean hasAuthority(Authentication authentication, String expectedAuthority) {
         return authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals(expectedAuthority));
     }
-
-
-
-
 }

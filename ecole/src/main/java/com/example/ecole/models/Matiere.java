@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.util.UUID;
 import  java.util.List;
 
+
 @Entity
 @Table(name = "matiere")
 public class Matiere {
@@ -22,6 +23,10 @@ public class Matiere {
     private  LocalDate fin;
     @ManyToMany(mappedBy = "matieres")
     private List<Personne> personnes;
+    @OneToOne
+    @JoinColumn(name = "inscriptions_id")
+
+    private  Inscription inscriptions;
 
     protected Matiere(){
 

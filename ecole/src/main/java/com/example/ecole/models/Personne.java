@@ -28,8 +28,8 @@ public class Personne {
             inverseJoinColumns = @JoinColumn(name = "matiere_id"))
     private List<Matiere> matieres;
 
-    //@OneToMany(mappedBy = "personnes")
-   // private List<Inscription> inscriptions;
+    @OneToMany(mappedBy = "personnes")
+    private List<Inscription> inscriptions;
 
 
     public Personne(String prenom, String nom, LocalDate naissance, String nationalite, String adresse, String sexe, List<Matiere> matieres) {
@@ -40,7 +40,7 @@ public class Personne {
         this.adresse = adresse;
         this.matieres = matieres;
         this.sexe = sexe;
-       // this.inscriptions = inscriptions;
+        this.inscriptions = inscriptions;
     }
     protected  Personne(){
 
@@ -117,11 +117,11 @@ public class Personne {
     }
 
 
-    //public List<Inscription> getInscriptions() {
-   //     return inscriptions;
-   // }
+    public List<Inscription> getInscriptions() {
+        return inscriptions;
+    }
 
-   // public void setInscriptions(List<Inscription> inscriptions) {
-    //    this.inscriptions = inscriptions;
-   // }
+    public void setInscriptions(List<Inscription> inscriptions) {
+        this.inscriptions = inscriptions;
+   }
 }
