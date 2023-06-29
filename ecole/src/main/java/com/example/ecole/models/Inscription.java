@@ -3,6 +3,8 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 @Entity
 @Table(name="inscription")
 public class Inscription {
@@ -15,6 +17,7 @@ public class Inscription {
 @Column(name = "prenom",nullable = false)
     private  String prenom;
 @Column(name = "naissance", nullable = false)
+@JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate naissance;
 @Column(name = "nationalite", nullable = false)
     private  String   nationalite;

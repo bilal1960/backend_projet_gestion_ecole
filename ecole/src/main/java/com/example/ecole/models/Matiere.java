@@ -23,7 +23,7 @@ public class Matiere {
     private  LocalDate fin;
     @ManyToMany(mappedBy = "matieres")
     private List<Personne> personnes;
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "inscriptions_id")
 
     private  Inscription inscriptions;
