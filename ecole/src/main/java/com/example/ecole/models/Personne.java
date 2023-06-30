@@ -44,7 +44,7 @@ public class Personne {
         this.sexe = sexe;
         this.inscriptions = inscriptions;
     }
-    protected  Personne(){
+    public   Personne(){
 
     }
 
@@ -115,4 +115,6 @@ public class Personne {
     public void setInscriptions(List<Inscription> inscriptions) {
         this.inscriptions = inscriptions;
    }
+
+
 }

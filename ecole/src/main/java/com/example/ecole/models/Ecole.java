@@ -17,18 +17,22 @@ public class Ecole {
     @Basic
     @Column(length=30, nullable=false)
     private String adresse;
-    private int nombreEtudiants;
     @Basic
     @Column(length=30, nullable=false)
     private  String type;
+    @Column(length = 30, nullable = false)
+    private String mail;
+    @Column(length = 30, nullable = false)
+    private  String number;
 
 
 
-    public Ecole(String nom, String adresse, int nombreEtudiants, String type) {
+    public Ecole(String nom, String adresse, String mail, String number, String type) {
         this.nom = nom;
         this.adresse = adresse;
-        this.nombreEtudiants = nombreEtudiants;
+        this.mail = mail;
         this.type = type;
+        this.number = number;
     }
 
     public UUID getId() {
@@ -43,9 +47,6 @@ public class Ecole {
         return adresse;
     }
 
-    public int getNombreEtudiants() {
-        return nombreEtudiants;
-    }
 
     public String getType() {
         return type;
@@ -63,9 +64,6 @@ public class Ecole {
         this.adresse = adresse;
     }
 
-    public void setNombreEtudiants(int nombreEtudiants) {
-        this.nombreEtudiants = nombreEtudiants;
-    }
 
     public void setType(String type) {
         this.type = type;
@@ -75,5 +73,20 @@ public class Ecole {
 
     }
 
+    public String getNumber() {
+        return number;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
+    }
+
+    public String getMail() {
+        return mail;
+    }
+
+    public void setMail(String mail) {
+        this.mail = mail;
+    }
 }
 
