@@ -28,7 +28,7 @@ public class EcoleController {
         this.ecoleRepository = ecoleRepository;
     }
 
-@GetMapping("/ecole")
+@GetMapping
     public ResponseEntity<List<Ecole>> getAllMatieres(Authentication authentication) {
         List<Ecole> ecoles = ecoleRepository.findAll();
         logger.info("succès de l'affichage de la liste");

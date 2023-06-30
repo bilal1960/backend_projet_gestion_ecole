@@ -36,7 +36,7 @@ public class Inscription {
     @JoinColumn(name= "inscriptions_id")
     private  List<Matiere> matieres;
 
-    protected  Inscription(){
+    public   Inscription(){
 
     }
 

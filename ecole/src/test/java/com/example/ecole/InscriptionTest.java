@@ -1,5 +1,4 @@
 package com.example.ecole;
-
 import com.example.ecole.models.Inscription;
 import com.example.ecole.models.Matiere;
 import com.example.ecole.models.Personne;

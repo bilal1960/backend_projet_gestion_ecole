@@ -28,7 +28,7 @@ public class Matiere {
 
     private  Inscription inscriptions;
 
-    protected Matiere(){
+    public  Matiere(){
 
     }
 
