@@ -1,4 +1,5 @@
 package com.example.ecole.models;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
@@ -15,6 +16,7 @@ public class Personne {
     @Column(name = "nom", nullable = false)
 
     private  String nom;
+    @JsonFormat(pattern = "dd/MM/yyyy")
     @Column(name = "naissance", nullable = false)
     private LocalDate naissance;
     @Column(name = "nationalite", nullable = false)
@@ -103,18 +105,7 @@ public class Personne {
     }
 
     public List<Matiere> getMatieres(){return  matieres;}
-    @Override
-    public String toString() {
-        return "Personne{" +
-                "id=" + id +
-                ", prenom='" + prenom + '\'' +
-                ", nom='" + nom + '\'' +
-                ", naissance=" + naissance +
-                ", nationalite='" + nationalite + '\'' +
-                ", adresse='" + adresse + '\'' +
-                ", sexe='" + sexe + '\'' +
-                '}';
-    }
+
 
 
     public List<Inscription> getInscriptions() {

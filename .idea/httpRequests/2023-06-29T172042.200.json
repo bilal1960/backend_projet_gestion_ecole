@@ -1,0 +1,62 @@
+[
+  {
+    "id": "0631cef5-78b8-4b12-a798-8938c2424219",
+    "nom": "Curto",
+    "prenom": "Bilal",
+    "naissance": "09/08/1996",
+    "nationalite": "Belge",
+    "sexe": "male",
+    "adresse": "place",
+    "commune": "Uccle",
+    "minerval": 200.3,
+    "personne": null
+  },
+  {
+    "id": "8fbc5e06-a4e8-4949-91df-8d9af7ba7a5d",
+    "nom": "Curto",
+    "prenom": "lalu",
+    "naissance": "09/08/1996",
+    "nationalite": "Belge",
+    "sexe": "male",
+    "adresse": "place",
+    "commune": "Uccle",
+    "minerval": 200.3,
+    "personne": null
+  },
+  {
+    "id": "8ee7ebec-e3f6-47bb-bfaf-3596c38f84d5",
+    "nom": "Français",
+    "prenom": "lalu",
+    "naissance": "09/08/1996",
+    "nationalite": "Belge",
+    "sexe": "male",
+    "adresse": "place",
+    "commune": "Uccle",
+    "minerval": 200.3,
+    "personne": null
+  },
+  {
+    "id": "5a679809-294f-4060-a8ec-abf1042d2366",
+    "nom": "Curto",
+    "prenom": "lalu",
+    "naissance": "09/08/1996",
+    "nationalite": "Belge",
+    "sexe": "male",
+    "adresse": "place",
+    "commune": "Uccle",
+    "minerval": 200.3,
+    "personne": null
+  },
+  {
+    "id": "e87d4605-e18a-4a23-8692-6b7119b2dfe3",
+    "nom": "Curto",
+    "prenom": "Bilal",
+    "naissance": "09/08/1996",
+    "nationalite": "Belge",
+    "sexe": "male",
+    "adresse": "place",
+    "commune": "Uccle",
+    "minerval": 200.3,
+    "personne": null
+  }
+]

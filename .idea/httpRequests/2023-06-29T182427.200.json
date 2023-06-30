@@ -1,0 +1,14 @@
+[
+  {
+    "id": "c1b855c7-5719-40a1-b118-1c1df3077caa",
+    "nom": "Curto",
+    "prenom": "Bilal",
+    "naissance": "09/08/1996",
+    "nationalite": "Belge",
+    "sexe": "male",
+    "adresse": "place",
+    "commune": "Uccle",
+    "minerval": 200.3,
+    "personne": null
+  }
+]

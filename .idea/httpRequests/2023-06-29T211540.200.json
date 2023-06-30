@@ -1,0 +1,14 @@
+[
+  {
+    "id": "dc377073-62b9-4217-b78e-bbf30742a057",
+    "nom": "Curto",
+    "prenom": "lalu",
+    "naissance": "09/08/1996",
+    "nationalite": "Belge",
+    "sexe": "male",
+    "adresse": "place",
+    "commune": "Uccle",
+    "minerval": 200.3,
+    "personne": null
+  }
+]
