@@ -11,10 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import com.example.ecole.repository.EcoleRepository;
 import com.example.ecole.models.Ecole;
-
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 
 @RestController
@@ -29,7 +26,7 @@ public class EcoleController {
     }
 
 @GetMapping
-    public ResponseEntity<List<Ecole>> getAllMatieres(Authentication authentication) {
+    public ResponseEntity<List<Ecole>> getAllEcoles(Authentication authentication) {
         List<Ecole> ecoles = ecoleRepository.findAll();
         logger.info("succès de l'affichage de la liste");
         return ResponseEntity.ok(ecoles);

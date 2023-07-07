@@ -59,9 +59,11 @@ public class InscriptionController {
             inscription.setId(UUID.randomUUID());
             inscritRepository.save(inscription);
             URI location = builder.path("/add/inscriptions/{id}").buildAndExpand(inscription.getId()).toUri();
+            logger.info("succès de l'ajout des données");
             return ResponseEntity.created(location).body(inscription);
         }else
         {
+            logger.warn("échec mauvaise permission");
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
 
 

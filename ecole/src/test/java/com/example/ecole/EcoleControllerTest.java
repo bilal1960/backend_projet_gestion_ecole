@@ -9,10 +9,8 @@ import org.slf4j.Logger;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import com.example.ecole.controller.EcoleController;
-
 import java.util.Collections;
 import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
@@ -35,7 +33,7 @@ class EcoleControllerTest {
         MockitoAnnotations.openMocks(this);
         List<Ecole> ecoles = Collections.singletonList(new Ecole());
         when(ecoleRepository.findAll()).thenReturn(ecoles);
-        ResponseEntity<List<Ecole>> responseEntity = ecoleController.getAllMatieres(authentication);
+        ResponseEntity<List<Ecole>> responseEntity = ecoleController.getAllEcoles(authentication);
         assertEquals(ecoles, responseEntity.getBody());
         assertEquals(200, responseEntity.getStatusCodeValue());
         verify(logger).info("succès de l'affichage de la liste");

@@ -1,11 +1,9 @@
 package com.example.ecole.controller;
-import com.example.ecole.models.PaginatedMatiereResponse;
 import com.example.ecole.repository.MatiereRepository;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -25,11 +23,9 @@ public class MatiereController {
     private static final Logger logger = LoggerFactory.getLogger(MatiereController.class);
     @Autowired
     private  MatiereRepository matiererepository;
-
     public MatiereController(MatiereRepository matiererepository) {
         this.matiererepository = matiererepository;
     }
-
     @GetMapping("/matieres")
     public ResponseEntity<List<Matiere>> getAllMatieres(Authentication authentication) {
         if (hasAuthority(authentication, "SCOPE_read:matiere")) {
@@ -55,21 +51,14 @@ public class MatiereController {
 
 
     }
-
     @GetMapping("/matieres/api")
-    public ResponseEntity<PaginatedMatiereResponse> getPaginatedMatieres(Authentication authentication,
-                                                                         @RequestParam int page, @RequestParam int size) {
-        if (hasAuthority(authentication, "SCOPE_read:matiere")) {
-            PageRequest pageRequest = PageRequest.of(page, size, Sort.by("id").ascending());
-            Page<Matiere> matierePage = matiererepository.findAll(pageRequest);
-            List<Matiere> matieres = matierePage.getContent();
-
-            // Créer l'objet PaginatedMatiereResponse avec le contenu des matières et les informations de pagination
-            PaginatedMatiereResponse response = new PaginatedMatiereResponse(matieres, matierePage.getTotalPages(), matierePage.getTotalElements());
-            logger.info("succès de la pagination de la liste des matières");
-            return ResponseEntity.ok(response);
+    public ResponseEntity<Page<Matiere>> getPaginatedMatieres(Pageable pageable, Authentication authentication) {
+        if (hasAuthority(authentication, "SCOPE_read:inscrit")) {
+            Page<Matiere> matieres = matiererepository.findAll(pageable);
+            logger.info("La récupération paginée est un succès");
+            return ResponseEntity.ok(matieres);
         } else {
-            logger.warn("erreur de la pagination de la liste, vérifier vos permissions");
+            logger.warn("Il y a eu un problème de récupération");
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
     }
