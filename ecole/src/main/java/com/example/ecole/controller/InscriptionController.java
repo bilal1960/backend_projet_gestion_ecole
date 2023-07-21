@@ -1,6 +1,8 @@
 package com.example.ecole.controller;
 import com.example.ecole.models.Inscription;
+import com.example.ecole.models.Personne;
 import com.example.ecole.repository.InscriptionRepository;
+import com.example.ecole.repository.PersonneRepository;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -20,14 +22,13 @@ import org.slf4j.Logger;
 @RequestMapping("/add/inscriptions")
 public class InscriptionController {
     private static final   Logger logger = LoggerFactory.getLogger(InscriptionController.class);
-
     @Autowired
     private InscriptionRepository inscritRepository;
-
+    @Autowired
+    private  PersonneRepository personneRepository;
     public InscriptionController(InscriptionRepository inscriptionRepository) {
         this.inscritRepository = inscriptionRepository;
     }
-
     @GetMapping
     public ResponseEntity<List<Inscription>> getAllInscription(Pageable pageable,Authentication authentication) {
         if (hasAuthority(authentication, "SCOPE_read:inscrit")) {
@@ -39,7 +40,6 @@ public class InscriptionController {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
       }
     }
-
     @GetMapping("/api")
     public ResponseEntity<Page<Inscription>> getPaginatedInscriptions(Pageable pageable, Authentication authentication) {
         if (hasAuthority(authentication, "SCOPE_read:inscrit")) {
@@ -51,31 +51,29 @@ public class InscriptionController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
     }
-
-
     @PostMapping
     public ResponseEntity<Inscription> addInscrit(@RequestBody Inscription inscription, UriComponentsBuilder builder, Authentication authentication) {
         if (hasAuthority(authentication, "SCOPE_write:inscrit")) {
-            inscription.setId(UUID.randomUUID());
-            inscritRepository.save(inscription);
-            URI location = builder.path("/add/inscriptions/{id}").buildAndExpand(inscription.getId()).toUri();
-            logger.info("succès de l'ajout des données");
-            return ResponseEntity.created(location).body(inscription);
-        }else
-        {
-            logger.warn("échec mauvaise permission");
+            Personne personne = personneRepository.findById(inscription.getPersonne().getId()).orElse(null);
+            if (personne != null) {
+                inscription.setPersonne(personne);
+                inscription.setId(UUID.randomUUID());
+                inscritRepository.save(inscription);
+                URI location = builder.path("/add/inscriptions/{id}").buildAndExpand(inscription.getId()).toUri();
+                logger.info("Succès de l'ajout des données ");
+                return ResponseEntity.created(location).body(inscription);
+            } else {
+                logger.warn("La personne correspondante n'a pas été trouvée");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            }
+        } else {
+            logger.warn("Échec mauvaise permission");
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-
-
         }
     }
-
     private static boolean hasAuthority(Authentication authentication, String expectedAuthority) {
         return authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals(expectedAuthority));
     }
-
-
-
 }
 
 

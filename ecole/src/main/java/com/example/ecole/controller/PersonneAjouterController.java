@@ -23,7 +23,6 @@ public class PersonneAjouterController {
     private  static  final Logger logger = LoggerFactory.getLogger(PersonneAjouterController.class);
     @Autowired
     private final PersonneRepository personneRepository;
-
     public PersonneAjouterController(PersonneRepository personneRepository) {
         this.personneRepository = personneRepository;
     }
@@ -32,13 +31,13 @@ public class PersonneAjouterController {
         if (hasAuthority(authentication, "SCOPE_read:personne")) {
             List<Personne> personness = personneRepository.findAll();
             logger.info("succès de l'affichage de la liste personne");
+
             return ResponseEntity.ok(personness);
         } else {
             logger.warn("échec mauvaise permission ");
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
     }
-
     @GetMapping("/api1")
     public ResponseEntity<Page<Personne>> getPaginatedInscriptions(Pageable pageable, Authentication authentication) {
         if (hasAuthority(authentication, "SCOPE_read:personne")) {
@@ -63,7 +62,6 @@ public class PersonneAjouterController {
         }
         logger.warn("attention vous n'avez pas la bonne permission");
         return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-
     }
     private static boolean hasAuthority(Authentication authentication, String expectedAuthority) {
         logger.info("vérifier l'autorité de permission", expectedAuthority);

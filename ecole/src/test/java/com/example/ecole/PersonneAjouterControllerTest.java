@@ -21,7 +21,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 class PersonneAjouterControllerTest {
-
     @Mock
     private PersonneRepository personneRepository;
 
@@ -67,7 +66,6 @@ class PersonneAjouterControllerTest {
         assertEquals(personne, response.getBody());
         verify(personneRepository, times(1)).save(personne);
     }
-
     private Authentication createAuthenticationWithAuthority(String authority) {
         Authentication authentication = mock(Authentication.class);
         Collection<GrantedAuthority> authorities = new ArrayList<>();

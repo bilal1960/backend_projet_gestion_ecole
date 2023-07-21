@@ -4,9 +4,7 @@ import com.example.ecole.repository.MatiereRepository;
 import com.example.ecole.models.Matiere;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -28,6 +26,7 @@ class MatiereControllerTest {
     @InjectMocks
     private MatiereController matiereController;
 
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
@@ -36,15 +35,11 @@ class MatiereControllerTest {
     @Test
     void testGetAllMatieres() {
         Authentication authentication = createAuthenticationWithAuthority("SCOPE_read:matiere");
-
         List<Matiere> matieres = new ArrayList<>();
         when(matiereRepository.findAll()).thenReturn(matieres);
-
         ResponseEntity<List<Matiere>> response = matiereController.getAllMatieres(authentication);
-
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(matieres, response.getBody());
-
         verify(matiereRepository, times(1)).findAll();
     }
 

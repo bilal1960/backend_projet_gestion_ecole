@@ -3,7 +3,7 @@
   <component name="JpaBuddyIdeaProjectConfig" ddlActionDbType="h2">
     <option name="defaultUnitInitialized" value="true" />
     <option name="renamerInitialized" value="true" />
-    <option name="isSnapshotDb" value="false" />
+    <option name="snapshotDbValue" value="16d5f37b-02d2-46c4-9ff4-bc8d88ee9b8f" />
     <option name="snapshotModelValue" value="Default" />
     <option name="newEntityIdType" value="UUID" />
     <option name="newEntityIdStrategy" value="UUID" />

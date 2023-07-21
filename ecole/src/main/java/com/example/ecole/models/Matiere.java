@@ -4,8 +4,6 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.util.UUID;
 import  java.util.List;
-
-
 @Entity
 @Table(name = "matiere")
 public class Matiere {
@@ -25,40 +23,28 @@ public class Matiere {
     private List<Personne> personnes;
     @ManyToOne
     @JoinColumn(name = "inscriptions_id")
-
     private  Inscription inscriptions;
-
     public  Matiere(){
 
     }
-
   public   Matiere(String nom, LocalDate debut, LocalDate fin, List<Personne> personnes){
         this.nom = nom;
         this.debut = debut;
         this.fin = fin;
         this.personnes = personnes;
     }
-
     public UUID getId() {
         return id;
     }
-
     public  LocalDate getDebut(){return  debut;}
-
     public  LocalDate getFin(){return  fin;}
-
     public  List<Personne> getPersonnes(){return  personnes;}
-
     public  void setId(UUID id){
         this.id = id;
     }
-
     public String getNom(){return  nom;}
-
     public  void  setNom(String nom){
         this.nom = nom;
     }
-
-
 
 }
