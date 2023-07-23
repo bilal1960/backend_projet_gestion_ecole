@@ -1,10 +1,10 @@
 package com.example.ecole.models;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
 import  java.util.UUID;
+
 @Entity
 @Table(name="personne", uniqueConstraints = @UniqueConstraint(columnNames = {"prenom", "nom"}))
 public class Personne {
@@ -26,9 +26,8 @@ public class Personne {
     @Column(name = "sexe", nullable = false)
     private  String sexe;
     private  String statut;
-    @ManyToMany
-    @JoinTable(name = "personne_matiere", joinColumns = @JoinColumn(name = "personne_id"),
-            inverseJoinColumns = @JoinColumn(name = "matiere_id"))
+    @JsonIgnore
+    @OneToMany(mappedBy = "professeur_id")
     private List<Matiere> matieres;
     @JsonBackReference
     @OneToMany(mappedBy = "personne_id")

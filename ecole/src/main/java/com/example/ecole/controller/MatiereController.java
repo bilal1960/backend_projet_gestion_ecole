@@ -1,5 +1,7 @@
 package com.example.ecole.controller;
+import com.example.ecole.models.Personne;
 import com.example.ecole.repository.MatiereRepository;
+import com.example.ecole.repository.PersonneRepository;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -10,6 +12,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 import java.net.URI;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.UUID;
 import com.example.ecole.models.Matiere;
@@ -18,11 +21,14 @@ import org.slf4j.LoggerFactory;
 
 
 @RestController
+
 @RequestMapping("/add")
 public class MatiereController {
     private static final Logger logger = LoggerFactory.getLogger(MatiereController.class);
     @Autowired
     private  MatiereRepository matiererepository;
+    @Autowired
+    private PersonneRepository personneRepository;
     public MatiereController(MatiereRepository matiererepository) {
         this.matiererepository = matiererepository;
     }
@@ -37,20 +43,33 @@ public class MatiereController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
     }
-    @PostMapping("/matieres")
-    public ResponseEntity<Matiere> addMatiere(@RequestBody Matiere matiere, UriComponentsBuilder builder, Authentication authentication) {
+   @PostMapping("/matieres")
+   public ResponseEntity<Matiere> addMatiere(@RequestBody Matiere matiere, UriComponentsBuilder builder, Authentication authentication) {
+            LocalTime heureminimum = LocalTime.of(9, 0);
         if (hasAuthority(authentication, "SCOPE_write:matiere")) {
-            matiere.setId(UUID.randomUUID());
-            matiererepository.save(matiere);
-            URI location = builder.path("/add/matieres/{id}").buildAndExpand(matiere.getId()).toUri();
-            logger.info("succès de la sauvegarde des données dans la database");
-            return ResponseEntity.created(location).body(matiere);
-        }
-             logger.warn("attention vous n'avez pas la bonne permission");
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-
-
-    }
+           Personne professeur = personneRepository.findById(matiere.getPersonne().getId()).orElse(null);
+           if (professeur != null) {
+               if (!matiere.getDebutime().isBefore(matiere.getFintime() ) || matiere.getDebutime().isBefore(heureminimum) ) {
+                   return  ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+               }
+               if(!matiere.getDebut().isBefore(matiere.getFin())){
+                   return  ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+               }
+               matiere.setPersonne(professeur);
+               matiere.setId(UUID.randomUUID());
+               matiererepository.save(matiere);
+               URI location = builder.path("/add/matieres/{id}").buildAndExpand(matiere.getId()).toUri();
+               logger.info("succès de la sauvegarde des données dans la base de données");
+               return ResponseEntity.created(location).body(matiere);
+           } else {
+               logger.warn("Le professeur correspondant n'a pas été trouvé");
+               return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+           }
+       } else {
+           logger.warn("Attention, vous n'avez pas la bonne permission");
+           return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+       }
+   }
     @GetMapping("/matieres/api")
     public ResponseEntity<Page<Matiere>> getPaginatedMatieres(Pageable pageable, Authentication authentication) {
         if (hasAuthority(authentication, "SCOPE_read:inscrit")) {

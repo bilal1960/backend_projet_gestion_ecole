@@ -56,8 +56,7 @@ public class PersonneAjouterController {
             personne.setId(UUID.randomUUID());
             personneRepository.save(personne);
             URI location = builder.path("/add/personnes/{id}").buildAndExpand(personne.getId()).toUri();
-            logger.info("succès de la sauvegarde des données dans la database");
-
+            logger.debug("succès de la sauvegarde des données dans la database");
             return ResponseEntity.created(location).body(personne);
         }
         logger.warn("attention vous n'avez pas la bonne permission");

@@ -2,6 +2,7 @@ package com.example.ecole.controller;
 import com.example.ecole.models.Inscription;
 import com.example.ecole.models.Personne;
 import com.example.ecole.repository.InscriptionRepository;
+import com.example.ecole.repository.MatiereRepository;
 import com.example.ecole.repository.PersonneRepository;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +17,6 @@ import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 import org.slf4j.Logger;
-
-
 @RestController
 @RequestMapping("/add/inscriptions")
 public class InscriptionController {
@@ -26,6 +25,8 @@ public class InscriptionController {
     private InscriptionRepository inscritRepository;
     @Autowired
     private  PersonneRepository personneRepository;
+    @Autowired
+    private MatiereRepository   matiereRepository;
     public InscriptionController(InscriptionRepository inscriptionRepository) {
         this.inscritRepository = inscriptionRepository;
     }

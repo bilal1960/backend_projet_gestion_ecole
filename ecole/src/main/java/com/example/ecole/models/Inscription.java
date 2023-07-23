@@ -1,4 +1,5 @@
 package com.example.ecole.models;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import java.util.List;
 import java.util.UUID;
@@ -13,11 +14,12 @@ public class Inscription {
     private  String commune;
 @Column(name = "minerval", nullable = false)
     private  float minerval;
+
     @ManyToOne
     @JoinColumn(name = "personne_id")
     private  Personne personne_id;
     @OneToMany
-    @JoinColumn(name= "inscriptions_id")
+    (mappedBy= "inscriptions_id")
     private  List<Matiere> matieres;
     public   Inscription(){
     }
@@ -52,4 +54,8 @@ public class Inscription {
     public void setPersonne(Personne personne_id) {
         this.personne_id = personne_id;
     }
+
+    public List<Matiere> getMatiere(){return  matieres;}
+
+    public void setMatieres(List<Matiere> matieres) {this.matieres = matieres;}
 }

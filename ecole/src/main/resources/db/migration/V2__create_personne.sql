@@ -7,7 +7,6 @@ CREATE TABLE personne
     nationalite VARCHAR(30) NOT NULL,
     adresse     VARCHAR(50) NOT NULL,
     sexe        VARCHAR(10) NOT NULL,
-
     CONSTRAINT pk_personne PRIMARY KEY (id)
 );
 
