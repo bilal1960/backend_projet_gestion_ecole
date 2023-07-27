@@ -83,6 +83,29 @@ public class PersonneAjouterController {
         logger.warn("attention vous n'avez pas la bonne permission");
         return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
+
+    @PutMapping("/persos/{id}")
+    public ResponseEntity<Personne> updatePersonne(@PathVariable UUID id, @RequestBody Personne updatedPersonne, Authentication authentication) {
+        if (hasAuthority(authentication, "SCOPE_write:personne")) {
+            Personne existingPersonne = personneRepository.findById(id).orElse(null);
+
+            if (existingPersonne == null) {
+                return ResponseEntity.notFound().build();
+            }
+
+            existingPersonne.setAdresse(updatedPersonne.getAdresse());
+
+            personneRepository.save(existingPersonne);
+
+            logger.debug("Succès de la mise à jour des données dans la database");
+
+            return ResponseEntity.ok(existingPersonne);
+        }
+
+        logger.warn("Attention, vous n'avez pas la bonne permission");
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+    }
+
     private static boolean hasAuthority(Authentication authentication, String expectedAuthority) {
         logger.info("vérifier l'autorité de permission", expectedAuthority);
         return authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals(expectedAuthority));

@@ -21,7 +21,7 @@ public class Personne {
     @Column(name = "prenom", nullable = false)
     private  String prenom;
     @NotEmpty
-    @Pattern(regexp = "^[A-Za-zÀ-ÖØ-öø-ÿ\\s]+$", message = "Le prénom doit contenir uniquement des lettres et des espaces.")
+    @Pattern(regexp = "^[A-Za-zÀ-ÖØ-öø-ÿ\\s]+$", message = "Le nom doit contenir uniquement des lettres et des espaces.")
     @Column(name = "nom", nullable = false)
     private  String nom;
     @JsonFormat(pattern = "dd/MM/yyyy")
@@ -32,10 +32,11 @@ public class Personne {
     @Column(name = "nationalite", nullable = false)
     private  String nationalite;
     @NotEmpty
+    @Pattern(regexp = "^[A-Za-z\\d\\s.-]+$", message = "Entrer une adresse valide")
     @Column(name = "adresse", nullable = false)
     private  String adresse;
     @NotEmpty
-    @Pattern(regexp = "^(homme|femme)$", message = "entrer professeur ou etudiant'")
+    @Pattern(regexp = "^(homme|femme)$", message = "entrer homme ou femme'")
     @Column(name = "sexe", nullable = false)
     private  String  sexe;
     @NotEmpty
