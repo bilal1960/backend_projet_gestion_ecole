@@ -13,8 +13,5 @@ public class EcoleApplication {
 		SpringApplication.run(EcoleApplication.class, args);
 		logger.info("information");
 
-
-
-
 	}
 }

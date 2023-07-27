@@ -1,7 +1,11 @@
 package com.example.ecole.models;
 import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Pattern;
+import org.hibernate.validator.constraints.NotEmpty;
 import java.time.LocalDate;
+import java.time.Period;
 import java.util.List;
 import  java.util.UUID;
 
@@ -12,19 +16,30 @@ public class Personne {
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", nullable = false)
     private UUID id;
+    @NotEmpty
+    @Pattern(regexp = "^[A-Za-zÀ-ÖØ-öø-ÿ\\s]+$", message = "Le prénom doit contenir uniquement des lettres et des espaces.")
     @Column(name = "prenom", nullable = false)
     private  String prenom;
+    @NotEmpty
+    @Pattern(regexp = "^[A-Za-zÀ-ÖØ-öø-ÿ\\s]+$", message = "Le prénom doit contenir uniquement des lettres et des espaces.")
     @Column(name = "nom", nullable = false)
     private  String nom;
     @JsonFormat(pattern = "dd/MM/yyyy")
     @Column(name = "naissance", nullable = false)
     private LocalDate naissance;
+    @NotEmpty
+    @Pattern(regexp =  "^[\\p{L}]+$" , message = "Nationalité invalide")
     @Column(name = "nationalite", nullable = false)
     private  String nationalite;
+    @NotEmpty
     @Column(name = "adresse", nullable = false)
     private  String adresse;
+    @NotEmpty
+    @Pattern(regexp = "^(homme|femme)$", message = "entrer professeur ou etudiant'")
     @Column(name = "sexe", nullable = false)
-    private  String sexe;
+    private  String  sexe;
+    @NotEmpty
+    @Pattern(regexp = "^(etudiant|professeur)$", message = "entrer professeur ou etudiant'")
     private  String statut;
     @JsonIgnore
     @OneToMany(mappedBy = "professeur_id")
@@ -32,7 +47,7 @@ public class Personne {
     @JsonBackReference
     @OneToMany(mappedBy = "personne_id")
     private List<Inscription> inscriptions;
-    public Personne(String prenom, String nom, LocalDate naissance, String nationalite, String adresse, String sexe,String statut, List<Matiere> matieres, List<Inscription> inscriptions) {
+    public Personne(String prenom, String nom, LocalDate naissance, String nationalite, String adresse, String  sexe,String statut, List<Matiere> matieres, List<Inscription> inscriptions) {
         this.prenom = prenom;
         this.nom = nom;
         this.naissance = naissance;
@@ -83,10 +98,10 @@ public class Personne {
     public void setAdresse(String adresse) {
         this.adresse = adresse;
     }
-    public String getSexe() {
+    public String  getSexe() {
         return sexe;
     }
-    public void setSexe(String sexe) {
+    public void setSexe(String  sexe) {
         this.sexe = sexe;
     }
     public String getStatut(){return  statut;}
@@ -98,5 +113,11 @@ public class Personne {
     public void setInscriptions(List<Inscription> inscriptions) {
         this.inscriptions = inscriptions;
    }
+
+    @Min(value = 13, message = "L'âge doit être supérieur ou égal à 13 ans pour inscrire .")
+    public int getAge() {
+        LocalDate now = LocalDate.now();
+        return Period.between(naissance, now).getYears();
+    }
 
 }

@@ -4,8 +4,8 @@
     <file url="file://$PROJECT_DIR$/ecole/src/main/java/com/example/ecole/repository/PersonneRepository.java" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/ecole/src/main/resources/db/migration/V1__create_ecole.sql" dialect="H2" />
     <file url="file://$PROJECT_DIR$/ecole/src/main/resources/db/migration/V2__create_personne.sql" dialect="GenericSQL" />
-    <file url="file://$PROJECT_DIR$/ecole/src/main/resources/db/migration/V3__create_table_inscription.sql" dialect="GenericSQL" />
-    <file url="file://$PROJECT_DIR$/ecole/src/main/resources/db/migration/V4__create_table_matiere.sql" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/ecole/src/main/resources/db/migration/V3__create_table_matiere.sql" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/ecole/src/main/resources/db/migration/V4__create_table_inscription.sql" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/ecole/src/main/resources/db/migration/V5__create_table_Personne_matiere.sql" dialect="GenericSQL" />
   </component>
 </project>

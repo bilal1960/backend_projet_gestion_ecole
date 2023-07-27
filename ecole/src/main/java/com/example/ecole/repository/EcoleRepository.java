@@ -10,4 +10,6 @@ import java.util.UUID;
 @Repository
 public interface EcoleRepository extends JpaRepository<Ecole, UUID> {
     Page<Ecole> findAll(Pageable pageable);
+    Ecole findEcoleById(UUID id);
+
 }

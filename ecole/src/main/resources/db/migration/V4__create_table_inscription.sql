@@ -6,5 +6,6 @@ CREATE TABLE inscription
     personne_id UUID not null,
     CONSTRAINT pk_inscription PRIMARY KEY (id),
     CONSTRAINT FK_INSCRIPTION_ON_PERSONNE FOREIGN KEY (personne_id) REFERENCES personne (id)
+
 );
 

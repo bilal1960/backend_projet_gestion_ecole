@@ -1,5 +1,6 @@
 package com.example.ecole.controller;
 import com.example.ecole.models.Inscription;
+import com.example.ecole.models.Matiere;
 import com.example.ecole.models.Personne;
 import com.example.ecole.repository.InscriptionRepository;
 import com.example.ecole.repository.MatiereRepository;
@@ -56,22 +57,33 @@ public class InscriptionController {
     public ResponseEntity<Inscription> addInscrit(@RequestBody Inscription inscription, UriComponentsBuilder builder, Authentication authentication) {
         if (hasAuthority(authentication, "SCOPE_write:inscrit")) {
             Personne personne = personneRepository.findById(inscription.getPersonne().getId()).orElse(null);
-            if (personne != null) {
+
+            if (personne != null  ) {
+                UUID inscriptionId = UUID.randomUUID();
                 inscription.setPersonne(personne);
-                inscription.setId(UUID.randomUUID());
+                inscription.setId(inscriptionId);
                 inscritRepository.save(inscription);
                 URI location = builder.path("/add/inscriptions/{id}").buildAndExpand(inscription.getId()).toUri();
                 logger.info("Succès de l'ajout des données ");
-                return ResponseEntity.created(location).body(inscription);
-            } else {
-                logger.warn("La personne correspondante n'a pas été trouvée");
+                    return ResponseEntity.created(location).body(inscription);
+                }
+
+
+
+             else {
+                logger.warn("La personne ou la matiere correspondante n'a pas été trouvée");
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
             }
+
+
+
         } else {
             logger.warn("Échec mauvaise permission");
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
     }
+
+
     private static boolean hasAuthority(Authentication authentication, String expectedAuthority) {
         return authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals(expectedAuthority));
     }

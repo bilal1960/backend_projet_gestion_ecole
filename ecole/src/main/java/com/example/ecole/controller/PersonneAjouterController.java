@@ -29,7 +29,7 @@ public class PersonneAjouterController {
     @GetMapping("/api")
     public ResponseEntity<List<Personne>> getAllPersonnes(Authentication authentication) {
         if (hasAuthority(authentication, "SCOPE_read:personne")) {
-            List<Personne> personness = personneRepository.findAll();
+            List<Personne> personness = personneRepository.findAllByStatut("etudiant");
             logger.info("succès de l'affichage de la liste personne");
 
             return ResponseEntity.ok(personness);
@@ -38,6 +38,19 @@ public class PersonneAjouterController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
     }
+
+    @GetMapping("/professeurs/api")
+    public ResponseEntity<List<Personne>> getAllProfesseurs(Authentication authentication) {
+        if (hasAuthority(authentication, "SCOPE_read:personne")) {
+            List<Personne> professeurs = personneRepository.findAllByStatut("professeur");
+            logger.info("Succès de l'affichage de la liste des profs");
+            return ResponseEntity.ok(professeurs);
+        } else {
+            logger.warn("Échec, mauvaise permission");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+    }
+
     @GetMapping("/api1")
     public ResponseEntity<Page<Personne>> getPaginatedInscriptions(Pageable pageable, Authentication authentication) {
         if (hasAuthority(authentication, "SCOPE_read:personne")) {
@@ -53,6 +66,14 @@ public class PersonneAjouterController {
     public ResponseEntity<Personne> addPersonne(@RequestBody Personne personne, Authentication authentication, UriComponentsBuilder builder) {
 
         if (hasAuthority(authentication, "SCOPE_write:personne")) {
+
+            if(personne.getAge() <21 && "professeur".equals(personne.getStatut())){
+                logger.debug("un professeur doit avoir 21 ans minimum");
+                return  ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+
+
+            }
+
             personne.setId(UUID.randomUUID());
             personneRepository.save(personne);
             URI location = builder.path("/add/personnes/{id}").buildAndExpand(personne.getId()).toUri();
