@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import org.slf4j.Logger;
 @RestController
@@ -82,6 +83,40 @@ public class InscriptionController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
     }
+
+
+    @PutMapping("/inscrit/{id}")
+    public ResponseEntity<Inscription> updateInscription(@PathVariable UUID id, @RequestBody Inscription updatedInscription, Authentication authentication) {
+        if (hasAuthority(authentication, "SCOPE_write:inscrit")) {
+            Optional<Inscription> optionalInscription = inscritRepository.findById(id);
+
+            if (optionalInscription.isPresent()) {
+
+                Inscription inscription = optionalInscription.get();
+                inscription.setRembourser(updatedInscription.getRembourser());
+                inscription.setSection(updatedInscription.getSection());
+                inscription.setSecondaire_anne(updatedInscription.getSecondaire_anne());
+                inscription.setCommune(updatedInscription.getCommune());
+                inscription.setMinerval(updatedInscription.getMinerval());
+                inscription = inscritRepository.save(inscription);
+
+                logger.info("Succès de la mise à jour des données");
+                return ResponseEntity.ok(inscription);
+            } else {
+                logger.warn("L'inscription correspondante n'a pas été trouvée");
+                return ResponseEntity.notFound().build();
+            }
+        } else {
+            logger.warn("Échec mauvaise permission");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+    }
+
+
+
+
+
+
 
 
     private static boolean hasAuthority(Authentication authentication, String expectedAuthority) {

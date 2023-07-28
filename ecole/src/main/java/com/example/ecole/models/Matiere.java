@@ -31,6 +31,7 @@ public class Matiere {
     @JsonFormat(pattern = "HH:mm")
     private
     LocalTime fintime;
+
     @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "professeur_id")
@@ -42,11 +43,13 @@ public class Matiere {
    @NotEmpty
    @Column(name = "jour")
    private String jour;
+    private  String secondaire;
+
 
     public  Matiere(){
 
     }
-  public   Matiere( UUID id, String nom, LocalDate debut, LocalDate fin, Personne professeur_id, LocalTime debutime, LocalTime fintime,String local, String jour){
+  public   Matiere( UUID id, String nom, LocalDate debut, LocalDate fin, Personne professeur_id, LocalTime debutime, LocalTime fintime,String local, String jour, String secondaire){
         this.id = id;
         this.nom = nom;
         this.debut = debut;
@@ -56,6 +59,7 @@ public class Matiere {
         this.fintime = fintime;
         this.local = local;
         this.jour = jour;
+        this.secondaire = secondaire;
     }
 
     public Matiere(String uuid) {
@@ -97,4 +101,8 @@ public class Matiere {
     public  String getJour(){return  jour;}
 
     public  void  setJour(String jour){this.jour = jour;}
+
+    public  String getSecondaire(){return  secondaire;}
+
+    public void setSecondaire(String secondaire) {this.secondaire = secondaire;}
 }

@@ -137,6 +137,7 @@ public class MatiereController {
                 existingMatiere.setFintime(updatedMatiere.getFintime());
                 existingMatiere.setLocal(updatedMatiere.getLocal());
                 existingMatiere.setJour(updatedMatiere.getJour());
+                existingMatiere.setSecondaire(updatedMatiere.getSecondaire());
                 matiererepository.save(existingMatiere);
 
                 logger.info("réussite de la mise à jour des champs debut, fin, debutime, fintime pour la Matiere avec l'ID : " + id);

@@ -8,6 +8,7 @@ CREATE TABLE matiere
     fintime Time not null,
     jour VARCHAR(30),
     local VARCHAR(50),
+    secondaire VARCHAR(20),
     professeur_id UUID,
     CONSTRAINT pk_matiere PRIMARY KEY (id),
     CONSTRAINT fk_matiere_professeur FOREIGN KEY (professeur_id) REFERENCES personne (id)
