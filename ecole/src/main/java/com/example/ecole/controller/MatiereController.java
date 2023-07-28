@@ -15,9 +15,12 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.net.URI;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.regex.Pattern;
+
 import com.example.ecole.models.Matiere;
 import org.slf4j.LoggerFactory;
 
@@ -103,6 +106,11 @@ public class MatiereController {
         if (hasAuthority(authentication, "SCOPE_write:matiere")) {
             Optional<Matiere> existingMatiereOptional = matiererepository.findById(id);
             LocalTime debutime = LocalTime.of(9,0);
+            String[] joursSemaineList = {"lundi", "mardi", "mercredi", "jeudi", "vendredi"};
+            String jourupdate = updatedMatiere.getJour().toLowerCase();
+            String localPattern = "^[a-zA-Z][a-zA-Z0-9]*$"; // Le pattern oblige une lettre au début suivit d'éventuelle lettre ou chiffre positif sans aucun espace
+            String local = updatedMatiere.getLocal();
+
             if (existingMatiereOptional.isPresent()) {
                 Matiere existingMatiere = existingMatiereOptional.get();
 
@@ -117,10 +125,18 @@ public class MatiereController {
                             .status(HttpStatus.BAD_REQUEST)
                             .body("la date de debut doit être supérieure à 09:00");
                 }
+                if (!Arrays.asList(joursSemaineList).contains(jourupdate) || !Pattern.matches(localPattern, local)) {
+                    return ResponseEntity
+                            .status(HttpStatus.BAD_REQUEST)
+                            .body("Le jour doit être lundi, mardi, mercredi, jeudi ou vendredi.");
+                }
+
                 existingMatiere.setDebut(updatedMatiere.getDebut());
                 existingMatiere.setFin(updatedMatiere.getFin());
                 existingMatiere.setDebutime(updatedMatiere.getDebutime());
                 existingMatiere.setFintime(updatedMatiere.getFintime());
+                existingMatiere.setLocal(updatedMatiere.getLocal());
+                existingMatiere.setJour(updatedMatiere.getJour());
                 matiererepository.save(existingMatiere);
 
                 logger.info("réussite de la mise à jour des champs debut, fin, debutime, fintime pour la Matiere avec l'ID : " + id);

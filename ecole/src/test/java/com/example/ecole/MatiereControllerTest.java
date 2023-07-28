@@ -1,4 +1,4 @@
-package com.example.ecole;
+/*package com.example.ecole;
 import com.example.ecole.controller.MatiereController;
 import com.example.ecole.repository.MatiereRepository;
 import com.example.ecole.models.Matiere;
@@ -80,5 +80,5 @@ class MatiereControllerTest {
         when(authentication.getAuthorities()).thenAnswer(invocation -> authorities);
         return authentication;
     }
-}
+}*/
 

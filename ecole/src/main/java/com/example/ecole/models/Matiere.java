@@ -7,6 +7,7 @@ import jakarta.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.NotEmpty;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 import java.util.UUID;
 
 
@@ -18,7 +19,6 @@ public class Matiere {
     @Column(name = "id", nullable = false)
     private UUID id;
     @NotEmpty(message = "Le nom ne peut pas être vide")
-    @Pattern(regexp = "(?i)^(français|mathématiques|physique|chimie|histoire|géographie|langue étrangère|informatique|biologie|éducation physique)$")
     @Column(name = "nom", nullable = false)
     private String nom;
     @JsonFormat(pattern = "dd/MM/yyyy")
@@ -35,11 +35,18 @@ public class Matiere {
     @ManyToOne
     @JoinColumn(name = "professeur_id")
     private Personne professeur_id;
+    @NotEmpty
+    @Pattern(regexp = "^[a-zA-Z][a-zA-Z0-9]*$", message = "Le local doit commencer par une lettre de l'alphabet ensuite elle peut contenir des lettres ou chiffres positif.")
+    @Column(name = "local")
+    private  String local;
+   @NotEmpty
+   @Column(name = "jour")
+   private String jour;
 
     public  Matiere(){
 
     }
-  public   Matiere( UUID id, String nom, LocalDate debut, LocalDate fin, Personne professeur_id, LocalTime debutime, LocalTime fintime){
+  public   Matiere( UUID id, String nom, LocalDate debut, LocalDate fin, Personne professeur_id, LocalTime debutime, LocalTime fintime,String local, String jour){
         this.id = id;
         this.nom = nom;
         this.debut = debut;
@@ -47,6 +54,8 @@ public class Matiere {
         this.professeur_id = professeur_id;
         this.debutime = debutime;
         this.fintime = fintime;
+        this.local = local;
+        this.jour = jour;
     }
 
     public Matiere(String uuid) {
@@ -81,5 +90,11 @@ public class Matiere {
     public void setDebutime(LocalTime debutime) {this.debutime = debutime;}
     public  void  setFintime(LocalTime fintime){this.fintime = fintime;}
 
+    public  String getLocal(){return  local;}
 
+    public void setLocal(String local) {this.local = local;}
+
+    public  String getJour(){return  jour;}
+
+    public  void  setJour(String jour){this.jour = jour;}
 }

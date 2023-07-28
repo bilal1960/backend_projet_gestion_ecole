@@ -1,10 +1,12 @@
 package com.example.ecole.models;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-
-import java.util.ArrayList;
-import java.util.List;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import org.hibernate.validator.constraints.NotEmpty;
+import java.time.LocalDate;
 import java.util.UUID;
 @Entity
 @Table(name="inscription")
@@ -15,8 +17,18 @@ public class Inscription {
     private UUID id;
 @Column(name = "commune", nullable = false)
     private  String commune;
+@NotNull
+@Positive
 @Column(name = "minerval", nullable = false)
     private  float minerval;
+    @JsonFormat(pattern = "dd/MM/yyyy")
+private LocalDate date_inscrit;
+
+private  float rembourser;
+@NotEmpty
+private String section;
+@NotEmpty
+private  String secondaire_anne;
 
     @ManyToOne
     @JoinColumn(name = "personne_id")
@@ -25,11 +37,15 @@ public class Inscription {
 
     public   Inscription(){
     }
-    public Inscription(UUID id, String commune, float minerval, Personne personne_id) {
+    public Inscription(UUID id, String commune, float minerval, Personne personne_id, LocalDate date_inscrit, float rembourser, String section, String secondaire_anne) {
         this.id = id;
         this.commune = commune;
         this.minerval = minerval;
+        this.date_inscrit = date_inscrit;
+        this.rembourser = rembourser;
+        this.section = section;
         this.personne_id = personne_id;
+        this.secondaire_anne = secondaire_anne;
     }
     public Inscription(String uuid) {
         this.id = UUID.fromString(uuid);
@@ -54,6 +70,23 @@ public class Inscription {
     public void setMinerval(float minerval) {
         this.minerval = minerval;
     }
+
+    public  LocalDate getDate_inscrit(){return  date_inscrit;}
+
+    public void setDate_inscrit(LocalDate date_inscrit) {this.date_inscrit = date_inscrit;}
+
+    public float getRembourser(){return  rembourser;}
+
+    public void setRembourser(float rembourser) {this.rembourser = rembourser;}
+
+    public  String getSection(){return  section;}
+
+    public void setSection(String section){this.section = section;}
+
+    public  String getSecondaire_anne(){return secondaire_anne;}
+
+    public void setSecondaire_anne(String secondaire_anne) {this.secondaire_anne = secondaire_anne;}
+
     public Personne getPersonne() {return personne_id;
     }
     public void setPersonne(Personne personne_id) {
