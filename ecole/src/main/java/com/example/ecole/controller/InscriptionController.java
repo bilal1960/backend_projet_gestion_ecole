@@ -1,9 +1,7 @@
 package com.example.ecole.controller;
 import com.example.ecole.models.Inscription;
-import com.example.ecole.models.Matiere;
 import com.example.ecole.models.Personne;
 import com.example.ecole.repository.InscriptionRepository;
-import com.example.ecole.repository.MatiereRepository;
 import com.example.ecole.repository.PersonneRepository;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,18 +26,18 @@ public class InscriptionController {
     @Autowired
     private  PersonneRepository personneRepository;
     @Autowired
-    private MatiereRepository   matiereRepository;
-    public InscriptionController(InscriptionRepository inscriptionRepository) {
+    public InscriptionController(InscriptionRepository inscriptionRepository,  PersonneRepository personneRepository) {
         this.inscritRepository = inscriptionRepository;
+        this.personneRepository = personneRepository;
     }
     @GetMapping
     public ResponseEntity<List<Inscription>> getAllInscription(Pageable pageable,Authentication authentication) {
         if (hasAuthority(authentication, "SCOPE_read:inscrit")) {
             List<Inscription> inscriptions = inscritRepository.findAll();
-            logger.info("la récupération est un succès");
+            logger.debug("la récupération est un succès");
             return ResponseEntity.ok(inscriptions);
         }else {
-            logger.warn("il y a eu un problème de récupération");
+            logger.debug("il y a eu un problème de récupération");
         return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
       }
     }
@@ -47,10 +45,10 @@ public class InscriptionController {
     public ResponseEntity<Page<Inscription>> getPaginatedInscriptions(Pageable pageable, Authentication authentication) {
         if (hasAuthority(authentication, "SCOPE_read:inscrit")) {
             Page<Inscription> inscriptions = inscritRepository.findAll(pageable);
-            logger.info("La récupération paginée est un succès");
+            logger.debug("La récupération paginée est un succès");
             return ResponseEntity.ok(inscriptions);
         } else {
-            logger.warn("Il y a eu un problème de récupération");
+            logger.debug("Il y a eu un problème de récupération");
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
     }
@@ -65,21 +63,17 @@ public class InscriptionController {
                 inscription.setId(inscriptionId);
                 inscritRepository.save(inscription);
                 URI location = builder.path("/add/inscriptions/{id}").buildAndExpand(inscription.getId()).toUri();
-                logger.info("Succès de l'ajout des données ");
+                logger.debug("Succès de l'ajout des données ");
                     return ResponseEntity.created(location).body(inscription);
                 }
 
-
-
              else {
-                logger.warn("La personne ou la matiere correspondante n'a pas été trouvée");
+                logger.debug("La personne ou la matiere correspondante n'a pas été trouvée");
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
             }
 
-
-
         } else {
-            logger.warn("Échec mauvaise permission");
+            logger.debug("Échec mauvaise permission");
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
     }
@@ -100,26 +94,20 @@ public class InscriptionController {
                 inscription.setMinerval(updatedInscription.getMinerval());
                 inscription = inscritRepository.save(inscription);
 
-                logger.info("Succès de la mise à jour des données");
+                logger.debug("Succès de la mise à jour des données");
                 return ResponseEntity.ok(inscription);
             } else {
-                logger.warn("L'inscription correspondante n'a pas été trouvée");
+                logger.debug("L'inscription correspondante n'a pas été trouvée");
                 return ResponseEntity.notFound().build();
             }
         } else {
-            logger.warn("Échec mauvaise permission");
+            logger.debug("Échec mauvaise permission");
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
     }
 
-
-
-
-
-
-
-
     private static boolean hasAuthority(Authentication authentication, String expectedAuthority) {
+        logger.debug("autorisation");
         return authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals(expectedAuthority));
     }
 }

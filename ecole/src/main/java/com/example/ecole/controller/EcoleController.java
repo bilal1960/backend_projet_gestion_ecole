@@ -26,9 +26,10 @@ public class EcoleController {
 
         Ecole ecole = ecoleRepository.findEcoleById(id); // Assurez-vous d'avoir une méthode pour récupérer l'école unique.
         if (ecole != null) {
-            logger.info("Succès de l'affichage de l'école");
+            logger.debug("Succès de l'affichage de l'école");
             return ResponseEntity.ok(ecole);
         } else {
+            logger.debug("problème affichage data vérifier la DB");
             return ResponseEntity.notFound().build();
         }
     }
@@ -39,7 +40,7 @@ public class EcoleController {
 
             Ecole existingEcole = ecoleRepository.findEcoleById(id);
             if (existingEcole == null) {
-                logger.warn("Échec, école introuvable");
+                logger.debug("Échec, école introuvable");
                 return ResponseEntity.notFound().build();
             }
 
@@ -49,15 +50,15 @@ public class EcoleController {
             existingEcole.setType(updatedEcole.getType());
 
             Ecole updatedSchool = ecoleRepository.save(existingEcole);
-            logger.info("Succès de la mise à jour de l'école");
+            logger.debug("Succès de la mise à jour de l'école");
             return ResponseEntity.ok(updatedSchool);
         }
-        logger.warn("Attention, vous n'avez pas la bonne permission");
+        logger.debug("Attention, vous n'avez pas la bonne permission");
         return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 
     private static boolean hasAuthority(Authentication authentication, String expectedAuthority) {
-        logger.info("vérifier l'autorité de permission", expectedAuthority);
+        logger.debug("vérifier l'autorité de permission", expectedAuthority);
         return authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals(expectedAuthority));
     }
 
