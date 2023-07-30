@@ -1,7 +1,5 @@
 package com.example.ecole.Controller;
 
-// other imports...
-
 import com.example.ecole.controller.InscriptionController;
 import com.example.ecole.models.Inscription;
 import com.example.ecole.models.Personne;
@@ -48,11 +46,9 @@ public class InscriptionControllerTest {
 
     @BeforeEach
     public void setUp() {
-        // creating a Personne object
         personne = new Personne();
         personne.setId(UUID.randomUUID());
 
-        // creating an Inscription object
         inscription = new Inscription();
         inscription.setId(UUID.randomUUID());
         inscription.setPersonne(personne);
