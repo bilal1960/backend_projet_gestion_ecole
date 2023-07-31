@@ -37,8 +37,8 @@ private  String secondaire_anne;
 
     public   Inscription(){
     }
-    public Inscription(UUID id, String commune, float minerval, Personne personne_id, LocalDate date_inscrit, float rembourser, String section, String secondaire_anne) {
-        this.id = id;
+    public Inscription( String commune, float minerval, Personne personne_id, LocalDate date_inscrit, float rembourser, String section, String secondaire_anne) {
+
         this.commune = commune;
         this.minerval = minerval;
         this.date_inscrit = date_inscrit;
