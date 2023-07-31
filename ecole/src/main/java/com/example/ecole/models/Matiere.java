@@ -49,8 +49,8 @@ public class Matiere {
     public  Matiere(){
 
     }
-  public   Matiere( UUID id, String nom, LocalDate debut, LocalDate fin, Personne professeur_id, LocalTime debutime, LocalTime fintime,String local, String jour, String secondaire){
-        this.id = id;
+  public   Matiere(  String nom, LocalDate debut, LocalDate fin, Personne professeur_id, LocalTime debutime, LocalTime fintime,String local, String jour, String secondaire){
+
         this.nom = nom;
         this.debut = debut;
         this.fin = fin;

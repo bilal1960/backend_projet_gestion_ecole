@@ -125,7 +125,6 @@ public class Personne {
         this.inscriptions = inscriptions;
    }
 
-    @Min(value = 13, message = "L'âge doit être supérieur ou égal à 13 ans pour inscrire .")
     public int getAge() {
         LocalDate now = LocalDate.now();
         return Period.between(naissance, now).getYears();

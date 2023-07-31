@@ -1,6 +1,5 @@
 package com.example.ecole.Respository;
-import com.example.ecole.models.Inscription;
-import com.example.ecole.models.Matiere;
+
 import com.example.ecole.models.Personne;
 import com.example.ecole.repository.PersonneRepository;
 import jakarta.validation.ConstraintViolationException;
@@ -13,7 +12,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 

@@ -118,7 +118,6 @@ public class PersonneAjouterControllerTest {
         UUID personneId = UUID.randomUUID();
         personne.setId(personneId);
 
-        // Set naissance so the age is 21 or more
         LocalDate birthDate = LocalDate.now().minusYears(21);
         personne.setNaissance(birthDate);
 
