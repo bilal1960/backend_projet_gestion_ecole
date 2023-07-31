@@ -84,7 +84,7 @@ public class InscriptionController {
         if (hasAuthority(authentication, "SCOPE_write:inscrit")) {
             Optional<Inscription> optionalInscription = inscritRepository.findById(id);
 
-            if (optionalInscription.isPresent()) {
+            if (optionalInscription.isPresent() && updatedInscription.getRembourser() > -1) {
 
                 Inscription inscription = optionalInscription.get();
                 inscription.setRembourser(updatedInscription.getRembourser());
