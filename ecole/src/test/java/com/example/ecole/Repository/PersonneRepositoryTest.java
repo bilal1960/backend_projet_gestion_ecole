@@ -1,4 +1,4 @@
-package com.example.ecole.Respository;
+package com.example.ecole.Repository;
 
 import com.example.ecole.models.Personne;
 import com.example.ecole.repository.PersonneRepository;
