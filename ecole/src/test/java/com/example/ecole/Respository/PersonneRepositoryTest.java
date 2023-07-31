@@ -40,18 +40,14 @@ public class PersonneRepositoryTest {
 
     @BeforeEach
     public  void setUp(){
-        List<Matiere> matieres = new ArrayList<>();
-        List<Inscription> inscriptions = new ArrayList<>();
-
-        personne1 = new Personne("lolo", "laura", birthDate, "Belge", "123 rue Test", "homme", "professeur", matieres, inscriptions);
-        personne2 = new Personne("laura", "lulu", birthDateinscrit, "Belge", "123 rue Test2", "homme", "etudiant", matieres, inscriptions);
-        personneerror = new Personne(null, "laura",birthDate, "Belge", "123 rue Test", "homme", "professeur", matieres, inscriptions);
+        personne1 = new Personne("lolo", "laura", birthDate, "Belge", "123 rue Test", "homme", "professeur");
+        personne2 = new Personne("laura", "lulu", birthDateinscrit, "Belge", "123 rue Test2", "homme", "etudiant");
+        personneerror = new Personne(null, "laura",birthDate, "Belge", "123 rue Test", "homme", "professeur");
         personnewithnotargument = new Personne();
     }
 
     @Test
     public void whenFindById_thenReturnPersonne() {
-
 
         entityManager.persist(personne1);
         entityManager.flush();

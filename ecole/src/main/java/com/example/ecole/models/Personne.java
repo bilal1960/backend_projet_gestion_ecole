@@ -60,6 +60,16 @@ public class Personne {
         this.statut = statut;
     }
     public   Personne(){}
+
+    public Personne(String prenom, String nom, LocalDate naissance, String nationalite, String adresse, String  sexe,String statut) {
+        this.prenom = prenom;
+        this.nom = nom;
+        this.naissance = naissance;
+        this.nationalite = nationalite;
+        this.adresse = adresse;
+        this.sexe = sexe;
+        this.statut = statut;
+    }
     public Personne(String uuid) {
         this.id = UUID.fromString(uuid);
     }
