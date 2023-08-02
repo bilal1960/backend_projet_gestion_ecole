@@ -9,7 +9,6 @@ CREATE TABLE personne
     sexe        VARCHAR(10) NOT NULL,
     CONSTRAINT pk_personne PRIMARY KEY (id)
 );
-
 ALTER TABLE personne
     ADD CONSTRAINT uc_fe31b440568efb37437d6af59 UNIQUE (prenom, nom);
 ALTER TABLE personne
