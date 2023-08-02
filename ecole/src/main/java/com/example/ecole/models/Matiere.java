@@ -43,6 +43,8 @@ public class Matiere {
    @NotEmpty
    @Column(name = "jour")
    private String jour;
+    @Pattern(regexp = "^[1-6] secondaire$", message = "La valeur doit être entre '1 secondaire' et '6 secondaire'")
+    @Column(name = "secondaire")
     private  String secondaire;
 
 

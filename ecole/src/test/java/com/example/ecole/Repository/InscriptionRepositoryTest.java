@@ -32,9 +32,9 @@ public class InscriptionRepositoryTest {
 
     @BeforeEach
     public  void setUp(){
-        personne = new Personne("lolo", "laura", date, "Belge", "123 rue Test", "homme", "etudiant");
+        personne = new Personne("lolo", "laura", date, "Belge", "rue Test/70", "homme", "etudiant");
         inscription = new Inscription( "Uccle", 500.0f, personne, date_inscrit, 50.0f, "General", "4 secondaire");
-        personnenotexist = new Personne("laura", "Lulu", date, "Belge", "123 rue du parc", "femme", "etudiant");
+        personnenotexist = new Personne("laura", "Lulu", date, "Belge", "rue du parc/50", "femme", "etudiant");
 
     }
 
@@ -50,6 +50,7 @@ public class InscriptionRepositoryTest {
         assertNotNull(found.getContent());
         assertNotNull(found.getContent().get(0).getPersonne());
         assertEquals(personne.getId(), found.getContent().get(0).getPersonne().getId());
+        assertTrue(inscription.getPersonne().equals(personne));
     }
 
     @Test

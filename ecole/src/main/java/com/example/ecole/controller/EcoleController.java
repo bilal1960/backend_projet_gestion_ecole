@@ -44,10 +44,19 @@ public class EcoleController {
                 return ResponseEntity.notFound().build();
             }
 
-            existingEcole.setAdresse(updatedEcole.getAdresse());
-            existingEcole.setMail(updatedEcole.getMail());
-            existingEcole.setNumber(updatedEcole.getNumber());
-            existingEcole.setType(updatedEcole.getType());
+            if (updatedEcole.getAdresse() != null && !updatedEcole.getAdresse().isEmpty()) {
+                existingEcole.setAdresse(updatedEcole.getAdresse());
+            }
+            if(updatedEcole.getMail() != null && !updatedEcole.getMail().isEmpty()){
+                existingEcole.setMail(updatedEcole.getMail());
+            }
+            if(updatedEcole.getNumber() != null && updatedEcole.getNumber().isEmpty()){
+                existingEcole.setNumber(updatedEcole.getNumber());
+
+            }
+            if(updatedEcole.getType() != null && updatedEcole.getType().isEmpty()){
+                existingEcole.setType(updatedEcole.getType());
+            }
 
             Ecole updatedSchool = ecoleRepository.save(existingEcole);
             logger.debug("Succès de la mise à jour de l'école");

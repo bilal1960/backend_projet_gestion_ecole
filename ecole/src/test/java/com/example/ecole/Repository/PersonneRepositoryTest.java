@@ -16,7 +16,8 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
+
 
 @DataJpaTest
 public class PersonneRepositoryTest {
@@ -38,9 +39,9 @@ public class PersonneRepositoryTest {
 
     @BeforeEach
     public  void setUp(){
-        personne1 = new Personne("lolo", "laura", birthDate, "Belge", "123 rue Test", "homme", "professeur");
-        personne2 = new Personne("laura", "lulu", birthDateinscrit, "Belge", "123 rue Test2", "homme", "etudiant");
-        personneerror = new Personne(null, "laura",birthDate, "Belge", "123 rue Test", "homme", "professeur");
+        personne1 = new Personne("lolo", "laura", birthDate, "Belge", "rue Test/50", "homme", "professeur");
+        personne2 = new Personne("laura", "lulu", birthDateinscrit, "Belge", "rue Test2/123", "homme", "etudiant");
+        personneerror = new Personne(null, "laura",birthDate, "Belge", "rue Test/123", "homme", "professeur");
         personnewithnotargument = new Personne();
     }
 
@@ -52,8 +53,9 @@ public class PersonneRepositoryTest {
 
         Personne found = personneRepository.findById(personne1.getId()).orElse(null);
 
-        assertThat(found).isNotNull();
-        assertThat(found.getNom()).isEqualTo(personne1.getNom());
+        assertNotNull(found, "L'objet trouvé ne doit pas être nul.");
+        assertEquals(personne1.getNom(), found.getNom(), "Le nom de la personne trouvée doit être égal au nom de personne1.");
+
     }
 
     @Test
@@ -67,38 +69,39 @@ public class PersonneRepositoryTest {
         List<Personne> foundteacher = personneRepository.findAllByStatut("professeur");
         List<Personne> foundstudent = personneRepository.findAllByStatut("etudiant");
 
-        assertThat(foundteacher).isNotEmpty();
-        assertThat(foundteacher.get(0).getStatut()).isEqualTo("professeur");
-        assertThat(foundstudent).isNotEmpty();
+        assertFalse(foundteacher.isEmpty(), "La liste des enseignants ne doit pas être vide.");
+        assertEquals("professeur", foundteacher.get(0).getStatut(), "Le statut doi être professeur'.");
+        assertFalse(foundstudent.isEmpty(), "la liste d'étudiant ne doit pas être vide");
         assertThat(foundstudent.get(0).getStatut()).isEqualTo("etudiant");
+        assertEquals("etudiant", foundstudent.get(0).getStatut(), "Le statut doit être etudiant'.");
+
     }
 
     @Test
     public void whenFindAll_thenReturnPersonnes() {
 
         entityManager.persist(personne1);
-
         entityManager.persist(personne2);
         entityManager.flush();
 
-
         List<Personne> found = personneRepository.findAll();
 
-        assertThat(found).isNotEmpty();
-        assertThat(found).hasSize(2);
+        assertNotNull(found);
+        assertFalse(found.isEmpty(), "la liste ne peut pas être vide");
+        assertEquals(2, found.size());
     }
 
     @Test
     public void whenFindAllWithPageable_thenReturnPersonnesPage() {
 
         entityManager.persist(personne1);
-
         entityManager.persist(personne2);
         entityManager.flush();
 
         Page<Personne> found = personneRepository.findAll(PageRequest.of(0, 2));
 
-        assertThat(found.getContent()).hasSize(2);
+        assertEquals(2, found.getContent().size(), "La taille doit être égal à 2.");
+
     }
 
     @Test
@@ -120,6 +123,6 @@ public class PersonneRepositoryTest {
     public void whenFindByIdWithNonExistingId_thenReturnNull() {
         UUID nonExistingId = UUID.randomUUID();
         Personne found = personneRepository.findById(nonExistingId).orElse(null);
-        assertThat(found).isNull();
+        assertNull(found);
     }
 }

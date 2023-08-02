@@ -3,6 +3,7 @@ import com.example.ecole.models.Inscription;
 import com.example.ecole.models.Personne;
 import com.example.ecole.repository.InscriptionRepository;
 import com.example.ecole.repository.PersonneRepository;
+import jakarta.validation.Valid;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -80,11 +81,11 @@ public class InscriptionController {
 
 
     @PutMapping("/inscrit/{id}")
-    public ResponseEntity<Inscription> updateInscription(@PathVariable UUID id, @RequestBody Inscription updatedInscription, Authentication authentication) {
+    public ResponseEntity<Inscription> updateInscription(@PathVariable UUID id, @Valid @RequestBody Inscription updatedInscription, Authentication authentication) {
         if (hasAuthority(authentication, "SCOPE_write:inscrit")) {
             Optional<Inscription> optionalInscription = inscritRepository.findById(id);
 
-            if (optionalInscription.isPresent() && updatedInscription.getRembourser() > -1) {
+            if (optionalInscription.isPresent()  ) {
 
                 Inscription inscription = optionalInscription.get();
                 inscription.setRembourser(updatedInscription.getRembourser());

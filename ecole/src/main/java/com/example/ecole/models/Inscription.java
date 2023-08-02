@@ -5,9 +5,12 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import org.hibernate.validator.constraints.NotEmpty;
 import java.time.LocalDate;
 import java.util.UUID;
+import jakarta.validation.constraints.Pattern;
+
 @Entity
 @Table(name="inscription")
 public class Inscription {
@@ -16,6 +19,7 @@ public class Inscription {
     @Column(name = "id", nullable = false)
     private UUID id;
 @Column(name = "commune", nullable = false)
+@Pattern(regexp =  "^[\\p{L}]+$" , message = "commune invalide")
     private  String commune;
 @NotNull
 @Positive
@@ -23,11 +27,17 @@ public class Inscription {
     private  float minerval;
     @JsonFormat(pattern = "dd/MM/yyyy")
 private LocalDate date_inscrit;
-
+    @PositiveOrZero
+    @NotNull
+    @Column(name = "rembourser")
 private  float rembourser;
 @NotEmpty
+@Pattern(regexp = "^(?i)(General|Technique|Professionnel)$", message = "Entrer une section valide (General, Technique, Professionnel)")
+@Column(name = "section")
 private String section;
 @NotEmpty
+@Pattern(regexp = "^[1-6] secondaire$", message = "La valeur doit être entre '1 secondaire' et '6 secondaire'")
+@Column(name = "secondaire_anne")
 private  String secondaire_anne;
 
     @ManyToOne

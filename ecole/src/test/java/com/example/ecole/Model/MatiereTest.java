@@ -18,9 +18,7 @@ public class MatiereTest {
     LocalDate datefin = LocalDate.of(2024, 1, 10);
     Personne professeur;
     LocalDate birthDate = LocalDate.now().minusYears(21);
-    @JsonFormat(pattern = "HH:mm")
     LocalTime debutime = LocalTime.of(9,0);
-    @JsonFormat(pattern = "HH:mm")
     LocalTime fintime = LocalTime.of(16,30);
 
 

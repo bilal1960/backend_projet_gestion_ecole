@@ -137,7 +137,6 @@ public class PersonneAjouterControllerTest {
         personne.setId(UUID.randomUUID());
         personne.setStatut("professeur");
 
-        // Simulating an underage professeur (20 years old).
         LocalDate dateOfBirth = LocalDate.now().minusYears(20);
         personne.setNaissance(dateOfBirth);
 

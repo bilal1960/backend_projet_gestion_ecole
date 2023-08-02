@@ -32,7 +32,7 @@ public class Personne {
     @Column(name = "nationalite", nullable = false)
     private  String nationalite;
     @NotEmpty
-    @Pattern(regexp = "^[A-Za-z\\d\\s.-]+$", message = "Entrer une adresse valide")
+    @Pattern(regexp = "^[A-Za-z][A-Za-z\\d\\s./]*$", message = "Entrer une adresse valide")
     @Column(name = "adresse", nullable = false)
     private  String adresse;
     @NotEmpty
@@ -118,6 +118,9 @@ public class Personne {
     public String getStatut(){return  statut;}
     public  void  setStatut(String statut){this.statut = statut;}
     public List<Matiere> getMatieres(){return  matieres;}
+
+    public void setMatieres(List<Matiere> matieres) {this.matieres = matieres;}
+
     public List<Inscription> getInscriptions() {
         return inscriptions;
     }

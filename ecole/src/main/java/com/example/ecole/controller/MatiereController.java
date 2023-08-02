@@ -16,10 +16,7 @@ import java.net.URI;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.Year;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.regex.Pattern;
 import com.example.ecole.models.Matiere;
 import org.slf4j.LoggerFactory;
@@ -38,8 +35,9 @@ public class MatiereController {
 
 
 
-    public MatiereController(MatiereRepository matiererepository) {
+    public MatiereController(MatiereRepository matiererepository,PersonneRepository personneRepository) {
         this.matiererepository = matiererepository;
+        this.personneRepository = personneRepository;
     }
     @GetMapping("/matieres")
     public ResponseEntity<List<Matiere>> getAllMatieres(Authentication authentication) {
@@ -53,9 +51,10 @@ public class MatiereController {
         }
     }
    @PostMapping("/matieress")
-   public ResponseEntity<?> addMatiere(@RequestBody Matiere matiere, UriComponentsBuilder builder, Authentication authentication) {
+   public ResponseEntity<Matiere> addMatiere(@RequestBody Matiere matiere, UriComponentsBuilder builder, Authentication authentication) {
             int debutYear = matiere.getDebut().getYear();
-            int finYear = matiere.getFin().getYear();
+            int finYear = debutYear+1;
+            List<Matiere> matieress= new ArrayList<>();
        if (hasAuthority(authentication, "SCOPE_write:matiere")) {
            Personne professeur = personneRepository.findById(matiere.getPersonne().getId()).orElse(null);
            if (professeur != null) {
@@ -75,8 +74,10 @@ public class MatiereController {
                }
 
                matiere.setPersonne(professeur);
-               matiere.setId(UUID.randomUUID());
                matiererepository.save(matiere);
+               matieress.add(matiere);
+               professeur.setMatieres(matieress);
+               personneRepository.save(professeur);
                URI location = builder.path("/add/matieres/{id}").buildAndExpand(matiere.getId()).toUri();
                logger.debug("succès de la sauvegarde des données dans la base de données");
                return ResponseEntity.created(location).body(matiere);
@@ -113,7 +114,7 @@ public class MatiereController {
         }
     }
     @PutMapping("/matieres/{id}")
-    public ResponseEntity<?> updateMatiere(@PathVariable UUID id, @RequestBody Matiere updatedMatiere, Authentication authentication) {
+    public ResponseEntity<Matiere> updateMatiere(@PathVariable UUID id, @RequestBody Matiere updatedMatiere, Authentication authentication) {
         if (hasAuthority(authentication, "SCOPE_write:matiere")) {
             Optional<Matiere> existingMatiereOptional = matiererepository.findById(id);
             int debutYear = updatedMatiere.getDebut().getYear();
