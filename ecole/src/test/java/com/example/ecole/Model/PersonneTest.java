@@ -33,15 +33,6 @@ public class PersonneTest {
 
       }
 
-      @Test
-     public  void  TestMethodeAge(){
 
-        int date = personne.getAge();
-
-        assertNotNull(date);
-        assertEquals(date,personne.getAge());
-
-
-      }
 
 }

@@ -67,12 +67,6 @@ public class PersonneAjouterController {
 
         if (hasAuthority(authentication, "SCOPE_write:personne")) {
 
-            if(personne.getAge() <21 && "professeur".equals(personne.getStatut())){
-                logger.debug("un professeur doit avoir 21 ans minimum");
-                return  ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-
-            }
-
             personne.setId(UUID.randomUUID());
             personneRepository.save(personne);
             URI location = builder.path("/add/personnes/{id}").buildAndExpand(personne.getId()).toUri();

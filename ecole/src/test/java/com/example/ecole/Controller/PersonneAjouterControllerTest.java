@@ -129,23 +129,6 @@ public class PersonneAjouterControllerTest {
         assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
         assertEquals(personne, responseEntity.getBody());
     }
-
-
-    @Test
-    public void addPersonneUnderageProfesseurTest() {
-        Personne personne = new Personne();
-        personne.setId(UUID.randomUUID());
-        personne.setStatut("professeur");
-
-        LocalDate dateOfBirth = LocalDate.now().minusYears(20);
-        personne.setNaissance(dateOfBirth);
-
-        Authentication authentication = createAuthenticationWithAuthority("SCOPE_write:personne");
-        ResponseEntity<Personne> responseEntity = personneAjouterController.addPersonne(personne, authentication, UriComponentsBuilder.newInstance());
-
-        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
-    }
-
     @Test
     public void addPersonneNoAuthorityTest() {
         Authentication authentication = createAuthenticationWithAuthority("SCOPE_wrong:personne");

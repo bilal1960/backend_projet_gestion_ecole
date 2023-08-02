@@ -1,6 +1,7 @@
 package com.example.ecole.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Pattern;
 import java.util.UUID;
 
 @Entity
@@ -10,17 +11,20 @@ public class Ecole {
     @Column(name="id",nullable = false)
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-    @Basic
+
     @Column(length=30, nullable=false)
     private String nom;
-    @Basic
+    @Pattern(regexp = "^[A-Za-z][A-Za-z\\d\\s./]*$", message = "Entrer une adresse valide")
     @Column(length=30, nullable=false)
     private String adresse;
-    @Basic
+
+    @Pattern(regexp = "secondaire(\\s?/\\s?supérieur)?", message = "Le type doit être 'secondaire' ou 'secondaire/supérieur'")
     @Column(length=30, nullable=false)
     private  String type;
+    @Pattern(regexp = ".*@.*\\..*", message = "Entrer une adresse e-mail valide")
     @Column(length = 30, nullable = false)
     private String mail;
+    @Pattern(regexp = "(\\+32\\s?)?\\d{1,}(\\s?\\d{2}){1,}", message = "Le numéro de téléphone doit être au format +32 XXX XX XX XX ou XXX XX XX XX")
     @Column(length = 30, nullable = false)
     private  String number;
 

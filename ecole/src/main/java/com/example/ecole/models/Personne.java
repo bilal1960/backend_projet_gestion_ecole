@@ -128,9 +128,4 @@ public class Personne {
         this.inscriptions = inscriptions;
    }
 
-    public int getAge() {
-        LocalDate now = LocalDate.now();
-        return Period.between(naissance, now).getYears();
-    }
-
 }

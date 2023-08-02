@@ -9,4 +9,4 @@ CREATE TABLE ecole
     CONSTRAINT pk_ecole PRIMARY KEY (id)
 );
 INSERT INTO ecole ( id,nom, adresse, mail, number, type)
-VALUES('04ece6ce-2690-4152-a5c9-09d40d5891b7', 'Saint peter', '123 Rue royale', 'ecolea@example.com', '04789652', 'secondaire');
+VALUES('04ece6ce-2690-4152-a5c9-09d40d5891b7', 'Saint peter', ' Rue royale 123', 'ecolea@example.com', '04789652', 'secondaire');

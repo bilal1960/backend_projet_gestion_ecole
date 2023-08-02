@@ -44,10 +44,10 @@ public class EcoleController {
                 return ResponseEntity.notFound().build();
             }
 
-            if (updatedEcole.getAdresse() != null && !updatedEcole.getAdresse().isEmpty()) {
+            if (updatedEcole.getAdresse() != null && updatedEcole.getAdresse().isEmpty()) {
                 existingEcole.setAdresse(updatedEcole.getAdresse());
             }
-            if(updatedEcole.getMail() != null && !updatedEcole.getMail().isEmpty()){
+            if(updatedEcole.getMail() != null && updatedEcole.getMail().isEmpty()){
                 existingEcole.setMail(updatedEcole.getMail());
             }
             if(updatedEcole.getNumber() != null && updatedEcole.getNumber().isEmpty()){
