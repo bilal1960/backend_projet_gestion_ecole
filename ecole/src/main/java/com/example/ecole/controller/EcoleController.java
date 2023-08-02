@@ -1,4 +1,5 @@
 package com.example.ecole.controller;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,9 +10,11 @@ import org.springframework.web.bind.annotation.*;
 import com.example.ecole.repository.EcoleRepository;
 import com.example.ecole.models.Ecole;
 import java.util.UUID;
+
 @RestController
 @RequestMapping("/add/ecoles")
 public class EcoleController {
+
     @Autowired
     private final EcoleRepository ecoleRepository;
     private static final Logger logger = LoggerFactory.getLogger(EcoleController.class);
@@ -47,14 +50,13 @@ public class EcoleController {
             if (updatedEcole.getAdresse() != null && updatedEcole.getAdresse().isEmpty()) {
                 existingEcole.setAdresse(updatedEcole.getAdresse());
             }
-            if(updatedEcole.getMail() != null && updatedEcole.getMail().isEmpty()){
+            if (updatedEcole.getMail() != null && updatedEcole.getMail().isEmpty()) {
                 existingEcole.setMail(updatedEcole.getMail());
             }
-            if(updatedEcole.getNumber() != null && updatedEcole.getNumber().isEmpty()){
+            if (updatedEcole.getNumber() != null && updatedEcole.getNumber().isEmpty()) {
                 existingEcole.setNumber(updatedEcole.getNumber());
-
             }
-            if(updatedEcole.getType() != null && updatedEcole.getType().isEmpty()){
+            if (updatedEcole.getType() != null && updatedEcole.getType().isEmpty()) {
                 existingEcole.setType(updatedEcole.getType());
             }
 
@@ -70,8 +72,4 @@ public class EcoleController {
         logger.debug("vérifier l'autorité de permission", expectedAuthority);
         return authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals(expectedAuthority));
     }
-
 }
-
-
-
