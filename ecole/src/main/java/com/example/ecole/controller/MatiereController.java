@@ -157,7 +157,7 @@ public class MatiereController {
                 }
 
                 if (updatedMatiere.getJour() != null) {
-                    String jourupdate = updatedMatiere.getJour().toLowerCase();
+                    String jourupdate = updatedMatiere.getJour().trim().toLowerCase();
 
                     if (!Arrays.asList(joursSemaineList).contains(jourupdate)) {
                         logger.debug("error entrer un jour valide");
@@ -169,7 +169,7 @@ public class MatiereController {
                 }
 
                 if (updatedMatiere.getLocal() != null) {
-                    String local = updatedMatiere.getLocal();
+                    String local = updatedMatiere.getLocal().trim();
 
                     if (!Pattern.matches(localPattern, local)) {
                         logger.debug("respecté le format suivant pour local: lettre suivit de chiffre ou lettre");

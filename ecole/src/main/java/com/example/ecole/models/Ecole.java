@@ -16,8 +16,7 @@ public class Ecole {
 
     @Column(length = 30, nullable = false)
     private String nom;
-
-    @Pattern(regexp = "^[A-Za-z][A-Za-z\\d\\s./]*$", message = "Entrer une adresse valide")
+    @Pattern(regexp = "^\\s*[A-Za-z][A-Za-z\\d\\s./]*\\s*$", message = "Entrer une adresse valide")
     @Column(length = 30, nullable = false)
     private String adresse;
 

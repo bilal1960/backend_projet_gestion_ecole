@@ -37,7 +37,7 @@ public class Personne {
     private String nationalite;
 
     @NotEmpty
-    @Pattern(regexp = "^[A-Za-z][A-Za-z\\d\\s./]*$", message = "Entrer une adresse valide")
+    @Pattern(regexp = "^\\s*[A-Za-z][A-Za-z\\d\\s./]*\\s*$", message = "Entrer une adresse valide")
     @Column(name = "adresse", nullable = false)
     private String adresse;
 

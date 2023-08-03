@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -65,12 +66,13 @@ public class InscriptionController {
     public ResponseEntity<Inscription> addInscrit(@RequestBody Inscription inscription, UriComponentsBuilder builder, Authentication authentication) {
         if (hasAuthority(authentication, "SCOPE_write:inscrit")) {
             Personne personne = personneRepository.findById(inscription.getPersonne().getId()).orElse(null);
+            List<Inscription> inscriptions = new ArrayList<>();
 
             if (personne != null) {
-                UUID inscriptionId = UUID.randomUUID();
                 inscription.setPersonne(personne);
-                inscription.setId(inscriptionId);
                 inscritRepository.save(inscription);
+                inscriptions.add(inscription);
+                personne.setInscriptions(inscriptions);
                 URI location = builder.path("/add/inscriptions/{id}").buildAndExpand(inscription.getId()).toUri();
                 logger.debug("Succès de l'ajout des données ");
                 return ResponseEntity.created(location).body(inscription);

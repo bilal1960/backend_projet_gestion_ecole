@@ -40,7 +40,7 @@ public class Matiere {
     private Personne professeur_id;
 
     @NotEmpty
-    @Pattern(regexp = "^[a-zA-Z][a-zA-Z0-9]*$", message = "Le local doit commencer par une lettre de l'alphabet ensuite elle peut contenir des lettres ou chiffres positif.")
+    @Pattern(regexp = "^\\s*[A-Za-z][A-Za-z\\d\\s./]*\\s*$", message = "le local doit avoir une lettre au début")
     @Column(name = "local")
     private String local;
 
