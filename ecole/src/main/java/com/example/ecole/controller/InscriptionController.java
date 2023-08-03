@@ -1,4 +1,5 @@
 package com.example.ecole.controller;
+
 import com.example.ecole.models.Inscription;
 import com.example.ecole.models.Personne;
 import com.example.ecole.repository.InscriptionRepository;
@@ -13,35 +14,41 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
+
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+
 import org.slf4j.Logger;
+
 @RestController
 @RequestMapping("/add/inscriptions")
 public class InscriptionController {
-    private static final   Logger logger = LoggerFactory.getLogger(InscriptionController.class);
+    private static final Logger logger = LoggerFactory.getLogger(InscriptionController.class);
     @Autowired
     private InscriptionRepository inscritRepository;
     @Autowired
-    private  PersonneRepository personneRepository;
+    private PersonneRepository personneRepository;
+
     @Autowired
-    public InscriptionController(InscriptionRepository inscriptionRepository,  PersonneRepository personneRepository) {
+    public InscriptionController(InscriptionRepository inscriptionRepository, PersonneRepository personneRepository) {
         this.inscritRepository = inscriptionRepository;
         this.personneRepository = personneRepository;
     }
+
     @GetMapping
-    public ResponseEntity<List<Inscription>> getAllInscription(Pageable pageable,Authentication authentication) {
+    public ResponseEntity<List<Inscription>> getAllInscription(Pageable pageable, Authentication authentication) {
         if (hasAuthority(authentication, "SCOPE_read:inscrit")) {
             List<Inscription> inscriptions = inscritRepository.findAll();
             logger.debug("la récupération est un succès");
             return ResponseEntity.ok(inscriptions);
-        }else {
+        } else {
             logger.debug("il y a eu un problème de récupération");
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-      }
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
     }
+
     @GetMapping("/api")
     public ResponseEntity<Page<Inscription>> getPaginatedInscriptions(Pageable pageable, Authentication authentication) {
         if (hasAuthority(authentication, "SCOPE_read:inscrit")) {
@@ -53,22 +60,21 @@ public class InscriptionController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
     }
+
     @PostMapping
     public ResponseEntity<Inscription> addInscrit(@RequestBody Inscription inscription, UriComponentsBuilder builder, Authentication authentication) {
         if (hasAuthority(authentication, "SCOPE_write:inscrit")) {
             Personne personne = personneRepository.findById(inscription.getPersonne().getId()).orElse(null);
 
-            if (personne != null  ) {
+            if (personne != null) {
                 UUID inscriptionId = UUID.randomUUID();
                 inscription.setPersonne(personne);
                 inscription.setId(inscriptionId);
                 inscritRepository.save(inscription);
                 URI location = builder.path("/add/inscriptions/{id}").buildAndExpand(inscription.getId()).toUri();
                 logger.debug("Succès de l'ajout des données ");
-                    return ResponseEntity.created(location).body(inscription);
-                }
-
-             else {
+                return ResponseEntity.created(location).body(inscription);
+            } else {
                 logger.debug("La personne ou la matiere correspondante n'a pas été trouvée");
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
             }
@@ -79,20 +85,30 @@ public class InscriptionController {
         }
     }
 
-
     @PutMapping("/inscrit/{id}")
     public ResponseEntity<Inscription> updateInscription(@PathVariable UUID id, @Valid @RequestBody Inscription updatedInscription, Authentication authentication) {
         if (hasAuthority(authentication, "SCOPE_write:inscrit")) {
             Optional<Inscription> optionalInscription = inscritRepository.findById(id);
 
-            if (optionalInscription.isPresent()  ) {
-
+            if (optionalInscription.isPresent()) {
                 Inscription inscription = optionalInscription.get();
-                inscription.setRembourser(updatedInscription.getRembourser());
-                inscription.setSection(updatedInscription.getSection());
-                inscription.setSecondaire_anne(updatedInscription.getSecondaire_anne());
-                inscription.setCommune(updatedInscription.getCommune());
-                inscription.setMinerval(updatedInscription.getMinerval());
+
+                if (updatedInscription.getRembourser() != null) {
+                    inscription.setRembourser(updatedInscription.getRembourser());
+                }
+                if (updatedInscription.getSection() != null) {
+                    inscription.setSection(updatedInscription.getSection());
+                }
+                if (updatedInscription.getSecondaire_anne() != null) {
+                    inscription.setSecondaire_anne(updatedInscription.getSecondaire_anne());
+                }
+                if (updatedInscription.getCommune() != null) {
+                    inscription.setCommune(updatedInscription.getCommune());
+                }
+                if (updatedInscription.getMinerval() != null) {
+                    inscription.setMinerval(updatedInscription.getMinerval());
+                }
+
                 inscription = inscritRepository.save(inscription);
 
                 logger.debug("Succès de la mise à jour des données");
@@ -106,6 +122,7 @@ public class InscriptionController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
     }
+
 
     private static boolean hasAuthority(Authentication authentication, String expectedAuthority) {
         logger.debug("autorisation");

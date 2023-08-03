@@ -1,8 +1,6 @@
 package com.example.ecole.models;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -11,10 +9,11 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import java.time.LocalDate;
 import java.util.UUID;
+
 import jakarta.validation.constraints.Pattern;
 
 @Entity
-@Table(name="inscription")
+@Table(name = "inscription")
 public class Inscription {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -22,13 +21,13 @@ public class Inscription {
     private UUID id;
 
     @Column(name = "commune", nullable = false)
-    @Pattern(regexp =  "^[\\p{L}]+$" , message = "commune invalide")
+    @Pattern(regexp = "^[\\p{L}]+$", message = "commune invalide")
     private String commune;
 
     @NotNull
     @Positive
     @Column(name = "minerval", nullable = false)
-    private float minerval;
+    private Float minerval;
 
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate date_inscrit;
@@ -36,7 +35,7 @@ public class Inscription {
     @PositiveOrZero
     @NotNull
     @Column(name = "rembourser")
-    private float rembourser;
+    private Float rembourser;
 
     @NotEmpty
     @Pattern(regexp = "^(?i)(General|Technique|Professionnel)$", message = "Entrer une section valide (General, Technique, Professionnel)")
@@ -55,7 +54,7 @@ public class Inscription {
     public Inscription() {
     }
 
-    public Inscription(String commune, float minerval, Personne personne_id, LocalDate date_inscrit, float rembourser, String section, String secondaire_anne) {
+    public Inscription(String commune, Float minerval, Personne personne_id, LocalDate date_inscrit, Float rembourser, String section, String secondaire_anne) {
         this.commune = commune;
         this.minerval = minerval;
         this.date_inscrit = date_inscrit;
@@ -85,11 +84,11 @@ public class Inscription {
         this.commune = commune;
     }
 
-    public float getMinerval() {
+    public Float getMinerval() {
         return minerval;
     }
 
-    public void setMinerval(float minerval) {
+    public void setMinerval(Float minerval) {
         this.minerval = minerval;
     }
 
@@ -101,11 +100,11 @@ public class Inscription {
         this.date_inscrit = date_inscrit;
     }
 
-    public float getRembourser() {
+    public Float getRembourser() {
         return rembourser;
     }
 
-    public void setRembourser(float rembourser) {
+    public void setRembourser(Float rembourser) {
         this.rembourser = rembourser;
     }
 

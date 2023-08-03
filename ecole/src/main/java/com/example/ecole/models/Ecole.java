@@ -2,14 +2,15 @@ package com.example.ecole.models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Pattern;
+
 import java.util.UUID;
 
 @Entity
-@Table(name="ecole")
+@Table(name = "ecole")
 public class Ecole {
 
     @Id
-    @Column(name="id", nullable = false)
+    @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 

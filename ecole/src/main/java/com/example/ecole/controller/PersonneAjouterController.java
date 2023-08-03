@@ -1,4 +1,5 @@
 package com.example.ecole.controller;
+
 import com.example.ecole.models.Personne;
 import com.example.ecole.repository.PersonneRepository;
 import org.slf4j.Logger;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
+
 import java.net.URI;
 import java.util.List;
 import java.util.UUID;
@@ -20,12 +22,14 @@ import java.util.UUID;
 @RequestMapping("/add/perso")
 public class PersonneAjouterController {
 
-    private  static  final Logger logger = LoggerFactory.getLogger(PersonneAjouterController.class);
+    private static final Logger logger = LoggerFactory.getLogger(PersonneAjouterController.class);
     @Autowired
     private final PersonneRepository personneRepository;
+
     public PersonneAjouterController(PersonneRepository personneRepository) {
         this.personneRepository = personneRepository;
     }
+
     @GetMapping("/api")
     public ResponseEntity<List<Personne>> getAllPersonnes(Authentication authentication) {
         if (hasAuthority(authentication, "SCOPE_read:personne")) {
@@ -62,6 +66,7 @@ public class PersonneAjouterController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
     }
+
     @PostMapping("/pagi")
     public ResponseEntity<Personne> addPersonne(@RequestBody Personne personne, Authentication authentication, UriComponentsBuilder builder) {
 

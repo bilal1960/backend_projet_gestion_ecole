@@ -3,12 +3,11 @@ package com.example.ecole.models;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.NotEmpty;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.List;
 import java.util.UUID;
 
 @Entity

@@ -2,17 +2,15 @@ package com.example.ecole.models;
 
 import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import java.time.LocalDate;
-import java.time.Period;
 import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name="personne", uniqueConstraints = @UniqueConstraint(columnNames = {"prenom", "nom"}))
+@Table(name = "personne", uniqueConstraints = @UniqueConstraint(columnNames = {"prenom", "nom"}))
 public class Personne {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -72,7 +70,8 @@ public class Personne {
         this.statut = statut;
     }
 
-    public Personne() {}
+    public Personne() {
+    }
 
     public Personne(String prenom, String nom, LocalDate naissance, String nationalite, String adresse, String sexe, String statut) {
         this.prenom = prenom;

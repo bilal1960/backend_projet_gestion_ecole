@@ -11,6 +11,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
@@ -36,12 +37,11 @@ public class PersonneRepositoryTest {
     LocalDate birthDateinscrit = LocalDate.now().minusYears(13);
 
 
-
     @BeforeEach
-    public  void setUp(){
+    public void setUp() {
         personne1 = new Personne("lolo", "laura", birthDate, "Belge", "rue Test/50", "homme", "professeur");
         personne2 = new Personne("laura", "lulu", birthDateinscrit, "Belge", "rue Test2/123", "homme", "etudiant");
-        personneerror = new Personne(null, "laura",birthDate, "Belge", "rue Test/123", "homme", "professeur");
+        personneerror = new Personne(null, "laura", birthDate, "Belge", "rue Test/123", "homme", "professeur");
         personnewithnotargument = new Personne();
     }
 
@@ -111,8 +111,9 @@ public class PersonneRepositoryTest {
             entityManager.flush();
         });
     }
+
     @Test
-    public  void whenPersistConstructeurwithnulldata_thenThrowException() {
+    public void whenPersistConstructeurwithnulldata_thenThrowException() {
         assertThrows(ValidationException.class, () -> {
             entityManager.persist(personnewithnotargument);
             entityManager.flush();

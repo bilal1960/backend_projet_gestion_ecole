@@ -9,6 +9,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import com.example.ecole.repository.EcoleRepository;
 import com.example.ecole.models.Ecole;
+
 import java.util.UUID;
 
 @RestController

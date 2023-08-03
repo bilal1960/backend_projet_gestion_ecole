@@ -4,10 +4,13 @@ import com.example.ecole.models.Ecole;
 import com.example.ecole.repository.EcoleRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.*;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+
 import java.util.UUID;
 
 @DataJpaTest
@@ -25,8 +28,8 @@ public class EcoleRepositoryTest {
 
 
     @BeforeEach
-    public  void setUp(){
-        ecole1 = new Ecole("ecole Royale", "40 rue du parc royal", "ecoleRoyale@hotmail.com","0487000789", "secondaire");
+    public void setUp() {
+        ecole1 = new Ecole("ecole Royale", "rue du parc royal", "ecoleRoyale@hotmail.com", "0487000789", "secondaire");
     }
 
     @Test

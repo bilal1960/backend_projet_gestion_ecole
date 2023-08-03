@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.util.UriComponentsBuilder;
+
 import java.time.LocalDate;
 import java.util.*;
 
@@ -129,6 +130,7 @@ public class PersonneAjouterControllerTest {
         assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
         assertEquals(personne, responseEntity.getBody());
     }
+
     @Test
     public void addPersonneNoAuthorityTest() {
         Authentication authentication = createAuthenticationWithAuthority("SCOPE_wrong:personne");

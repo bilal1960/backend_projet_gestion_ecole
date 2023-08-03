@@ -1,4 +1,3 @@
-
 CREATE TABLE personne_matiere
 (
     matiere_id  UUID NOT NULL,

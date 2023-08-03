@@ -1,8 +1,10 @@
 package com.example.ecole.Model;
+
 import com.example.ecole.models.Ecole;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import java.util.UUID;
+
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -18,7 +20,7 @@ class EcoleTest {
     }
 
     @Test
-    void  TestConstructeur(){
+    void TestConstructeur() {
 
         assertNotNull(ecole);
         assertEquals("Ecole Royale", ecole.getNom());
