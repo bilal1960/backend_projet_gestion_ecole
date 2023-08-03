@@ -6,8 +6,10 @@ pipelines:
         name: Build
         script:
         - cd ecole/src
+
           - mvn install -DskipTests
     - step:
         name: Test
         script:
+        - cd ecole/src
           - mvn test
