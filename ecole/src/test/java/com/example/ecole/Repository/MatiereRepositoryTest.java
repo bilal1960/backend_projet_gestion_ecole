@@ -1,5 +1,6 @@
 package com.example.ecole.Repository;
 
+import com.example.ecole.models.Inscription;
 import com.example.ecole.models.Matiere;
 import com.example.ecole.models.Personne;
 import com.example.ecole.repository.MatiereRepository;
@@ -70,6 +71,13 @@ public class MatiereRepositoryTest {
         entityManager.remove(professeurNotExist);
 
         Page<Matiere> found = matiereRepository.findAll(PageRequest.of(0, 1));
+        assertTrue(found.getContent().isEmpty());
+    }
+    @Test
+    public  void whenpageablenotexisting(){
+
+        Page<Matiere> found = matiereRepository.findAll(PageRequest.of(10, 1));
+
         assertTrue(found.getContent().isEmpty());
     }
 }
