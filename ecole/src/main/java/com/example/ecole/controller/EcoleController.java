@@ -1,5 +1,7 @@
 package com.example.ecole.controller;
 
+import com.mashape.unirest.http.HttpResponse;
+import com.mashape.unirest.http.Unirest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,6 +70,8 @@ public class EcoleController {
         logger.debug("Attention, vous n'avez pas la bonne permission");
         return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
+
+
 
     private static boolean hasAuthority(Authentication authentication, String expectedAuthority) {
         logger.debug("vérifier l'autorité de permission", expectedAuthority);

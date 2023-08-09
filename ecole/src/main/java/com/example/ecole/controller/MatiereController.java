@@ -56,7 +56,7 @@ public class MatiereController {
     @PostMapping("/matieress")
     public ResponseEntity<Matiere> addMatiere(@RequestBody Matiere matiere, UriComponentsBuilder builder, Authentication authentication) {
         int debutYear = matiere.getDebut().getYear();
-        int finYear = debutYear + 1;
+        int finYear = matiere.getFin().getYear();
         List<Matiere> matieress = new ArrayList<>();
 
         if (hasAuthority(authentication, "SCOPE_write:matiere")) {

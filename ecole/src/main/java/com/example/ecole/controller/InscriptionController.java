@@ -4,6 +4,8 @@ import com.example.ecole.models.Inscription;
 import com.example.ecole.models.Personne;
 import com.example.ecole.repository.InscriptionRepository;
 import com.example.ecole.repository.PersonneRepository;
+import com.mashape.unirest.http.HttpResponse;
+import com.mashape.unirest.http.Unirest;
 import jakarta.validation.Valid;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +16,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
-
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -124,6 +125,7 @@ public class InscriptionController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
     }
+
 
 
     private static boolean hasAuthority(Authentication authentication, String expectedAuthority) {
