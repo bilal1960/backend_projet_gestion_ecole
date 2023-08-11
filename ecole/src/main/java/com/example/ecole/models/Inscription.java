@@ -6,10 +6,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 import org.hibernate.validator.constraints.NotEmpty;
-
 import java.time.LocalDate;
 import java.util.UUID;
-
 import jakarta.validation.constraints.Pattern;
 
 @Entity
@@ -64,10 +62,6 @@ public class Inscription {
         this.secondaire_anne = secondaire_anne;
     }
 
-    public Inscription(String uuid) {
-        this.id = UUID.fromString(uuid);
-    }
-
     public UUID getId() {
         return id;
     }
@@ -94,10 +88,6 @@ public class Inscription {
 
     public LocalDate getDate_inscrit() {
         return date_inscrit;
-    }
-
-    public void setDate_inscrit(LocalDate date_inscrit) {
-        this.date_inscrit = date_inscrit;
     }
 
     public Float getRembourser() {

@@ -18,15 +18,11 @@ public class PermissionApiController {
 
     @GetMapping
     public List<String> getPermissions(Authentication authentication) {
+        logger.debug("l'utilisateur ne dispose pas des bons droits d'accès");
+
         return authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .map((a) -> a.replace("SCOPE_", ""))
                 .toList();
-    }
-
-    private boolean hasAuthority(Authentication authentication, String requiredAuthority) {
-        logger.debug("autorisation");
-        return authentication.getAuthorities().stream()
-                .anyMatch(authority -> authority.getAuthority().equals(requiredAuthority));
     }
 }

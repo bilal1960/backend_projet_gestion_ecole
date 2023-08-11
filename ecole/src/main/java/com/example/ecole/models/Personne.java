@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.NotEmpty;
-
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
@@ -98,19 +97,9 @@ public class Personne {
     public String getPrenom() {
         return prenom;
     }
-
-    public void setPrenom(String prenom) {
-        this.prenom = prenom;
-    }
-
     public String getNom() {
         return nom;
     }
-
-    public void setNom(String nom) {
-        this.nom = nom;
-    }
-
     public LocalDate getNaissance() {
         return naissance;
     }
@@ -122,11 +111,6 @@ public class Personne {
     public String getNationalite() {
         return nationalite;
     }
-
-    public void setNationalite(String nationalite) {
-        this.nationalite = nationalite;
-    }
-
     public String getAdresse() {
         return adresse;
     }
@@ -138,11 +122,6 @@ public class Personne {
     public String getSexe() {
         return sexe;
     }
-
-    public void setSexe(String sexe) {
-        this.sexe = sexe;
-    }
-
     public String getStatut() {
         return statut;
     }
@@ -150,19 +129,9 @@ public class Personne {
     public void setStatut(String statut) {
         this.statut = statut;
     }
-
-    public List<Matiere> getMatieres() {
-        return matieres;
-    }
-
     public void setMatieres(List<Matiere> matieres) {
         this.matieres = matieres;
     }
-
-    public List<Inscription> getInscriptions() {
-        return inscriptions;
-    }
-
     public void setInscriptions(List<Inscription> inscriptions) {
         this.inscriptions = inscriptions;
     }

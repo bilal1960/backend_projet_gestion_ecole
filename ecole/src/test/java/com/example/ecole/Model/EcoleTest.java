@@ -3,8 +3,6 @@ package com.example.ecole.Model;
 import com.example.ecole.models.Ecole;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 

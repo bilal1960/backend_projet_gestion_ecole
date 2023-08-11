@@ -2,7 +2,6 @@ package com.example.ecole.models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Pattern;
-
 import java.util.UUID;
 
 @Entity

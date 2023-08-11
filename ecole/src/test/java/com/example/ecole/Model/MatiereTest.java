@@ -4,10 +4,8 @@ import com.example.ecole.models.Matiere;
 import com.example.ecole.models.Personne;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-
 import java.time.LocalDate;
 import java.time.LocalTime;
 

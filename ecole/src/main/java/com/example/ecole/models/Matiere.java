@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.NotEmpty;
-
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.UUID;
@@ -67,9 +66,6 @@ public class Matiere {
         this.secondaire = secondaire;
     }
 
-    public Matiere(String uuid) {
-        this.id = UUID.fromString(uuid);
-    }
 
     public UUID getId() {
         return id;

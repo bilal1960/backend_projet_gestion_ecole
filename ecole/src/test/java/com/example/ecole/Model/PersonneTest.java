@@ -3,9 +3,7 @@ package com.example.ecole.Model;
 import com.example.ecole.models.Personne;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.*;
-
 import java.time.LocalDate;
 
 

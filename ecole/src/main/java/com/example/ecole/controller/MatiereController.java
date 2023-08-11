@@ -12,13 +12,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
-
 import java.net.URI;
 import java.time.LocalTime;
 import java.time.Year;
 import java.util.*;
 import java.util.regex.Pattern;
-
 import com.example.ecole.models.Matiere;
 import org.slf4j.LoggerFactory;
 
