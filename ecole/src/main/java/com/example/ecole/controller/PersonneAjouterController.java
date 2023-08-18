@@ -55,7 +55,7 @@ public class PersonneAjouterController {
     }
 
     @GetMapping("/api1")
-    public ResponseEntity<Page<Personne>> getPaginatedInscriptions(Pageable pageable, Authentication authentication) {
+    public ResponseEntity<Page<Personne>> getPaginatedIPersonne(Pageable pageable, Authentication authentication) {
         if (hasAuthority(authentication, "SCOPE_read:personne")) {
             Page<Personne> personnes = personneRepository.findAll(pageable);
             logger.debug("La récupération paginée est un succès");

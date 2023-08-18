@@ -98,7 +98,7 @@ public class PersonneAjouterControllerTest {
         when(personneRepository.findAll(any(Pageable.class))).thenReturn(personnePage);
 
         Authentication authentication = createAuthenticationWithAuthority("SCOPE_read:personne");
-        ResponseEntity<Page<Personne>> responseEntity = personneAjouterController.getPaginatedInscriptions(Pageable.unpaged(), authentication);
+        ResponseEntity<Page<Personne>> responseEntity = personneAjouterController.getPaginatedIPersonne(Pageable.unpaged(), authentication);
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(personnePage, responseEntity.getBody());
@@ -107,7 +107,7 @@ public class PersonneAjouterControllerTest {
     @Test
     public void getPaginatedInscriptionsNoAuthorityTest() {
         Authentication authentication = createAuthenticationWithAuthority("SCOPE_wrong:personne");
-        ResponseEntity<Page<Personne>> responseEntity = personneAjouterController.getPaginatedInscriptions(Pageable.unpaged(), authentication);
+        ResponseEntity<Page<Personne>> responseEntity = personneAjouterController.getPaginatedIPersonne(Pageable.unpaged(), authentication);
 
         assertEquals(HttpStatus.FORBIDDEN, responseEntity.getStatusCode());
     }
