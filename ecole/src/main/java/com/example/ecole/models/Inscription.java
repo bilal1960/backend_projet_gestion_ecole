@@ -60,6 +60,7 @@ public class Inscription {
         this.section = section;
         this.personne_id = personne_id;
         this.secondaire_anne = secondaire_anne;
+
     }
 
     public UUID getId() {
@@ -121,4 +122,7 @@ public class Inscription {
     public void setPersonne(Personne personne_id) {
         this.personne_id = personne_id;
     }
+
+
+
 }
