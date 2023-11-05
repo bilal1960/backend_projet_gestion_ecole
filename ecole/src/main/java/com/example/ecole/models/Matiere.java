@@ -27,6 +27,8 @@ public class Matiere {
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate fin;
 
+    private String revision;
+
     @JsonFormat(pattern = "HH:mm")
     private LocalTime debutime;
 

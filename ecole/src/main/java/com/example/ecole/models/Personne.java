@@ -57,7 +57,11 @@ public class Personne {
     @OneToMany(mappedBy = "personne_id")
     private List<Inscription> inscriptions;
 
-    public Personne(String prenom, String nom, LocalDate naissance, String nationalite, String adresse, String sexe, String statut, List<Matiere> matieres, List<Inscription> inscriptions) {
+    @JsonIgnore
+    @OneToMany(mappedBy = "personne_idpresence", cascade = CascadeType.ALL)
+    private List<Absence> absences;
+
+    public Personne(String prenom, String nom, LocalDate naissance, String nationalite, String adresse, String sexe, String statut, List<Matiere> matieres, List<Inscription> inscriptions, List<Absence> absences) {
         this.prenom = prenom;
         this.nom = nom;
         this.naissance = naissance;
@@ -67,6 +71,7 @@ public class Personne {
         this.sexe = sexe;
         this.inscriptions = inscriptions;
         this.statut = statut;
+        this.absences = absences;
     }
 
     public Personne() {
@@ -134,5 +139,9 @@ public class Personne {
     }
     public void setInscriptions(List<Inscription> inscriptions) {
         this.inscriptions = inscriptions;
+    }
+
+    public void setAbsences(List<Absence> absences) {
+        this.absences = absences;
     }
 }

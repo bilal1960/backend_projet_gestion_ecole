@@ -15,5 +15,5 @@ CREATE TABLE matiere
 );
 
 
-
-
+ALTER TABLE matiere
+    ADD revision VARCHAR(255);
