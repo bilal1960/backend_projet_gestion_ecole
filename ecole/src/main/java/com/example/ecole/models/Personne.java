@@ -61,7 +61,11 @@ public class Personne {
     @OneToMany(mappedBy = "personne_idpresence", cascade = CascadeType.ALL)
     private List<Absence> absences;
 
-    public Personne(String prenom, String nom, LocalDate naissance, String nationalite, String adresse, String sexe, String statut, List<Matiere> matieres, List<Inscription> inscriptions, List<Absence> absences) {
+    @JsonIgnore
+    @OneToMany(mappedBy = "personne_vacance", cascade = CascadeType.ALL)
+    private  List<Vacance> vacances;
+
+    public Personne(String prenom, String nom, LocalDate naissance, String nationalite, String adresse, String sexe, String statut, List<Matiere> matieres, List<Inscription> inscriptions, List<Absence> absences, List<Vacance> vacances) {
         this.prenom = prenom;
         this.nom = nom;
         this.naissance = naissance;
@@ -72,6 +76,7 @@ public class Personne {
         this.inscriptions = inscriptions;
         this.statut = statut;
         this.absences = absences;
+        this.vacances = vacances;
     }
 
     public Personne() {
@@ -143,5 +148,9 @@ public class Personne {
 
     public void setAbsences(List<Absence> absences) {
         this.absences = absences;
+    }
+
+    public void setVacances(List<Vacance> vacances) {
+        this.vacances = vacances;
     }
 }

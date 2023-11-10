@@ -53,7 +53,6 @@ public class PersonneAjouterController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
     }
-
     @GetMapping("/api1")
     public ResponseEntity<Page<Personne>> getPaginatedIPersonne(Pageable pageable, Authentication authentication) {
         if (hasAuthority(authentication, "SCOPE_read:personne")) {

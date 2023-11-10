@@ -1,10 +1,9 @@
 package com.example.ecole.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.PositiveOrZero;
 
-import java.rmi.server.UID;
 import java.time.LocalDate;
 import java.util.UUID;
 
@@ -21,26 +20,23 @@ public class Vacance {
     @JsonFormat(pattern = "dd/MM/yyyy")
     @Column(name = "datefin", nullable = false)
     private LocalDate datefin;
-    @PositiveOrZero
-    @Column(name = "conge", nullable = false)
-    private  int conge;
-    @Column(name = "statut")
-    private String statut;
 
     @Column(name = "type")
     private String type;
     @Column(name = "commentaire")
     private String commentaire;
 
+    @JsonBackReference
+    @ManyToOne
+    @JoinColumn(name = "personne_vacance")
+    private Personne personne_vacance;
+
     public Vacance() {
     }
 
-    // Constructeur avec paramètres
-    public Vacance(LocalDate datedebut, LocalDate dateFin, int conge, String statut, String type, String commentaire) {
+    public Vacance(LocalDate datedebut, LocalDate dateFin,  String type, String commentaire) {
         this.datedebut = datedebut;
         this.datefin = dateFin;
-        this.conge = conge;
-        this.statut = statut;
         this.type = type;
         this.commentaire = commentaire;
     }
@@ -70,22 +66,6 @@ public class Vacance {
         this.datefin = dateFin;
     }
 
-    public int getConge() {
-        return conge;
-    }
-
-    public void setConge(int conge) {
-        this.conge = conge;
-    }
-
-    public String getStatut() {
-        return statut;
-    }
-
-    public void setStatut(String statut) {
-        this.statut = statut;
-    }
-
     public String getType() {
         return type;
     }
@@ -102,5 +82,11 @@ public class Vacance {
         this.commentaire = commentaire;
     }
 
+    public Personne getPersonne() {
+        return personne_vacance;
+    }
 
+    public void setPersonne(Personne personne_vacance) {
+        this.personne_vacance = personne_vacance;
+    }
 }
