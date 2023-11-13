@@ -11,7 +11,7 @@ import java.util.UUID;
 public interface NoteRepository extends JpaRepository<Note, UUID> {
 
     Page<Note> findAll(Pageable pageable);
-    List<Note> finAll();
+    List<Note> findAll();
 
 
 }

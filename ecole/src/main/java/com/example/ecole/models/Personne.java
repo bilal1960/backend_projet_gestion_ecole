@@ -64,8 +64,13 @@ public class Personne {
     @JsonIgnore
     @OneToMany(mappedBy = "personne_vacance", cascade = CascadeType.ALL)
     private  List<Vacance> vacances;
+    @JsonIgnore
+    @OneToMany(mappedBy = "personne_note", cascade = CascadeType.ALL)
+    private  List<Note> notes;
 
-    public Personne(String prenom, String nom, LocalDate naissance, String nationalite, String adresse, String sexe, String statut, List<Matiere> matieres, List<Inscription> inscriptions, List<Absence> absences, List<Vacance> vacances) {
+    private  float moyenne;
+
+    public Personne(String prenom, String nom, LocalDate naissance, String nationalite, String adresse, String sexe, String statut, List<Matiere> matieres, List<Inscription> inscriptions, List<Absence> absences, List<Vacance> vacances, List<Note> notes,float moyenne) {
         this.prenom = prenom;
         this.nom = nom;
         this.naissance = naissance;
@@ -77,12 +82,14 @@ public class Personne {
         this.statut = statut;
         this.absences = absences;
         this.vacances = vacances;
+        this.notes = notes;
+        this.moyenne = moyenne;
     }
 
     public Personne() {
     }
 
-    public Personne(String prenom, String nom, LocalDate naissance, String nationalite, String adresse, String sexe, String statut) {
+    public Personne(String prenom, String nom, LocalDate naissance, String nationalite, String adresse, String sexe, String statut,float moyenne) {
         this.prenom = prenom;
         this.nom = nom;
         this.naissance = naissance;
@@ -90,6 +97,7 @@ public class Personne {
         this.adresse = adresse;
         this.sexe = sexe;
         this.statut = statut;
+        this.moyenne = moyenne;
     }
 
     public Personne(String uuid) {
@@ -152,5 +160,38 @@ public class Personne {
 
     public void setVacances(List<Vacance> vacances) {
         this.vacances = vacances;
+    }
+
+    public void setNotes(List<Note> notes) {
+        this.notes = notes;
+    }
+
+    public List<Note> getNotes() {
+        return notes;
+    }
+
+    public float getMoyenne() {
+        return moyenne;
+    }
+
+    public void setMoyenne(float moyenne) {
+        this.moyenne = moyenne;
+    }
+
+    public void calculerMoyenne() {
+
+        int cpt = 0;
+
+        if (this.notes == null || this.notes.isEmpty()) {
+                this.moyenne = 0;
+                return;
+            }
+            int somme = 0;
+            for (Note note : this.notes) {
+                somme += note.getResultat();
+                cpt++;
+            }
+
+            this.moyenne = (float) somme / cpt;
     }
 }

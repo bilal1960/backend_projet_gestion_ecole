@@ -7,5 +7,8 @@ CREATE TABLE note
     resultat     INT     NOT NULL,
     moyenne      FLOAT   NOT NULL,
     reussi       BOOLEAN NOT NULL,
-    CONSTRAINT pk_note PRIMARY KEY (id)
+    personne_note UUID,
+
+    CONSTRAINT pk_note PRIMARY KEY (id),
+    CONSTRAINT fk_personne_note FOREIGN KEY (personne_note) REFERENCES personne (id)
 );

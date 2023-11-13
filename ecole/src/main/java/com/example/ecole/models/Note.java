@@ -1,5 +1,7 @@
 package com.example.ecole.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -11,27 +13,31 @@ public class Note {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     private String nom;
+
+    @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate deliberation;
     private  String     session;
     private int  resultat;
-    private float moyenne;
+    @Column(name = "reussi")
     private boolean reussi;
+    @JsonBackReference
+    @ManyToOne
+    @JoinColumn(name = "personne_note")
+    private Personne personne_note;
 
     public Note() {
     }
 
-    // Constructeur paramétré
-    public Note( String nom, LocalDate deliberation, String session, int resultat, float moyenne, boolean reussi) {
+
+    public Note( String nom, LocalDate deliberation, String session, int resultat, boolean reussi) {
 
         this.nom = nom;
         this.deliberation = deliberation;
         this.session = session;
         this.resultat = resultat;
-        this.moyenne = moyenne;
         this.reussi = reussi;
     }
 
-    // Getters et setters
     public UUID getId() {
         return id;
     }
@@ -72,14 +78,6 @@ public class Note {
         this.resultat = resultat;
     }
 
-    public float getMoyenne() {
-        return moyenne;
-    }
-
-    public void setMoyenne(float moyenne) {
-        this.moyenne = moyenne;
-    }
-
     public boolean isReussi() {
         return reussi;
     }
@@ -88,5 +86,12 @@ public class Note {
         this.reussi = reussi;
     }
 
+    public Personne getPersonne() {
+        return personne_note;
+    }
+
+    public void setPersonne(Personne personne_note) {
+        this.personne_note = personne_note;
+    }
 
 }
