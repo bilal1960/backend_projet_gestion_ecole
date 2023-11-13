@@ -1,5 +1,6 @@
 package com.example.ecole.controller;
 
+import com.example.ecole.models.Inscription;
 import com.example.ecole.models.Note;
 import com.example.ecole.models.Personne;
 import com.example.ecole.repository.NoteRepository;
@@ -18,6 +19,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/add/note")
@@ -103,6 +106,8 @@ public class NoteController {
         }
 
         }
+
+
 
 
     private static boolean hasAuthority(Authentication authentication, String expectedAuthority) {

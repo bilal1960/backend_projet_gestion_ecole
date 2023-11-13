@@ -18,6 +18,8 @@ import org.slf4j.Logger;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 
 @RestController
@@ -47,7 +49,7 @@ public class AbsenceController {
         if (hasAuthority(authentication, "SCOPE_read:presence")) {
             List<Absence> absences = absenceRepository.findAll();
             return ResponseEntity.ok(absences);
-        }else{
+        } else {
 
             logger.debug("il y a eu un problème de récupération");
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
@@ -62,7 +64,7 @@ public class AbsenceController {
     }
 
     @PostMapping
-    public ResponseEntity<Absence> addAbsence(@RequestBody  Absence absence, UriComponentsBuilder builder, Authentication authentication) {
+    public ResponseEntity<Absence> addAbsence(@RequestBody Absence absence, UriComponentsBuilder builder, Authentication authentication) {
         if (hasAuthority(authentication, "SCOPE_write:presence")) {
             Personne personne = personneRepository.findById(absence.getPersonne().getId()).orElse(null);
             List<Absence> absences = new ArrayList<>();
@@ -91,7 +93,7 @@ public class AbsenceController {
     }
 
     @PostMapping("/prof")
-    public ResponseEntity<Absence> addAbsenceprof(@RequestBody  Absence absence, UriComponentsBuilder builder, Authentication authentication) {
+    public ResponseEntity<Absence> addAbsenceprof(@RequestBody Absence absence, UriComponentsBuilder builder, Authentication authentication) {
         if (hasAuthority(authentication, "SCOPE_write:profabsent")) {
             Personne personne = personneRepository.findById(absence.getPersonne().getId()).orElse(null);
             List<Absence> absences = new ArrayList<>();
@@ -125,6 +127,7 @@ public class AbsenceController {
             List<Personne> personnes = personneRepository.findAll();
             logger.debug("Succès de l'affichage de la liste des profs");
             return ResponseEntity.ok(personnes);
+
         } else {
             logger.debug("Échec, mauvaise permission");
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
@@ -154,6 +157,51 @@ public class AbsenceController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
     }
+
+    @PutMapping("/absences/{id}")
+    public ResponseEntity<Absence> updateAbsence(@PathVariable UUID id, @RequestBody Absence updateAbsence, Authentication authentication) {
+        if (!hasAuthority(authentication, "SCOPE_write:profabsent")) {
+            logger.debug("Attention, vous n'avez pas la bonne permission");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+
+        }
+        Optional<Absence> existingAbsenceOptional = absenceRepository.findById(id);
+
+        if (!existingAbsenceOptional.isPresent()) {
+            logger.debug("L'ID de l'absence est inexistant");
+            return ResponseEntity.notFound().build();
+        }
+
+        Absence existingAbsence = existingAbsenceOptional.get();
+
+        if (updateAbsence.getPresence() != null) {
+            existingAbsence.setPresence(updateAbsence.getPresence());
+        }
+
+        if (updateAbsence.getDate() != null) {
+            existingAbsence.setDate(updateAbsence.getDate());
+        }
+
+        if (updateAbsence.getHeuredebut() != null) {
+            existingAbsence.setHeuredebut(updateAbsence.getHeuredebut());
+        }
+
+        if (updateAbsence.getHeurefin() != null) {
+            existingAbsence.setHeurefin(updateAbsence.getHeurefin());
+        }
+
+        if (updateAbsence.isCertficat()) {
+            existingAbsence.setCertficat(updateAbsence.isCertficat());
+        }
+
+        absenceRepository.save(existingAbsence);
+
+        logger.debug("Réussite de la mise à jour des champs pour l'absence avec l'ID : " + id);
+        return ResponseEntity.ok(existingAbsence);
+    }
+
+
+
 
     private static boolean hasAuthority(Authentication authentication, String expectedAuthority) {
         logger.debug("autorisation");
