@@ -4,6 +4,7 @@ import com.example.ecole.models.Inscription;
 import com.example.ecole.models.Personne;
 import com.example.ecole.repository.InscriptionRepository;
 import com.example.ecole.repository.PersonneRepository;
+import com.example.ecole.service.EmailService;
 import jakarta.validation.Valid;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 import java.net.URI;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -29,6 +31,10 @@ public class InscriptionController {
     private InscriptionRepository inscritRepository;
     @Autowired
     private PersonneRepository personneRepository;
+
+    @Autowired
+    private EmailService emailService;
+
 
     @Autowired
     public InscriptionController(InscriptionRepository inscriptionRepository, PersonneRepository personneRepository) {
@@ -65,6 +71,7 @@ public class InscriptionController {
         if (hasAuthority(authentication, "SCOPE_write:inscrit")) {
             Personne personne = personneRepository.findById(inscription.getPersonne().getId()).orElse(null);
             List<Inscription> inscriptions = new ArrayList<>();
+            LocalDate deadline = LocalDate.of(2023,9,7);
 
             if (personne != null) {
                 inscription.setPersonne(personne);
@@ -73,6 +80,7 @@ public class InscriptionController {
                 personne.setInscriptions(inscriptions);
                 URI location = builder.path("/add/inscriptions/{id}").buildAndExpand(inscription.getId()).toUri();
                 logger.debug("Succès de l'ajout des données ");
+                emailService.sendRegistrationConfirmationEmail(personne.getMail(), deadline);
                 return ResponseEntity.created(location).body(inscription);
             } else {
                 logger.debug("La personne ou la matiere correspondante n'a pas été trouvée");

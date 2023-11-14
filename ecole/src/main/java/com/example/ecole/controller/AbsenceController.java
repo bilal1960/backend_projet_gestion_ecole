@@ -4,6 +4,7 @@ import com.example.ecole.models.Absence;
 import com.example.ecole.models.Personne;
 import com.example.ecole.repository.AbsenceRepository;
 import com.example.ecole.repository.PersonneRepository;
+import com.example.ecole.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,6 +17,8 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 
 import java.net.URI;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -34,6 +37,9 @@ public class AbsenceController {
 
     @Autowired
     private PersonneRepository personneRepository;
+
+    @Autowired
+    EmailService emailService;
 
 
     @Autowired
@@ -97,13 +103,18 @@ public class AbsenceController {
         if (hasAuthority(authentication, "SCOPE_write:profabsent")) {
             Personne personne = personneRepository.findById(absence.getPersonne().getId()).orElse(null);
             List<Absence> absences = new ArrayList<>();
-
+             String professor = personne.getNom() + " " + personne.getPrenom();
+            LocalDate date = absence.getDate();
+            LocalTime heuredebut = absence.getHeuredebut();
+            LocalTime heurefin = absence.getHeurefin();
+            String email = personne.getMail();
             if (personne != null) {
                 absence.setPersonne(personne);
                 absenceRepository.save(absence);
                 absences.add(absence);
                 personne.setAbsences(absences);
                 URI location = builder.path("/add/absence/{id}").buildAndExpand(absence.getId()).toUri();
+                emailService.sendProfessorAbsenceNotificationEmail(email,professor, date, heuredebut,heurefin);
                 logger.debug("Succès de l'ajout des données ");
 
                 return ResponseEntity.created(location).body(absence);

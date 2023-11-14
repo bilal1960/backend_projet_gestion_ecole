@@ -17,7 +17,7 @@ public class Note {
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate deliberation;
     private  String     session;
-    private int  resultat;
+    private double  resultat;
     @Column(name = "reussi")
     private boolean reussi;
     @JsonBackReference
@@ -29,7 +29,7 @@ public class Note {
     }
 
 
-    public Note( String nom, LocalDate deliberation, String session, int resultat, boolean reussi) {
+    public Note( String nom, LocalDate deliberation, String session, double resultat, boolean reussi) {
 
         this.nom = nom;
         this.deliberation = deliberation;
@@ -70,11 +70,11 @@ public class Note {
         this.session = session;
     }
 
-    public int getResultat() {
+    public double getResultat() {
         return resultat;
     }
 
-    public void setResultat(int resultat) {
+    public void setResultat(double resultat) {
         this.resultat = resultat;
     }
 

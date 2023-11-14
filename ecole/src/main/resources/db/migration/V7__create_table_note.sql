@@ -4,8 +4,8 @@ CREATE TABLE note
     nom          VARCHAR(255) not null ,
     deliberation date not null ,
     session      VARCHAR(255),
-    resultat     INT     NOT NULL,
-    moyenne      FLOAT   NOT NULL,
+    resultat     FLOAT    NOT NULL,
+
     reussi       BOOLEAN NOT NULL,
     personne_note UUID,
 

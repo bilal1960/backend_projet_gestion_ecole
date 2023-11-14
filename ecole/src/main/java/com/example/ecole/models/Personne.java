@@ -69,8 +69,9 @@ public class Personne {
     private  List<Note> notes;
 
     private  float moyenne;
+    private String mail;
 
-    public Personne(String prenom, String nom, LocalDate naissance, String nationalite, String adresse, String sexe, String statut, List<Matiere> matieres, List<Inscription> inscriptions, List<Absence> absences, List<Vacance> vacances, List<Note> notes,float moyenne) {
+    public Personne(String prenom, String nom, LocalDate naissance, String nationalite, String adresse, String sexe, String statut, List<Matiere> matieres, List<Inscription> inscriptions, List<Absence> absences, List<Vacance> vacances, List<Note> notes,float moyenne,String mail) {
         this.prenom = prenom;
         this.nom = nom;
         this.naissance = naissance;
@@ -84,12 +85,13 @@ public class Personne {
         this.vacances = vacances;
         this.notes = notes;
         this.moyenne = moyenne;
+        this.mail = mail;
     }
 
     public Personne() {
     }
 
-    public Personne(String prenom, String nom, LocalDate naissance, String nationalite, String adresse, String sexe, String statut,float moyenne) {
+    public Personne(String prenom, String nom, LocalDate naissance, String nationalite, String adresse, String sexe, String statut,float moyenne, String mail) {
         this.prenom = prenom;
         this.nom = nom;
         this.naissance = naissance;
@@ -98,6 +100,7 @@ public class Personne {
         this.sexe = sexe;
         this.statut = statut;
         this.moyenne = moyenne;
+        this.mail = mail;
     }
 
     public Personne(String uuid) {
@@ -147,6 +150,15 @@ public class Personne {
     public void setStatut(String statut) {
         this.statut = statut;
     }
+
+    public String getMail() {
+        return mail;
+    }
+
+    public void setMail(String mail) {
+        this.mail = mail;
+    }
+
     public void setMatieres(List<Matiere> matieres) {
         this.matieres = matieres;
     }

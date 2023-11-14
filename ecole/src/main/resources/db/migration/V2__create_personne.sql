@@ -8,6 +8,7 @@ CREATE TABLE personne
     adresse     VARCHAR(50) NOT NULL,
     sexe        VARCHAR(10) NOT NULL,
     moyenne FLOAT,
+    mail VARCHAR(255) NOT NULL,
 
     CONSTRAINT pk_personne PRIMARY KEY (id)
 );
@@ -15,3 +16,4 @@ ALTER TABLE personne
     ADD CONSTRAINT uc_fe31b440568efb37437d6af59 UNIQUE (prenom, nom);
 ALTER TABLE personne
     ADD statut VARCHAR(30);
+

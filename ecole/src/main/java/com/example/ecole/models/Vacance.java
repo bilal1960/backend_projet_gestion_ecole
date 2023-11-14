@@ -34,14 +34,14 @@ public class Vacance {
     public Vacance() {
     }
 
-    public Vacance(LocalDate datedebut, LocalDate dateFin,  String type, String commentaire) {
+    public Vacance(LocalDate datedebut, LocalDate datefin,  String type, String commentaire) {
         this.datedebut = datedebut;
-        this.datefin = dateFin;
+        this.datefin = datefin;
         this.type = type;
         this.commentaire = commentaire;
     }
 
-    // Getters et Setters
+
     public UUID getId() {
         return id;
     }
@@ -54,16 +54,16 @@ public class Vacance {
         return datedebut;
     }
 
-    public void setDateDebut(LocalDate dateDebut) {
-        this.datedebut = dateDebut;
+    public void setDatedebut(LocalDate datedebut) {
+        this.datedebut = datedebut;
     }
 
     public LocalDate getDateFin() {
         return datefin;
     }
 
-    public void setDateFin(LocalDate dateFin) {
-        this.datefin = dateFin;
+    public void setDatefin(LocalDate datefin) {
+        this.datefin = datefin;
     }
 
     public String getType() {

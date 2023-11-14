@@ -5,6 +5,7 @@ import com.example.ecole.models.Note;
 import com.example.ecole.models.Personne;
 import com.example.ecole.repository.NoteRepository;
 import com.example.ecole.repository.PersonneRepository;
+import com.example.ecole.service.EmailService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -34,6 +36,9 @@ public class NoteController {
     @Autowired
     private PersonneRepository personneRepository;
 
+    @Autowired
+    EmailService emailService;
+
     public NoteController(NoteRepository noteRepository, PersonneRepository personneRepository) {
         this.noteRepository = noteRepository;
         this.personneRepository = personneRepository;
@@ -42,7 +47,7 @@ public class NoteController {
     @GetMapping
     public ResponseEntity<List<Note>> getAllNote(Pageable pageable, Authentication authentication) {
 
-        if (hasAuthority(authentication, "SCOPE_read:note")) {
+        if (hasAuthority(authentication, "SCOPE_read:personne")) {
             List<Note> notes = noteRepository.findAll();
             return ResponseEntity.ok(notes);
         } else {
@@ -91,6 +96,16 @@ public class NoteController {
                 personneRepository.save(personne);
 
                 URI location = builder.path("/add/note/{id}").buildAndExpand(note.getId()).toUri();
+                String emailTo = personne.getMail();
+                String studentName = personne.getPrenom() + " " + personne.getNom();
+                String matiereName = note.getNom();
+                LocalDate deliberation = note.getDeliberation();
+                String session = note.getSession();
+                boolean reussi = note.isReussi();
+                double resultat = note.getResultat();
+
+                emailService.sendStudentResultEmail(emailTo, studentName, matiereName, deliberation, session, reussi, resultat);
+
                 logger.debug("Succès de l'ajout des données ");
 
                 return ResponseEntity.created(location).body(note);

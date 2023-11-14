@@ -3,6 +3,7 @@ package com.example.ecole.controller;
 import com.example.ecole.models.Personne;
 import com.example.ecole.repository.MatiereRepository;
 import com.example.ecole.repository.PersonneRepository;
+import com.example.ecole.service.EmailService;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -13,6 +14,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 import java.net.URI;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.Year;
 import java.util.*;
@@ -28,6 +30,9 @@ public class MatiereController {
     private MatiereRepository matiererepository;
     @Autowired
     private PersonneRepository personneRepository;
+
+    @Autowired
+    private EmailService emailService;
     int currentYear = Year.now().getValue();
     LocalTime heureminimum = LocalTime.of(9, 0);
     String[] joursSemaineList = {"lundi", "mardi", "mercredi", "jeudi", "vendredi"};
@@ -80,7 +85,14 @@ public class MatiereController {
                 professeur.setMatieres(matieress);
                 personneRepository.save(professeur);
                 URI location = builder.path("/add/matieres/{id}").buildAndExpand(matiere.getId()).toUri();
+
+                String emailTo = professeur.getMail();
+                LocalDate courseDate = matiere.getDebut();
+                String courseName = matiere.getNom();
+                String courseStartTime = matiere.getDebutime().toString();
+                String courseEndTime = matiere.getFintime().toString();
                 logger.debug("succès de la sauvegarde des données dans la base de données");
+                emailService.sendCourseConfirmationEmail(emailTo, courseDate, courseName, courseStartTime, courseEndTime);
                 return ResponseEntity.created(location).body(matiere);
             } else {
                 logger.debug("Le professeur correspondant n'a pas été trouvé");
