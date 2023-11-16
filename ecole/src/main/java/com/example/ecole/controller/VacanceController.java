@@ -18,10 +18,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.net.URI;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @RestController
 @RequestMapping("/add/vacance")
@@ -35,6 +32,25 @@ public class VacanceController {
     @Autowired
     private EmailService emailService;
 
+    List<LocalDate[]> eventDates = Arrays.asList(
+            new LocalDate[]{LocalDate.of(2023, 9, 27), LocalDate.of(2023, 9, 27)},
+            new LocalDate[]{LocalDate.of(2023, 10, 23), LocalDate.of(2023, 11, 3)}, // Juillet
+            new LocalDate[]{LocalDate.of(2023, 12, 25), LocalDate.of(2024, 1, 5)},
+            new LocalDate[]{LocalDate.of(2024, 2, 13), LocalDate.of(2024, 2, 13)},
+            new LocalDate[]{LocalDate.of(2024, 2, 26), LocalDate.of(2024, 3, 8)},
+            new LocalDate[]{LocalDate.of(2024, 4, 1), LocalDate.of(2024, 4, 1)},
+            new LocalDate[]{LocalDate.of(2024, 5, 20), LocalDate.of(2024, 5, 20)},
+            new LocalDate[]{LocalDate.of(2024, 4, 29), LocalDate.of(2024, 5, 10)},
+            new LocalDate[]{LocalDate.of(2024, 7, 6), LocalDate.of(2024, 8, 25)}
+
+    );
+
+    private boolean areDatesValid(LocalDate start, LocalDate end) {
+        return eventDates.stream().anyMatch(dates ->
+                (start.isEqual(dates[0]) || start.isAfter(dates[0])) &&
+                        (end.isEqual(dates[1]) || end.isBefore(dates[1]))
+        );
+    }
 
     private static final Logger logger = LoggerFactory.getLogger(VacanceController.class);
 
@@ -91,20 +107,31 @@ public class VacanceController {
                 String commentaire = vacances.getCommentaire();
                 String studentName = personne.getPrenom() + ""+ personne.getNom();
                 String emailto = personne.getMail();
+                String typevac = vacances.getType();
 
+                if (!areDatesValid(vacances.getDateDebut(), vacances.getDateFin())) {
+                    logger.debug("Les dates de vacance ne sont pas dans les périodes autorisées.");
+                    return ResponseEntity.badRequest().body(null);
+                }
+
+                if(!typevac.equals("vacance scolaire")&& !typevac.equals("férié")){
+                    logger.debug("donné incorrecte: veuillez entrer vacance scolaire ou férié");
+                    return ResponseEntity.badRequest().body(null);
+                }
 
                 if (personne != null) {
 
-                    vacances.setPersonne(personne);
-                    vacanceRepository.save(vacances);
-                    vacances1.add(vacances);
-                    personne.setVacances(vacances1);
-                    personneRepository.save(personne);
-                    URI location = builder.path("/add/vacance/{id}").buildAndExpand(vacances.getId()).toUri();
+                        vacances.setPersonne(personne);
+                        vacanceRepository.save(vacances);
+                        vacances1.add(vacances);
+                        personne.setVacances(vacances1);
+                        personneRepository.save(personne);
+                        URI location = builder.path("/add/vacance/{id}").buildAndExpand(vacances.getId()).toUri();
 
-                    emailService.sendVacationNotificationEmail(emailto,studentName,commentaire,debut,fin);
-                    logger.debug("succès de la sauvegarde des données dans la database");
-                    return ResponseEntity.created(location).body(vacances);
+                        emailService.sendVacationNotificationEmail(emailto,studentName,commentaire,debut,fin);
+                        logger.debug("succès de la sauvegarde des données dans la database");
+                        return ResponseEntity.created(location).body(vacances);
+
 
                 } else {
                     logger.debug("Échec de la création de la vacance : personne inexistante.");
@@ -126,26 +153,37 @@ public class VacanceController {
         }
         Optional<Vacance> existingVacanceOptional = vacanceRepository.findById(id);
 
+        String typevac = updateVacance.getType();
+        Vacance existingVacance = existingVacanceOptional.get();
         if (!existingVacanceOptional.isPresent()) {
-            logger.debug("L'ID de l'absence est inexistant");
+            logger.debug("L'ID de vacance est inexistant");
             return ResponseEntity.notFound().build();
         }
 
-        Vacance existingVacance = existingVacanceOptional.get();
+        if(!typevac.equals("vacance scolaire")&& !typevac.equals("férié")){
+            logger.debug("donné incorrecte: veuillez entrer vacance scolaire ou férié");
+            return ResponseEntity.badRequest().body(null);
+        }
 
-        if (updateVacance.getDateDebut() != null) {
+
+        if (updateVacance.getDateDebut() != null && updateVacance.getDateFin() != null) {
+            if (!areDatesValid(updateVacance.getDateDebut(), updateVacance.getDateFin())) {
+                logger.debug("Les dates de vacance ne sont pas dans les périodes autorisées.");
+                return ResponseEntity.badRequest().body(null);
+            }
+
             existingVacance.setDatedebut(updateVacance.getDateDebut());
-        }
-
-        if (updateVacance.getDateFin() != null) {
             existingVacance.setDatefin(updateVacance.getDateFin());
+        } else {
+            logger.debug("Les deux dates doivent être fournies ensemble pour la mise à jour.");
+            return ResponseEntity.badRequest().body(null);
         }
 
-        if (updateVacance != null) {
+        if (updateVacance.getType() != null) {
             existingVacance.setType(updateVacance.getType());
         }
 
-        if (updateVacance != null) {
+        if (updateVacance.getCommentaire() != null) {
             existingVacance.setCommentaire(updateVacance.getCommentaire());
         }
 
@@ -154,8 +192,6 @@ public class VacanceController {
         logger.debug("Réussite de la mise à jour des champs pour l'absence avec l'ID : " + id);
         return ResponseEntity.ok(existingVacance);
     }
-
-
 
     private static boolean hasAuthority(Authentication authentication, String expectedAuthority) {
         logger.debug("vérifier l'autorité de permission", expectedAuthority);

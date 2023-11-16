@@ -1,6 +1,5 @@
 package com.example.ecole.controller;
 
-import com.example.ecole.models.Inscription;
 import com.example.ecole.models.Note;
 import com.example.ecole.models.Personne;
 import com.example.ecole.repository.NoteRepository;
@@ -18,11 +17,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @RestController
 @RequestMapping("/add/note")
@@ -38,6 +35,19 @@ public class NoteController {
 
     @Autowired
     EmailService emailService;
+
+    List<LocalDate[]> eventDates = Arrays.asList(
+            new LocalDate[]{LocalDate.of(2023, 9, 27), LocalDate.of(2023, 9, 27)},
+            new LocalDate[]{LocalDate.of(2023, 10, 23), LocalDate.of(2023, 11, 3)}, // Juillet
+            new LocalDate[]{LocalDate.of(2023, 12, 25), LocalDate.of(2024, 1, 5)},
+            new LocalDate[]{LocalDate.of(2024, 2, 13), LocalDate.of(2024, 2, 13)},
+            new LocalDate[]{LocalDate.of(2024, 2, 26), LocalDate.of(2024, 3, 8)},
+            new LocalDate[]{LocalDate.of(2024, 4, 1), LocalDate.of(2024, 4, 1)},
+            new LocalDate[]{LocalDate.of(2024, 5, 20), LocalDate.of(2024, 5, 20)},
+            new LocalDate[]{LocalDate.of(2024, 4, 29), LocalDate.of(2024, 5, 10)},
+            new LocalDate[]{LocalDate.of(2024, 7, 6), LocalDate.of(2024, 8, 25)}
+
+    );
 
     public NoteController(NoteRepository noteRepository, PersonneRepository personneRepository) {
         this.noteRepository = noteRepository;
@@ -81,6 +91,52 @@ public class NoteController {
         if (hasAuthority(authentication, "SCOPE_write:note")) {
             Personne personne = personneRepository.findById(note.getPersonne().getId()).orElse(null);
 
+            String emailTo = personne.getMail();
+            String studentName = personne.getPrenom() + " " + personne.getNom();
+            String matiereName = note.getNom();
+            LocalDate deliberation = note.getDeliberation();
+            String session = note.getSession();
+            boolean reussi = note.isReussi();
+            double resultat = note.getResultat();
+
+            boolean isDateInEvents = eventDates.stream().anyMatch(dates ->
+                    (deliberation.isEqual(dates[0]) || deliberation.isAfter(dates[0])) &&
+                            (deliberation.isEqual(dates[1]) || deliberation.isBefore(dates[1]))
+            );
+
+            if (isDateInEvents) {
+                logger.debug("Échec de la validation de la date (pendant les événements)");
+                return ResponseEntity.badRequest().body(null);
+            }
+
+            if(deliberation.getDayOfWeek() == DayOfWeek.SATURDAY || deliberation.getDayOfWeek() == DayOfWeek.SUNDAY){
+                logger.debug("Échec de la validation de la date le week-end");
+                return ResponseEntity.badRequest().body(null);
+
+            }
+
+
+
+            if(resultat <0|| resultat >100){
+
+                logger.debug("Le résultat ne peut être négatif ou supérieur à 100.");
+                return ResponseEntity.badRequest().body(null);
+            }
+
+            if(!session.equals("1 session") && !session.equals("2 session")){
+
+                logger.debug("donnée de saisit incorrecte: entrer 1 session ou 2 session");
+                return ResponseEntity.badRequest().body(null);
+
+            }
+
+            if(resultat <50 && reussi ){
+
+                logger.debug("resultat <= 50%");
+                return ResponseEntity.badRequest().body(null);
+
+            }
+
             if (personne != null) {
                 List<Note> notesActuelles = personne.getNotes();
                 if (notesActuelles == null) {
@@ -96,13 +152,7 @@ public class NoteController {
                 personneRepository.save(personne);
 
                 URI location = builder.path("/add/note/{id}").buildAndExpand(note.getId()).toUri();
-                String emailTo = personne.getMail();
-                String studentName = personne.getPrenom() + " " + personne.getNom();
-                String matiereName = note.getNom();
-                LocalDate deliberation = note.getDeliberation();
-                String session = note.getSession();
-                boolean reussi = note.isReussi();
-                double resultat = note.getResultat();
+
 
                 emailService.sendStudentResultEmail(emailTo, studentName, matiereName, deliberation, session, reussi, resultat);
 

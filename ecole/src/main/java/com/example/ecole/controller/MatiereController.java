@@ -14,6 +14,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 import java.net.URI;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.Year;
@@ -36,7 +37,29 @@ public class MatiereController {
     int currentYear = Year.now().getValue();
     LocalTime heureminimum = LocalTime.of(9, 0);
     String[] joursSemaineList = {"lundi", "mardi", "mercredi", "jeudi", "vendredi"};
-    String localPattern = "^[a-zA-Z][a-zA-Z0-9]*$"; // Le pattern oblige une lettre au début suivit d'éventuelle lettre ou chiffre positif sans aucun espace
+    String localPattern = "^[a-zA-Z][a-zA-Z0-9]*$";
+    List<LocalDate> blockedDates = Arrays.asList(
+            LocalDate.of(2023, 9, 27),
+            LocalDate.of(2023, 2, 13),
+            LocalDate.of(2023, 4, 1),
+            LocalDate.of(2023,5,20)
+    );
+
+    List<LocalDate[]> eventDates = Arrays.asList(
+            new LocalDate[]{LocalDate.of(2023, 9, 27), LocalDate.of(2023, 9, 27)},
+            new LocalDate[]{LocalDate.of(2023, 10, 23), LocalDate.of(2023, 11, 3)}, // Juillet
+            new LocalDate[]{LocalDate.of(2023, 12, 25), LocalDate.of(2024, 1, 5)},
+            new LocalDate[]{LocalDate.of(2024, 2, 13), LocalDate.of(2024, 2, 13)},
+            new LocalDate[]{LocalDate.of(2024, 2, 26), LocalDate.of(2024, 3, 8)},
+            new LocalDate[]{LocalDate.of(2024, 4, 1), LocalDate.of(2024, 4, 1)},
+            new LocalDate[]{LocalDate.of(2024, 5, 20), LocalDate.of(2024, 5, 20)},
+            new LocalDate[]{LocalDate.of(2024, 4, 29), LocalDate.of(2024, 5, 10)},
+            new LocalDate[]{LocalDate.of(2024, 7, 6), LocalDate.of(2024, 8, 25)}
+
+    );
+
+
+
 
 
     public MatiereController(MatiereRepository matiererepository, PersonneRepository personneRepository) {
@@ -62,6 +85,16 @@ public class MatiereController {
         int finYear = matiere.getFin().getYear();
         List<Matiere> matieress = new ArrayList<>();
 
+        boolean isStartDateInEvents = eventDates.stream().anyMatch(dates ->
+                (matiere.getDebut().isEqual(dates[0]) || matiere.getDebut().isAfter(dates[0])) &&
+                        matiere.getDebut().isBefore(dates[1])
+        );
+
+        boolean isEndDateInEvents = eventDates.stream().anyMatch(dates ->
+                (matiere.getFin().isEqual(dates[1]) || matiere.getFin().isBefore(dates[1])) &&
+                        matiere.getFin().isAfter(dates[0])
+        );
+
         if (hasAuthority(authentication, "SCOPE_write:matiere")) {
             Personne professeur = personneRepository.findById(matiere.getPersonne().getId()).orElse(null);
             if (professeur != null) {
@@ -79,6 +112,29 @@ public class MatiereController {
                     return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 
                 }
+
+                if (blockedDates.contains(matiere.getDebut()) || blockedDates.contains(matiere.getFin())) {
+                    logger.debug("La date du cours tombe sur une date bloquée.");
+                    return ResponseEntity.badRequest().body(null);
+                }
+
+
+                if(isStartDateInEvents || isEndDateInEvents){
+                    logger.debug("un cours ne peut être encodé pendant les vacances, jours fériés");
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+
+                }
+
+                if(matiere.getDebut().getDayOfWeek()== DayOfWeek.SATURDAY || matiere.getDebut().getDayOfWeek() == DayOfWeek.SUNDAY){
+                    logger.debug("Les dates des matières ne peuvent se donner en week end");
+                    return ResponseEntity.badRequest().body(null);
+                }
+
+                if(matiere.getFin().getDayOfWeek()== DayOfWeek.SATURDAY || matiere.getFin().getDayOfWeek() == DayOfWeek.SUNDAY){
+                    logger.debug("Les dates des matières ne peuvent se donner en week end");
+                    return ResponseEntity.badRequest().body(null);
+                }
+
                 matiere.setPersonne(professeur);
                 matiererepository.save(matiere);
                 matieress.add(matiere);
@@ -133,8 +189,35 @@ public class MatiereController {
         if (hasAuthority(authentication, "SCOPE_write:matiere")) {
             Optional<Matiere> existingMatiereOptional = matiererepository.findById(id);
 
+            boolean isStartDateInEvents = eventDates.stream().anyMatch(dates ->
+                    (updatedMatiere.getDebut().isEqual(dates[0]) || updatedMatiere.getDebut().isAfter(dates[0])) &&
+                            updatedMatiere.getDebut().isBefore(dates[1])
+            );
+
+            boolean isEndDateInEvents = eventDates.stream().anyMatch(dates ->
+                    (updatedMatiere.getFin().isEqual(dates[1]) || updatedMatiere.getFin().isBefore(dates[1])) &&
+                            updatedMatiere.getFin().isAfter(dates[0])
+            );
+
             if (existingMatiereOptional.isPresent()) {
                 Matiere existingMatiere = existingMatiereOptional.get();
+
+                if (updatedMatiere.getDebut() != null && updatedMatiere.getFin() != null) {
+
+
+                    if (blockedDates.contains(updatedMatiere.getDebut()) || blockedDates.contains(updatedMatiere.getFin())) {
+                        logger.debug("La date du cours tombe sur une date bloquée.");
+                        return ResponseEntity.badRequest().body(null);
+                    }
+
+                    if (isStartDateInEvents|| isEndDateInEvents) {
+                        logger.debug("La mise à jour des dates pendant les périodes de vacances ou les jours fériés n'est pas autorisée");
+                        return ResponseEntity.badRequest().body(null);
+                    }
+
+                    existingMatiere.setDebut(updatedMatiere.getDebut());
+                    existingMatiere.setFin(updatedMatiere.getFin());
+                }
 
                 if (updatedMatiere.getDebut() != null && updatedMatiere.getFin() != null) {
                     int debutYear = updatedMatiere.getDebut().getYear();

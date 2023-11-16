@@ -21,6 +21,7 @@ public class Absence {
     @JsonFormat(pattern = "dd/MM/yyyy")
     @Column(name = "date", nullable = false)
     private LocalDate date;
+
     @JsonFormat(pattern = "HH:mm")
     @Column(name = "heuredebut")
     private LocalTime heuredebut;
@@ -70,6 +71,8 @@ public class Absence {
     public void setDate(LocalDate date) {
         this.date = date;
     }
+
+
 
     public LocalTime getHeuredebut() {
         return heuredebut;

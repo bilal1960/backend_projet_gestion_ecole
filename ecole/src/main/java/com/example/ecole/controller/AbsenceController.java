@@ -17,12 +17,10 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 
 import java.net.URI;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 
 @RestController
@@ -41,6 +39,27 @@ public class AbsenceController {
     @Autowired
     EmailService emailService;
 
+    List<LocalDate[]> eventDates = Arrays.asList(
+            new LocalDate[]{LocalDate.of(2023, 9, 27), LocalDate.of(2023, 9, 27)},
+            new LocalDate[]{LocalDate.of(2023, 10, 23), LocalDate.of(2023, 11, 3)}, // Juillet
+            new LocalDate[]{LocalDate.of(2023, 12, 25), LocalDate.of(2024, 1, 5)},
+            new LocalDate[]{LocalDate.of(2024, 2, 13), LocalDate.of(2024, 2, 13)},
+            new LocalDate[]{LocalDate.of(2024, 2, 26), LocalDate.of(2024, 3, 8)},
+            new LocalDate[]{LocalDate.of(2024, 4, 1), LocalDate.of(2024, 4, 1)},
+            new LocalDate[]{LocalDate.of(2024, 5, 20), LocalDate.of(2024, 5, 20)},
+            new LocalDate[]{LocalDate.of(2024, 4, 29), LocalDate.of(2024, 5, 10)},
+            new LocalDate[]{LocalDate.of(2024, 7, 6), LocalDate.of(2024, 8, 25)}
+    );
+
+    List<LocalDate> blockedDates = Arrays.asList(
+            LocalDate.of(2023, 9, 27),
+            LocalDate.of(2023, 2, 13),
+            LocalDate.of(2023, 4, 1),
+            LocalDate.of(2023,5,20)
+    );
+
+    LocalTime heureDebutMin = LocalTime.of(9, 0);
+    LocalTime heureFinMax = LocalTime.of(21, 30);
 
     @Autowired
     public AbsenceController(AbsenceRepository absenceRepository, PersonneRepository personneRepository) {
@@ -74,6 +93,37 @@ public class AbsenceController {
         if (hasAuthority(authentication, "SCOPE_write:presence")) {
             Personne personne = personneRepository.findById(absence.getPersonne().getId()).orElse(null);
             List<Absence> absences = new ArrayList<>();
+            LocalDate date = absence.getDate();
+            String presence = absence.getPresence();
+            LocalTime heuredebut = absence.getHeuredebut();
+            LocalTime heurefin = absence.getHeurefin();
+
+            boolean isDateInEvents = eventDates.stream().anyMatch(dates ->
+                    (date.isEqual(dates[0]) || date.isAfter(dates[0])) &&
+                            (date.isEqual(dates[1]) || date.isBefore(dates[1]))
+            );
+
+            if(date.getDayOfWeek() == DayOfWeek.SATURDAY || date.getDayOfWeek() == DayOfWeek.SUNDAY){
+
+                logger.debug("Échec de l'enregistrement de l'absence : la date ne peut pas être un week-end");
+                return ResponseEntity.badRequest().body(null);
+            }
+
+            if (isDateInEvents) {
+                logger.debug("Échec de la validation de la date (pendant les événements)");
+                return ResponseEntity.badRequest().body(null);
+            }
+
+            if (!(presence.equalsIgnoreCase("A") || presence.equalsIgnoreCase("P"))) {
+                logger.debug("Échec de la validation de la présence");
+                return ResponseEntity.badRequest().body(null);
+            }
+
+
+            if (heuredebut.isBefore(heureDebutMin) || heurefin.isAfter(heureFinMax) || heuredebut.isAfter(heurefin)) {
+                logger.debug("Échec de la validation des heures");
+                return ResponseEntity.badRequest().body(null);
+            }
 
             if (personne != null) {
                 absence.setPersonne(personne);
@@ -108,6 +158,35 @@ public class AbsenceController {
             LocalTime heuredebut = absence.getHeuredebut();
             LocalTime heurefin = absence.getHeurefin();
             String email = personne.getMail();
+            String presence = absence.getPresence();
+
+            boolean isDateInEvents = eventDates.stream().anyMatch(dates ->
+                    (date.isEqual(dates[0]) || date.isAfter(dates[0])) &&
+                            (date.isEqual(dates[1]) || date.isBefore(dates[1]))
+            );
+
+            if(date.getDayOfWeek() == DayOfWeek.SATURDAY || date.getDayOfWeek() == DayOfWeek.SUNDAY){
+
+                logger.debug("Échec de l'enregistrement de l'absence : la date ne peut pas être un week-end");
+                return ResponseEntity.badRequest().body(null);
+            }
+
+            if (isDateInEvents) {
+                logger.debug("Échec de la validation de la date (pendant les événements)");
+                return ResponseEntity.badRequest().body(null);
+            }
+
+            if (!(presence.equalsIgnoreCase("A") || presence.equalsIgnoreCase("P"))) {
+                logger.debug("Échec de la validation de la présence");
+                return ResponseEntity.badRequest().body(null);
+            }
+
+
+            if (heuredebut.isBefore(heureDebutMin) || heurefin.isAfter(heureFinMax) || heuredebut.isAfter(heurefin)) {
+                logger.debug("Échec de la validation des heures");
+                return ResponseEntity.badRequest().body(null);
+            }
+
             if (personne != null) {
                 absence.setPersonne(personne);
                 absenceRepository.save(absence);
@@ -177,10 +256,49 @@ public class AbsenceController {
 
         }
         Optional<Absence> existingAbsenceOptional = absenceRepository.findById(id);
+        LocalDate date = updateAbsence.getDate();
+        LocalTime heuredebut = updateAbsence.getHeuredebut();
+        LocalTime heurefin = updateAbsence.getHeurefin();
+        String presence = updateAbsence.getPresence();
+
+        boolean isStartDateInEvents = eventDates.stream().anyMatch(dates ->
+                (updateAbsence.getDate().isEqual(dates[0]) || updateAbsence.getDate().isAfter(dates[0])) &&
+                        updateAbsence.getDate().isBefore(dates[1])
+        );
+
+
 
         if (!existingAbsenceOptional.isPresent()) {
             logger.debug("L'ID de l'absence est inexistant");
             return ResponseEntity.notFound().build();
+        }
+
+        if (blockedDates.contains(updateAbsence.getDate())) {
+            logger.debug("La date de l'absence tombe sur une date bloquée.");
+            return ResponseEntity.badRequest().body(null);
+        }
+          if(isStartDateInEvents){
+              logger.debug("L'absence tombe sur des vacances");
+              return ResponseEntity.badRequest().body(null);
+          }
+
+
+        if(date.getDayOfWeek() == DayOfWeek.SATURDAY || date.getDayOfWeek() == DayOfWeek.SUNDAY){
+
+            logger.debug("Échec de l'enregistrement de l'absence : la date ne peut pas être un week-end");
+            return ResponseEntity.badRequest().body(null);
+        }
+
+
+
+        if (heuredebut.isBefore(heureDebutMin) || heurefin.isAfter(heureFinMax) || heuredebut.isAfter(heurefin)) {
+            logger.debug("Échec de la validation des heures");
+            return ResponseEntity.badRequest().body(null);
+        }
+
+        if (!(presence.equalsIgnoreCase("A") || presence.equalsIgnoreCase("P"))) {
+            logger.debug("Échec de la validation de la présence");
+            return ResponseEntity.badRequest().body(null);
         }
 
         Absence existingAbsence = existingAbsenceOptional.get();
@@ -192,6 +310,8 @@ public class AbsenceController {
         if (updateAbsence.getDate() != null) {
             existingAbsence.setDate(updateAbsence.getDate());
         }
+
+
 
         if (updateAbsence.getHeuredebut() != null) {
             existingAbsence.setHeuredebut(updateAbsence.getHeuredebut());

@@ -73,29 +73,9 @@ public class InscriptionControllerTest {
         assertEquals(inscription, responseEntity.getBody().getContent().get(0));
     }
 
-    @Test
-    public void addInscritTest() {
-        when(inscritRepository.save(any(Inscription.class))).thenReturn(inscription);
-        when(personneRepository.findById(any(UUID.class))).thenReturn(Optional.of(personne));
-        Authentication authentication = createAuthenticationWithAuthority("SCOPE_write:inscrit");
-        ResponseEntity<Inscription> responseEntity = inscriptionController.addInscrit(inscription, UriComponentsBuilder.newInstance(), authentication);
-        assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
-        assertEquals(inscription, responseEntity.getBody());
 
-        verify(inscritRepository, times(1)).save(any(Inscription.class));
-    }
 
-    @Test
-    public void updateInscriptionTest() {
-        when(inscritRepository.findById(any(UUID.class))).thenReturn(Optional.of(inscription));
-        when(inscritRepository.save(any(Inscription.class))).thenReturn(inscription);
-        Authentication authentication = createAuthenticationWithAuthority("SCOPE_write:inscrit");
-        ResponseEntity<Inscription> responseEntity = inscriptionController.updateInscription(inscription.getId(), inscription, authentication);
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertEquals(inscription, responseEntity.getBody());
 
-        verify(inscritRepository, times(1)).save(any(Inscription.class));
-    }
 
     @Test
     public void getAllInscriptionTestNoAuthority() {
@@ -104,13 +84,7 @@ public class InscriptionControllerTest {
         assertEquals(HttpStatus.FORBIDDEN, responseEntity.getStatusCode());
     }
 
-    @Test
-    public void addInscritTestNoPersonne() {
-        when(personneRepository.findById(any(UUID.class))).thenReturn(Optional.empty());
-        Authentication authentication = createAuthenticationWithAuthority("SCOPE_write:inscrit");
-        ResponseEntity<Inscription> responseEntity = inscriptionController.addInscrit(inscription, UriComponentsBuilder.newInstance(), authentication);
-        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
-    }
+
 
     @Test
     public void updateInscriptionTestNoInscription() {

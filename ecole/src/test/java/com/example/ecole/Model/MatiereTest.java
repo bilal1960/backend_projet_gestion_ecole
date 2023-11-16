@@ -24,7 +24,7 @@ public class MatiereTest {
     @BeforeEach
     void setUp() {
 
-        professeur = new Personne("lolo", "laura", birthDate, "Belge", "123 rue Test", "homme", "professeur");
+        professeur = new Personne("lolo", "laura", birthDate, "Belge", "123 rue Test", "homme", "professeur",30.00f, "reginecamille@hotmail.com");
         matiere = new Matiere("Mathématiques", datedbut, datefin, professeur, debutime, fintime, "A400", "lundi", "3 secondaire");
     }
 

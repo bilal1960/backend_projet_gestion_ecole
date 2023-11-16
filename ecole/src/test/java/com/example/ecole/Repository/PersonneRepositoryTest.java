@@ -37,9 +37,9 @@ public class PersonneRepositoryTest {
 
     @BeforeEach
     public void setUp() {
-        personne1 = new Personne("lolo", "laura", birthDate, "Belge", "rue Test/50", "homme", "professeur");
-        personne2 = new Personne("laura", "lulu", birthDateinscrit, "Belge", "rue Test2/123", "homme", "etudiant");
-        personneerror = new Personne(null, "laura", birthDate, "Belge", "rue Test/123", "homme", "professeur");
+        personne1 = new Personne("lolo", "laura", birthDate, "Belge", "rue Test/50", "homme", "professeur",0.0f,"professa@hotmail.com");
+        personne2 = new Personne("laura", "lulu", birthDateinscrit, "Belge", "rue Test2/123", "homme", "etudiant",80.0f,"student@hotmail.com");
+        personneerror = new Personne(null, "laura", birthDate, "Belge", "rue Test/123", "homme", "professeur",0.0f,"teacher@hotmail.com");
         personnewithnotargument = new Personne();
     }
 

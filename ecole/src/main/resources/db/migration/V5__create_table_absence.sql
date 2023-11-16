@@ -10,3 +10,4 @@ CREATE TABLE absence
     CONSTRAINT pk_absence PRIMARY KEY (id),
     CONSTRAINT fk_personne_presence FOREIGN KEY (personne_idpresence) REFERENCES personne (id)
 );
+

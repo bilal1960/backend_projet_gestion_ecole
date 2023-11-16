@@ -14,7 +14,7 @@ public class PersonneTest {
 
     @BeforeEach
     public void setUp() {
-        personne = new Personne("lolo", "laura", birthDate, "Belge", "123 rue Test", "homme", "professeur");
+        personne = new Personne("lolo", "laura", birthDate, "Belge", "123 rue Test", "homme", "professeur",30.00f,"reginecamille@hotmail.com");
 
     }
 

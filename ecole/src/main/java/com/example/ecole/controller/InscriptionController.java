@@ -17,10 +17,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 import java.net.URI;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
+
 import org.slf4j.Logger;
 
 @RestController
@@ -34,6 +32,19 @@ public class InscriptionController {
 
     @Autowired
     private EmailService emailService;
+
+    List<LocalDate[]> eventinscrit = Arrays.asList(
+            new LocalDate[]{LocalDate.of(2023, 7, 1), LocalDate.of(2023, 7, 5)},
+            new LocalDate[]{LocalDate.of(2023, 7, 8), LocalDate.of(2023, 7, 12)},
+            new LocalDate[]{LocalDate.of(2023, 8, 19), LocalDate.of(2023, 8, 23)}
+    );
+
+    private boolean isDateValid(LocalDate date) {
+        return eventinscrit.stream().anyMatch(dates ->
+                !date.isBefore(dates[0]) && !date.isAfter(dates[1])
+        );
+    }
+
 
 
     @Autowired
@@ -73,6 +84,17 @@ public class InscriptionController {
             List<Inscription> inscriptions = new ArrayList<>();
             LocalDate deadline = LocalDate.of(2023,9,7);
 
+            if (!isDateValid(inscription.getDate_inscrit())) {
+                logger.debug("La date d'inscription n'est pas dans une période valide.");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            }
+
+            if(inscription.getMinerval() >800){
+                logger.debug("Le minerval doit être <=800");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+
+            }
+
             if (personne != null) {
                 inscription.setPersonne(personne);
                 inscritRepository.save(inscription);
@@ -101,6 +123,14 @@ public class InscriptionController {
             if (optionalInscription.isPresent()) {
                 Inscription inscription = optionalInscription.get();
 
+                if(updatedInscription.getMinerval() < updatedInscription.getRembourser()){
+
+                    logger.debug("Le remboursement doit être inférieur au minerval");
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+
+
+                }
+
                 if (updatedInscription.getRembourser() != null) {
                     inscription.setRembourser(updatedInscription.getRembourser());
                 }
@@ -113,6 +143,13 @@ public class InscriptionController {
                 if (updatedInscription.getCommune() != null) {
                     inscription.setCommune(updatedInscription.getCommune());
                 }
+
+                if(updatedInscription.getMinerval() >800){
+                    logger.debug("Le minerval doit être <=800");
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+
+                }
+
                 if (updatedInscription.getMinerval() != null) {
                     inscription.setMinerval(updatedInscription.getMinerval());
                 }
