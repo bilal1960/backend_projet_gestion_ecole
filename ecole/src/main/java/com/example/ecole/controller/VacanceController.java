@@ -34,7 +34,7 @@ public class VacanceController {
 
     List<LocalDate[]> eventDates = Arrays.asList(
             new LocalDate[]{LocalDate.of(2023, 9, 27), LocalDate.of(2023, 9, 27)},
-            new LocalDate[]{LocalDate.of(2023, 10, 23), LocalDate.of(2023, 11, 3)}, // Juillet
+            new LocalDate[]{LocalDate.of(2023, 10, 23), LocalDate.of(2023, 11, 3)},
             new LocalDate[]{LocalDate.of(2023, 12, 25), LocalDate.of(2024, 1, 5)},
             new LocalDate[]{LocalDate.of(2024, 2, 13), LocalDate.of(2024, 2, 13)},
             new LocalDate[]{LocalDate.of(2024, 2, 26), LocalDate.of(2024, 3, 8)},
