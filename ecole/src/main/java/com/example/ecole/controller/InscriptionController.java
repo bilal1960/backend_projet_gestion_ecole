@@ -34,9 +34,11 @@ public class InscriptionController {
     private EmailService emailService;
 
     List<LocalDate[]> eventinscrit = Arrays.asList(
-            new LocalDate[]{LocalDate.of(2023, 7, 1), LocalDate.of(2023, 7, 5)},
-            new LocalDate[]{LocalDate.of(2023, 7, 8), LocalDate.of(2023, 7, 12)},
-            new LocalDate[]{LocalDate.of(2023, 8, 19), LocalDate.of(2023, 8, 23)}
+            new LocalDate[]{LocalDate.of(2023, 7, 3), LocalDate.of(2023, 7, 7)},
+            new LocalDate[]{LocalDate.of(2023, 7, 10), LocalDate.of(2023, 7, 14)},
+            new LocalDate[]{LocalDate.of(2023, 8, 14), LocalDate.of(2023, 8, 18)},
+            new LocalDate[]{LocalDate.of(2023, 8, 21), LocalDate.of(2023, 8, 25)}
+
     );
 
     private boolean isDateValid(LocalDate date) {
@@ -78,20 +80,24 @@ public class InscriptionController {
     }
 
     @PostMapping
-    public ResponseEntity<Inscription> addInscrit(@RequestBody Inscription inscription, UriComponentsBuilder builder, Authentication authentication) {
+    public ResponseEntity<?> addInscrit(@RequestBody Inscription inscription, UriComponentsBuilder builder, Authentication authentication) {
         if (hasAuthority(authentication, "SCOPE_write:inscrit")) {
             Personne personne = personneRepository.findById(inscription.getPersonne().getId()).orElse(null);
             List<Inscription> inscriptions = new ArrayList<>();
             LocalDate deadline = LocalDate.of(2023,9,7);
 
             if (!isDateValid(inscription.getDate_inscrit())) {
-                logger.debug("La date d'inscription n'est pas dans une période valide.");
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+                logger.debug("La date d'inscription n'est pas dans le mois juillet ou août.");
+                return ResponseEntity
+                        .status(HttpStatus.BAD_REQUEST)
+                        .body(Collections.singletonMap("erreur", "La date d'inscription doit être 03/07/2023 au 07/07/2023, 10/07/2023 au 14/07/2023 ou 14/08/2023 au 18/08/2023, 21/08/2023 au 25/08/2023."));
             }
 
-            if(inscription.getMinerval() >800){
-                logger.debug("Le minerval doit être <=800");
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            if(inscription.getMinerval() >300){
+                logger.debug("Le minerval doit être <=300");
+                return ResponseEntity
+                        .status(HttpStatus.BAD_REQUEST)
+                        .body(Collections.singletonMap("erreur", "Le minerval doit être inférieur ou égal à 300"));
 
             }
 
@@ -116,19 +122,18 @@ public class InscriptionController {
     }
 
     @PutMapping("/inscrit/{id}")
-    public ResponseEntity<Inscription> updateInscription(@PathVariable UUID id, @Valid @RequestBody Inscription updatedInscription, Authentication authentication) {
+    public ResponseEntity<?> updateInscription(@PathVariable UUID id, @Valid @RequestBody Inscription updatedInscription, Authentication authentication) {
         if (hasAuthority(authentication, "SCOPE_write:inscrit")) {
             Optional<Inscription> optionalInscription = inscritRepository.findById(id);
 
             if (optionalInscription.isPresent()) {
                 Inscription inscription = optionalInscription.get();
 
-                if(updatedInscription.getMinerval() < updatedInscription.getRembourser()){
+                if(updatedInscription.getMinerval() < updatedInscription.getRembourser() || updatedInscription.getRembourser() <0){
 
                     logger.debug("Le remboursement doit être inférieur au minerval");
-                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-
-
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                            .body(Collections.singletonMap("erreur", "Le remboursement doit être inférieur au minerval"));
                 }
 
                 if (updatedInscription.getRembourser() != null) {
@@ -144,9 +149,16 @@ public class InscriptionController {
                     inscription.setCommune(updatedInscription.getCommune());
                 }
 
-                if(updatedInscription.getMinerval() >800){
-                    logger.debug("Le minerval doit être <=800");
-                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+                if(updatedInscription.getMinerval() >300){
+                    logger.debug("Le minerval doit être <=300 ou >=0");
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                            .body(Collections.singletonMap("erreur", "Le minerval ne peut pas être supérieur à 300"));
+                }
+
+                if(updatedInscription.getMinerval() <0){
+                    logger.debug("Le mineval doit être >=0");
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                            .body(Collections.singletonMap("erreur", "Le minerval ne peut pas être <0"));
 
                 }
 

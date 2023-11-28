@@ -151,6 +151,10 @@ public class Personne {
         this.statut = statut;
     }
 
+    public void setSexe(String sexe) {
+        this.sexe = sexe;
+    }
+
     public String getMail() {
         return mail;
     }

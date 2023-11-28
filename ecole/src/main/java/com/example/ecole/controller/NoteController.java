@@ -87,7 +87,7 @@ public class NoteController {
     }
 
     @PostMapping
-    public ResponseEntity<Note> addNote(@RequestBody Note note, UriComponentsBuilder builder, Authentication authentication) {
+    public ResponseEntity<?> addNote(@RequestBody Note note, UriComponentsBuilder builder, Authentication authentication) {
         if (hasAuthority(authentication, "SCOPE_write:note")) {
             Personne personne = personneRepository.findById(note.getPersonne().getId()).orElse(null);
 
@@ -106,12 +106,14 @@ public class NoteController {
 
             if (isDateInEvents) {
                 logger.debug("Échec de la validation de la date (pendant les événements)");
-                return ResponseEntity.badRequest().body(null);
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(Collections.singletonMap("erreur", "La date tombe pendant des vacances ou jour férié, sélectionné une autre"));
             }
 
             if(deliberation.getDayOfWeek() == DayOfWeek.SATURDAY || deliberation.getDayOfWeek() == DayOfWeek.SUNDAY){
                 logger.debug("Échec de la validation de la date le week-end");
-                return ResponseEntity.badRequest().body(null);
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(Collections.singletonMap("erreur", "On ne peut pas encoder une note un week-end"));
 
             }
 
@@ -120,21 +122,29 @@ public class NoteController {
             if(resultat <0|| resultat >100){
 
                 logger.debug("Le résultat ne peut être négatif ou supérieur à 100.");
-                return ResponseEntity.badRequest().body(null);
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(Collections.singletonMap("erreur", "Le résultat ne peut être négatif ou supérieur à 100"));
             }
 
             if(!session.equals("1 session") && !session.equals("2 session")){
 
                 logger.debug("donnée de saisit incorrecte: entrer 1 session ou 2 session");
-                return ResponseEntity.badRequest().body(null);
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(Collections.singletonMap("erreur", "encodé 1 session ou 2 session"));
 
             }
 
             if(resultat <50 && reussi ){
 
                 logger.debug("resultat <= 50%");
-                return ResponseEntity.badRequest().body(null);
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(Collections.singletonMap("erreur", "une note inférieur à 50% ne peut pas être réussi"));
+            }
 
+            if (resultat >= 50 && !reussi) {
+                logger.debug("Incohérence détectée : un résultat de 50% ou plus doit être marqué comme réussi.");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(Collections.singletonMap("erreur", "Un résultat de 50% ou plus doit être considéré comme une réussite."));
             }
 
             if (personne != null) {

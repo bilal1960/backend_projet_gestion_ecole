@@ -89,7 +89,7 @@ public class AbsenceController {
     }
 
     @PostMapping
-    public ResponseEntity<Absence> addAbsence(@RequestBody Absence absence, UriComponentsBuilder builder, Authentication authentication) {
+    public ResponseEntity<?> addAbsence(@RequestBody Absence absence, UriComponentsBuilder builder, Authentication authentication) {
         if (hasAuthority(authentication, "SCOPE_write:presence")) {
             Personne personne = personneRepository.findById(absence.getPersonne().getId()).orElse(null);
             List<Absence> absences = new ArrayList<>();
@@ -106,23 +106,31 @@ public class AbsenceController {
             if(date.getDayOfWeek() == DayOfWeek.SATURDAY || date.getDayOfWeek() == DayOfWeek.SUNDAY){
 
                 logger.debug("Échec de l'enregistrement de l'absence : la date ne peut pas être un week-end");
-                return ResponseEntity.badRequest().body(null);
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(Collections.singletonMap("erreur", "Une absence ne peut pas être encodé le week-end."));
+
             }
 
             if (isDateInEvents) {
                 logger.debug("Échec de la validation de la date (pendant les événements)");
-                return ResponseEntity.badRequest().body(null);
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(Collections.singletonMap("erreur", "Une absence ne peut pas être encodé pendant les vacances ou jour fériée."));
+
             }
 
             if (!(presence.equalsIgnoreCase("A") || presence.equalsIgnoreCase("P"))) {
                 logger.debug("Échec de la validation de la présence");
-                return ResponseEntity.badRequest().body(null);
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(Collections.singletonMap("erreur", "veuillez entre a ou A, p ou P."));
+
             }
 
 
             if (heuredebut.isBefore(heureDebutMin) || heurefin.isAfter(heureFinMax) || heuredebut.isAfter(heurefin)) {
                 logger.debug("Échec de la validation des heures");
-                return ResponseEntity.badRequest().body(null);
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(Collections.singletonMap("erreur", "heure de début doit être min 09:00 ou avant heurefin, heuremax 21:30."));
+
             }
 
             if (personne != null) {
@@ -149,7 +157,7 @@ public class AbsenceController {
     }
 
     @PostMapping("/prof")
-    public ResponseEntity<Absence> addAbsenceprof(@RequestBody Absence absence, UriComponentsBuilder builder, Authentication authentication) {
+    public ResponseEntity<?> addAbsenceprof(@RequestBody Absence absence, UriComponentsBuilder builder, Authentication authentication) {
         if (hasAuthority(authentication, "SCOPE_write:profabsent")) {
             Personne personne = personneRepository.findById(absence.getPersonne().getId()).orElse(null);
             List<Absence> absences = new ArrayList<>();
@@ -168,23 +176,27 @@ public class AbsenceController {
             if(date.getDayOfWeek() == DayOfWeek.SATURDAY || date.getDayOfWeek() == DayOfWeek.SUNDAY){
 
                 logger.debug("Échec de l'enregistrement de l'absence : la date ne peut pas être un week-end");
-                return ResponseEntity.badRequest().body(null);
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(Collections.singletonMap("erreur", "interdit de mettre absence sur un week-end"));
             }
 
             if (isDateInEvents) {
                 logger.debug("Échec de la validation de la date (pendant les événements)");
-                return ResponseEntity.badRequest().body(null);
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(Collections.singletonMap("erreur", "absence ne peut être en vacance"));
             }
 
             if (!(presence.equalsIgnoreCase("A") || presence.equalsIgnoreCase("P"))) {
                 logger.debug("Échec de la validation de la présence");
-                return ResponseEntity.badRequest().body(null);
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(Collections.singletonMap("erreur", "La présence doit être p ou P, a ou A"));
             }
 
 
             if (heuredebut.isBefore(heureDebutMin) || heurefin.isAfter(heureFinMax) || heuredebut.isAfter(heurefin)) {
                 logger.debug("Échec de la validation des heures");
-                return ResponseEntity.badRequest().body(null);
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(Collections.singletonMap("erreur", "heuredebut min 09:00 ou heuremax 21:30, heure debut ne doit pas dépasser heuremax"));
             }
 
             if (personne != null) {
@@ -249,7 +261,7 @@ public class AbsenceController {
     }
 
     @PutMapping("/absences/{id}")
-    public ResponseEntity<Absence> updateAbsence(@PathVariable UUID id, @RequestBody Absence updateAbsence, Authentication authentication) {
+    public ResponseEntity<?> updateAbsence(@PathVariable UUID id, @RequestBody Absence updateAbsence, Authentication authentication) {
         if (!hasAuthority(authentication, "SCOPE_write:profabsent")) {
             logger.debug("Attention, vous n'avez pas la bonne permission");
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
@@ -275,30 +287,40 @@ public class AbsenceController {
 
         if (blockedDates.contains(updateAbsence.getDate())) {
             logger.debug("La date de l'absence tombe sur une date bloquée.");
-            return ResponseEntity.badRequest().body(null);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Collections.singletonMap("erreur", "la date absence ne peut pas être sur un jour férié."));
+
+
         }
           if(isStartDateInEvents){
               logger.debug("L'absence tombe sur des vacances");
-              return ResponseEntity.badRequest().body(null);
+              return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                      .body(Collections.singletonMap("erreur", "absence tombe sur des vacances"));
           }
 
 
         if(date.getDayOfWeek() == DayOfWeek.SATURDAY || date.getDayOfWeek() == DayOfWeek.SUNDAY){
 
             logger.debug("Échec de l'enregistrement de l'absence : la date ne peut pas être un week-end");
-            return ResponseEntity.badRequest().body(null);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Collections.singletonMap("erreur", "interdit de mettre absence sur un week-end"));
+
         }
 
 
 
         if (heuredebut.isBefore(heureDebutMin) || heurefin.isAfter(heureFinMax) || heuredebut.isAfter(heurefin)) {
             logger.debug("Échec de la validation des heures");
-            return ResponseEntity.badRequest().body(null);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Collections.singletonMap("erreur", "heure de début doit être min 09:00 ou avant heurefin, heuremax 21:30."));
+
         }
 
         if (!(presence.equalsIgnoreCase("A") || presence.equalsIgnoreCase("P"))) {
             logger.debug("Échec de la validation de la présence");
-            return ResponseEntity.badRequest().body(null);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Collections.singletonMap("erreur", "la présence doit être a ou A, p ou P"));
+
         }
 
         Absence existingAbsence = existingAbsenceOptional.get();

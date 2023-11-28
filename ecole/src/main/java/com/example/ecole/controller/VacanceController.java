@@ -98,7 +98,7 @@ public class VacanceController {
     }
 
         @PostMapping
-        public ResponseEntity<Vacance> addVacance(@RequestBody Vacance vacances, Authentication authentication, UriComponentsBuilder builder) {
+        public ResponseEntity<?> addVacance(@RequestBody Vacance vacances, Authentication authentication, UriComponentsBuilder builder) {
             if (hasAuthority(authentication, "SCOPE_write:vacance")) {
                 Personne personne = personneRepository.findById(vacances.getPersonne().getId()).orElse(null);
                 List<Vacance> vacances1 = new ArrayList<>();
@@ -111,12 +111,15 @@ public class VacanceController {
 
                 if (!areDatesValid(vacances.getDateDebut(), vacances.getDateFin())) {
                     logger.debug("Les dates de vacance ne sont pas dans les périodes autorisées.");
-                    return ResponseEntity.badRequest().body(null);
+                   return  ResponseEntity
+                            .status(HttpStatus.BAD_REQUEST)
+                            .body(Collections.singletonMap("erreur", "veuillez encoder des dates de vacance valide"));
                 }
 
                 if(!typevac.equals("vacance scolaire")&& !typevac.equals("férié")){
                     logger.debug("donné incorrecte: veuillez entrer vacance scolaire ou férié");
-                    return ResponseEntity.badRequest().body(null);
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                            .body(Collections.singletonMap("erreur", "veuillez encoder vacance scolaire ou férié"));
                 }
 
                 if (personne != null) {
@@ -145,7 +148,7 @@ public class VacanceController {
         }
 
     @PutMapping("/vacances/{id}")
-    public ResponseEntity<Vacance> updateVacance(@PathVariable UUID id, @RequestBody Vacance updateVacance, Authentication authentication) {
+    public ResponseEntity<?> updateVacance(@PathVariable UUID id, @RequestBody Vacance updateVacance, Authentication authentication) {
         if (!hasAuthority(authentication, "SCOPE_write:profabsent")) {
             logger.debug("Attention, vous n'avez pas la bonne permission");
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
@@ -162,14 +165,17 @@ public class VacanceController {
 
         if(!typevac.equals("vacance scolaire")&& !typevac.equals("férié")){
             logger.debug("donné incorrecte: veuillez entrer vacance scolaire ou férié");
-            return ResponseEntity.badRequest().body(null);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Collections.singletonMap("erreur", "veuillez encoder vacance scolaire ou férié"));
         }
 
 
         if (updateVacance.getDateDebut() != null && updateVacance.getDateFin() != null) {
             if (!areDatesValid(updateVacance.getDateDebut(), updateVacance.getDateFin())) {
                 logger.debug("Les dates de vacance ne sont pas dans les périodes autorisées.");
-                return ResponseEntity.badRequest().body(null);
+                return  ResponseEntity
+                        .status(HttpStatus.BAD_REQUEST)
+                        .body(Collections.singletonMap("erreur", "veuillez encoder des dates de vacance valide"));
             }
 
             existingVacance.setDatedebut(updateVacance.getDateDebut());

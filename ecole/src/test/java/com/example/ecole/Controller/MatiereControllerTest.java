@@ -88,7 +88,7 @@ public class MatiereControllerTest {
     public void addMatiereTestNoPersonne() {
         when(personneRepository.findById(any(UUID.class))).thenReturn(Optional.empty());
         Authentication authentication = createAuthenticationWithAuthority("SCOPE_write:matiere");
-        ResponseEntity<Matiere> responseEntity = matiereController.addMatiere(matiere, UriComponentsBuilder.newInstance(), authentication);
+        ResponseEntity<?> responseEntity = matiereController.addMatiere(matiere, UriComponentsBuilder.newInstance(), authentication);
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
     }
 
@@ -97,7 +97,7 @@ public class MatiereControllerTest {
         when(personneRepository.findById(any(UUID.class))).thenReturn(Optional.of(personne));
 
         Authentication authentication = createAuthenticationWithAuthority("SCOPE_wrong:matiere");
-        ResponseEntity<Matiere> responseEntity = matiereController.addMatiere(matiere, UriComponentsBuilder.newInstance(), authentication);
+        ResponseEntity<?> responseEntity = matiereController.addMatiere(matiere, UriComponentsBuilder.newInstance(), authentication);
 
         assertEquals(HttpStatus.FORBIDDEN, responseEntity.getStatusCode());
         verify(matiereRepository, never()).save(any(Matiere.class));
@@ -109,7 +109,7 @@ public class MatiereControllerTest {
         matiere.setFintime(LocalTime.of(12, 0));
 
         Authentication authentication = createAuthenticationWithAuthority("SCOPE_write:matiere");
-        ResponseEntity<Matiere> responseEntity = matiereController.addMatiere(matiere, UriComponentsBuilder.newInstance(), authentication);
+        ResponseEntity<?> responseEntity = matiereController.addMatiere(matiere, UriComponentsBuilder.newInstance(), authentication);
 
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
         verify(matiereRepository, never()).save(any(Matiere.class));
@@ -131,7 +131,7 @@ public class MatiereControllerTest {
     public void updateMatiereNotMatiere() {
         when(matiereRepository.findById(any(UUID.class))).thenReturn(Optional.empty());
         Authentication authentication = createAuthenticationWithAuthority("SCOPE_write:matiere");
-        ResponseEntity<Matiere> responseEntity = matiereController.updateMatiere(matiere.getId(), matiere, authentication);
+        ResponseEntity<?> responseEntity = matiereController.updateMatiere(matiere.getId(), matiere, authentication);
         assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
     }
 

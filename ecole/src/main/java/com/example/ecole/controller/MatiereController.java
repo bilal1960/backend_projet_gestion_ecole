@@ -80,7 +80,7 @@ public class MatiereController {
     }
 
     @PostMapping("/matieress")
-    public ResponseEntity<Matiere> addMatiere(@RequestBody Matiere matiere, UriComponentsBuilder builder, Authentication authentication) {
+    public ResponseEntity<?> addMatiere(@RequestBody Matiere matiere, UriComponentsBuilder builder, Authentication authentication) {
         int debutYear = matiere.getDebut().getYear();
         int finYear = matiere.getFin().getYear();
         List<Matiere> matieress = new ArrayList<>();
@@ -100,39 +100,39 @@ public class MatiereController {
             if (professeur != null) {
                 if (matiere.getDebutime().isAfter(matiere.getFintime()) || matiere.getDebutime().isBefore(heureminimum)) {
                     logger.debug("vérifie que l'heure de début n'est pas après l'heure de fin ou avant 09:00");
-                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+                    return  ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                            .body(Collections.singletonMap("erreur", "vérifie que l'heure de début n'est pas après l'heure de fin ou avant 09:00'"));
+
                 }
                 if (matiere.getDebut().isAfter(matiere.getFin()) || debutYear != currentYear && debutYear != currentYear - 1 || finYear != currentYear && finYear != currentYear + 1) {
                     logger.debug("le format de la date est incorrecte ");
-                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-                }
-
-                if (finYear > debutYear + 1) {
-                    logger.debug("l'année de fin ne peut pas être supérieur à 2 année de debut");
-                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-
+                    return ResponseEntity
+                            .status(HttpStatus.BAD_REQUEST)
+                            .body(Collections.singletonMap("erreur", "L'année de fin ne peut pas être supérieure de plus de deux ans à l'année de début"));
                 }
 
                 if (blockedDates.contains(matiere.getDebut()) || blockedDates.contains(matiere.getFin())) {
                     logger.debug("La date du cours tombe sur une date bloquée.");
-                    return ResponseEntity.badRequest().body(null);
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                            .body(Collections.singletonMap("erreur", "un cours ne peut pas se donner pendant un jour férié"));
                 }
-
 
                 if(isStartDateInEvents || isEndDateInEvents){
                     logger.debug("un cours ne peut être encodé pendant les vacances, jours fériés");
-                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                            .body(Collections.singletonMap("erreur", "un cours ne peut pas être encodé pendant les vacances, jour fériés"));
                 }
 
                 if(matiere.getDebut().getDayOfWeek()== DayOfWeek.SATURDAY || matiere.getDebut().getDayOfWeek() == DayOfWeek.SUNDAY){
                     logger.debug("Les dates des matières ne peuvent se donner en week end");
-                    return ResponseEntity.badRequest().body(null);
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                            .body(Collections.singletonMap("erreur", "un cours ne peut pas se donner pendant les week-end"));
                 }
 
                 if(matiere.getFin().getDayOfWeek()== DayOfWeek.SATURDAY || matiere.getFin().getDayOfWeek() == DayOfWeek.SUNDAY){
                     logger.debug("Les dates des matières ne peuvent se donner en week end");
-                    return ResponseEntity.badRequest().body(null);
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                            .body(Collections.singletonMap("erreur", "un cours ne peut pas se donner pendant les week-end"));
                 }
 
                 matiere.setPersonne(professeur);
@@ -185,7 +185,7 @@ public class MatiereController {
     }
 
     @PutMapping("/matieres/{id}")
-    public ResponseEntity<Matiere> updateMatiere(@PathVariable UUID id, @RequestBody Matiere updatedMatiere, Authentication authentication) {
+    public ResponseEntity<?> updateMatiere(@PathVariable UUID id, @RequestBody Matiere updatedMatiere, Authentication authentication) {
         if (hasAuthority(authentication, "SCOPE_write:matiere")) {
             Optional<Matiere> existingMatiereOptional = matiererepository.findById(id);
 
@@ -207,16 +207,30 @@ public class MatiereController {
 
                     if (blockedDates.contains(updatedMatiere.getDebut()) || blockedDates.contains(updatedMatiere.getFin())) {
                         logger.debug("La date du cours tombe sur une date bloquée.");
-                        return ResponseEntity.badRequest().body(null);
+                        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                                .body(Collections.singletonMap("erreur", "on ne peut pas mettre à jour la date d'un cours sur un jour férié"));
                     }
 
                     if (isStartDateInEvents|| isEndDateInEvents) {
                         logger.debug("La mise à jour des dates pendant les périodes de vacances ou les jours fériés n'est pas autorisée");
-                        return ResponseEntity.badRequest().body(null);
+                        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                                .body(Collections.singletonMap("erreur", "on ne peut pas mettre à jour la date d'un cours sur les périodes de vacance ou jour férié"));
                     }
 
                     existingMatiere.setDebut(updatedMatiere.getDebut());
                     existingMatiere.setFin(updatedMatiere.getFin());
+                }
+
+                if(updatedMatiere.getDebut().getDayOfWeek()== DayOfWeek.SATURDAY || updatedMatiere.getDebut().getDayOfWeek() == DayOfWeek.SUNDAY){
+                    logger.debug("Les dates des matières ne peuvent se donner en week end");
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                            .body(Collections.singletonMap("erreur", "un cours ne peut pas se donner pendant les week-end"));
+                }
+
+                if(updatedMatiere.getFin().getDayOfWeek()== DayOfWeek.SATURDAY || updatedMatiere.getFin().getDayOfWeek() == DayOfWeek.SUNDAY){
+                    logger.debug("Les dates des matières ne peuvent se donner en week end");
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                            .body(Collections.singletonMap("erreur", "un cours ne peut pas se donner pendant les week-end"));
                 }
 
                 if (updatedMatiere.getDebut() != null && updatedMatiere.getFin() != null) {
@@ -225,13 +239,20 @@ public class MatiereController {
 
                     if (updatedMatiere.getFin().isBefore(updatedMatiere.getDebut())) {
                         logger.debug("veuiller insérer une date fin supérieur à date début ou une année correcte");
-                        return ResponseEntity
-                                .status(HttpStatus.BAD_REQUEST).build();
+                        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                                .body(Collections.singletonMap("erreur", "veuillez insérer une date de fin supérieur à datedebut ou une année correcte"));
                     }
 
-                    if (finYear != currentYear && finYear != currentYear + 1 || debutYear != currentYear && debutYear != currentYear - 1 || finYear > debutYear + 1) {
+                    if (updatedMatiere.getDebut().isAfter(updatedMatiere.getFin()) || debutYear != currentYear && debutYear != currentYear - 1 || finYear != currentYear && finYear != currentYear + 1) {
                         logger.debug("année de début doit être entre 2022 et 2023 et l'écart entre debut et fin ne doit pas dépasser 1 ans");
-                        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+                       return  ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                                .body(Collections.singletonMap("erreur", "année de début doit être entre 2022 et 2023 et l'écart entre debut et fin ne doit pas dépasser 1 ans"));
+                    }
+
+                    if (debutYear < 2023) {
+                        logger.debug("L'écart entre l'année de début et l'année de fin ne doit pas dépasser deux ans.");
+                        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                                .body(Collections.singletonMap("erreur", "L'année debut doit être min 2023"));
                     }
 
                     existingMatiere.setDebut(updatedMatiere.getDebut());
@@ -241,8 +262,8 @@ public class MatiereController {
                 if (updatedMatiere.getDebutime() != null && updatedMatiere.getFintime() != null) {
                     if (!updatedMatiere.getDebutime().isBefore(updatedMatiere.getFintime()) || updatedMatiere.getDebutime().isBefore(heureminimum)) {
                         logger.debug("format d'heure incorrecte: veuillez respecter le format: heuredebut <heurefin et heure debut>=09:00: ");
-                        return ResponseEntity
-                                .status(HttpStatus.BAD_REQUEST).build();
+                        return  ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                                .body(Collections.singletonMap("erreur", "format d'heure incorrecte: veuillez respecter le format: heuredebut inférieur à heurefin ou heuredebut min 09:00"));
                     }
 
                     existingMatiere.setDebutime(updatedMatiere.getDebutime());
@@ -254,8 +275,8 @@ public class MatiereController {
 
                     if (!Arrays.asList(joursSemaineList).contains(jourupdate)) {
                         logger.debug("error entrer un jour valide");
-                        return ResponseEntity
-                                .status(HttpStatus.BAD_REQUEST).build();
+                        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                                .body(Collections.singletonMap("erreur", "entrer un jour valide Lundi à Vendredi"));
                     }
 
                     existingMatiere.setJour(updatedMatiere.getJour());
@@ -266,8 +287,8 @@ public class MatiereController {
 
                     if (!Pattern.matches(localPattern, local)) {
                         logger.debug("respecté le format suivant pour local: lettre suivit de chiffre ou lettre");
-                        return ResponseEntity
-                                .status(HttpStatus.BAD_REQUEST).build();
+                        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                                .body(Collections.singletonMap("erreur", "respecté le format suivant pour le local: lettre suivit de chiffre ou lettre"));
                     }
 
                     existingMatiere.setLocal(updatedMatiere.getLocal());

@@ -13,6 +13,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 import java.net.URI;
+import java.time.LocalDate;
+import java.time.Period;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -28,6 +31,9 @@ public class PersonneAjouterController {
     public PersonneAjouterController(PersonneRepository personneRepository) {
         this.personneRepository = personneRepository;
     }
+
+    LocalDate currentDate = LocalDate.now();
+
 
     @GetMapping("/api")
     public ResponseEntity<List<Personne>> getAllPersonnes(Authentication authentication) {
@@ -66,9 +72,31 @@ public class PersonneAjouterController {
     }
 
     @PostMapping("/pagi")
-    public ResponseEntity<Personne> addPersonne(@RequestBody Personne personne, Authentication authentication, UriComponentsBuilder builder) {
+    public ResponseEntity<?> addPersonne(@RequestBody Personne personne, Authentication authentication, UriComponentsBuilder builder) {
 
         if (hasAuthority(authentication, "SCOPE_write:personne")) {
+
+            int age = Period.between(personne.getNaissance(), currentDate).getYears();
+
+            if(age <13){
+
+                logger.debug("La personne doit avoir au moins 13 ans");
+                return ResponseEntity
+                        .status(HttpStatus.BAD_REQUEST)
+                        .body(Collections.singletonMap("erreur", "La personne doit avoir au moins 13 ans"));
+            }
+
+            if(!personne.getStatut().equals("etudiant") && !personne.getStatut().equals("professeur")){
+                return ResponseEntity
+                        .status(HttpStatus.BAD_REQUEST)
+                        .body(Collections.singletonMap("erreur", "Le statut peut-être etudiant ou professeur"));
+            }
+
+            if(!personne.getSexe().equals("homme") && !personne.getSexe().equals("femme")){
+                return ResponseEntity
+                        .status(HttpStatus.BAD_REQUEST)
+                        .body(Collections.singletonMap("erreur", "Le sexe peut-être homme ou femme"));
+            }
 
             personne.setId(UUID.randomUUID());
             personneRepository.save(personne);

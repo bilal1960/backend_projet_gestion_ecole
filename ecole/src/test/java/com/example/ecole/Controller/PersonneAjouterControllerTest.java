@@ -32,12 +32,14 @@ public class PersonneAjouterControllerTest {
     private PersonneRepository personneRepository;
 
     private Personne personne;
+    String sex = "homme";
 
     @BeforeEach
     public void setUp() {
         personne = new Personne();
         personne.setId(UUID.randomUUID());
         personne.setStatut("etudiant");
+        personne.setSexe("homme");
     }
 
     private Authentication createAuthenticationWithAuthority(String authority) {
@@ -123,7 +125,7 @@ public class PersonneAjouterControllerTest {
         when(personneRepository.save(any(Personne.class))).thenReturn(personne);
 
         Authentication authentication = createAuthenticationWithAuthority("SCOPE_write:personne");
-        ResponseEntity<Personne> responseEntity = personneAjouterController.addPersonne(personne, authentication, UriComponentsBuilder.newInstance());
+        ResponseEntity<?> responseEntity = personneAjouterController.addPersonne(personne, authentication, UriComponentsBuilder.newInstance());
 
         assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
         assertEquals(personne, responseEntity.getBody());
@@ -132,7 +134,7 @@ public class PersonneAjouterControllerTest {
     @Test
     public void addPersonneNoAuthorityTest() {
         Authentication authentication = createAuthenticationWithAuthority("SCOPE_wrong:personne");
-        ResponseEntity<Personne> responseEntity = personneAjouterController.addPersonne(personne, authentication, UriComponentsBuilder.newInstance());
+        ResponseEntity<?> responseEntity = personneAjouterController.addPersonne(personne, authentication, UriComponentsBuilder.newInstance());
 
         assertEquals(HttpStatus.FORBIDDEN, responseEntity.getStatusCode());
     }

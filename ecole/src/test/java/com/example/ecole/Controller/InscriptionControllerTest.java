@@ -90,7 +90,7 @@ public class InscriptionControllerTest {
     public void updateInscriptionTestNoInscription() {
         when(inscritRepository.findById(any(UUID.class))).thenReturn(Optional.empty());
         Authentication authentication = createAuthenticationWithAuthority("SCOPE_write:inscrit");
-        ResponseEntity<Inscription> responseEntity = inscriptionController.updateInscription(inscription.getId(), inscription, authentication);
+        ResponseEntity<?> responseEntity = inscriptionController.updateInscription(inscription.getId(), inscription, authentication);
         assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
     }
 
