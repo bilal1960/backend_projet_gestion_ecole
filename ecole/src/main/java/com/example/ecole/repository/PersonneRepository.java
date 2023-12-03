@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface PersonneRepository extends JpaRepository<Personne, UUID> {
@@ -13,4 +14,6 @@ public interface PersonneRepository extends JpaRepository<Personne, UUID> {
     List<Personne> findAll();
 
     List<Personne> findAllByStatut(String statut);
+    Optional<Personne> findByAuth0Id(String auth0Id);
+
 }

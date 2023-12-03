@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 import java.net.URI;
@@ -99,43 +100,42 @@ public class MatiereController {
             Personne professeur = personneRepository.findById(matiere.getPersonne().getId()).orElse(null);
             if (professeur != null) {
                 if (matiere.getDebutime().isAfter(matiere.getFintime()) || matiere.getDebutime().isBefore(heureminimum)) {
-                    logger.debug("vérifie que l'heure de début n'est pas après l'heure de fin ou avant 09:00");
                     return  ResponseEntity.status(HttpStatus.BAD_REQUEST)
                             .body(Collections.singletonMap("erreur", "vérifie que l'heure de début n'est pas après l'heure de fin ou avant 09:00'"));
 
                 }
                 if (matiere.getDebut().isAfter(matiere.getFin()) || debutYear != currentYear && debutYear != currentYear - 1 || finYear != currentYear && finYear != currentYear + 1) {
-                    logger.debug("le format de la date est incorrecte ");
                     return ResponseEntity
                             .status(HttpStatus.BAD_REQUEST)
                             .body(Collections.singletonMap("erreur", "L'année de fin ne peut pas être supérieure de plus de deux ans à l'année de début"));
                 }
 
                 if (blockedDates.contains(matiere.getDebut()) || blockedDates.contains(matiere.getFin())) {
-                    logger.debug("La date du cours tombe sur une date bloquée.");
                     return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                             .body(Collections.singletonMap("erreur", "un cours ne peut pas se donner pendant un jour férié"));
                 }
 
                 if(isStartDateInEvents || isEndDateInEvents){
-                    logger.debug("un cours ne peut être encodé pendant les vacances, jours fériés");
                     return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                             .body(Collections.singletonMap("erreur", "un cours ne peut pas être encodé pendant les vacances, jour fériés"));
                 }
 
                 if(matiere.getDebut().getDayOfWeek()== DayOfWeek.SATURDAY || matiere.getDebut().getDayOfWeek() == DayOfWeek.SUNDAY){
-                    logger.debug("Les dates des matières ne peuvent se donner en week end");
                     return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                             .body(Collections.singletonMap("erreur", "un cours ne peut pas se donner pendant les week-end"));
                 }
 
                 if(matiere.getFin().getDayOfWeek()== DayOfWeek.SATURDAY || matiere.getFin().getDayOfWeek() == DayOfWeek.SUNDAY){
-                    logger.debug("Les dates des matières ne peuvent se donner en week end");
                     return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                             .body(Collections.singletonMap("erreur", "un cours ne peut pas se donner pendant les week-end"));
                 }
+                if(isUserProfesseur(authentication) && professeur.getAuth0Id() == null) {
+                    String professeurAuth0Id = matiere.getProfesseurAuth0Id();
+                    professeur.setAuth0Id(professeurAuth0Id);
+                }
 
                 matiere.setPersonne(professeur);
+
                 matiererepository.save(matiere);
                 matieress.add(matiere);
                 professeur.setMatieres(matieress);
@@ -147,15 +147,12 @@ public class MatiereController {
                 String courseName = matiere.getNom();
                 String courseStartTime = matiere.getDebutime().toString();
                 String courseEndTime = matiere.getFintime().toString();
-                logger.debug("succès de la sauvegarde des données dans la base de données");
                 emailService.sendCourseConfirmationEmail(emailTo, courseDate, courseName, courseStartTime, courseEndTime);
                 return ResponseEntity.created(location).body(matiere);
             } else {
-                logger.debug("Le professeur correspondant n'a pas été trouvé");
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
             }
         } else {
-            logger.debug("Attention, vous n'avez pas la bonne permission");
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
     }
@@ -180,6 +177,31 @@ public class MatiereController {
             return ResponseEntity.ok(professeurs);
         } else {
             logger.debug("Échec, mauvaise permission");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+    }
+
+    @GetMapping("/mesMatieres")
+    public ResponseEntity<Page<Matiere>> getMatieresDuProfesseur(Authentication authentication, Pageable pageable) {
+        if (hasAuthority(authentication, "SCOPE_read:matiere")) {
+            if (authentication instanceof JwtAuthenticationToken) {
+                JwtAuthenticationToken jwtAuth = (JwtAuthenticationToken) authentication;
+                String professeurAuth0Id = jwtAuth.getToken().getClaims().get("sub").toString();
+
+                Optional<Personne> personne = personneRepository.findByAuth0Id(professeurAuth0Id);
+                if (personne.isPresent()) {
+                    Page<Matiere> matieresDuProfesseur = matiererepository.findByProfesseur(personne.get(), pageable);
+                    return ResponseEntity.ok(matieresDuProfesseur);
+                } else {
+                    logger.debug("Le professeur n'a pas été trouvé.");
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+                }
+            } else {
+                logger.debug("Type d'authentification non pris en charge");
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            }
+        } else {
+            logger.debug("Attention, vous n'avez pas la bonne permission");
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
     }
@@ -316,4 +338,22 @@ public class MatiereController {
         logger.debug("vérifier l'autorité de permission", expectedAuthority);
         return authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals(expectedAuthority));
     }
+
+    private boolean isUserProfesseur(Authentication authentication) {
+        if (authentication instanceof JwtAuthenticationToken) {
+            JwtAuthenticationToken jwtAuth = (JwtAuthenticationToken) authentication;
+
+            Map<String, Object> tokenAttributes = jwtAuth.getTokenAttributes();
+
+            String scopeString = (String) tokenAttributes.get("scope");
+
+            List<String> scopes = Arrays.asList(scopeString.split(" "));
+
+            return scopes.contains("write:note");
+        }
+        return false;
+    }
+
+
+
 }

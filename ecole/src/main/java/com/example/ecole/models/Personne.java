@@ -50,7 +50,7 @@ public class Personne {
     private String statut;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "professeur_id")
+    @OneToMany(mappedBy = "professeur")
     private List<Matiere> matieres;
 
     @JsonBackReference
@@ -70,8 +70,10 @@ public class Personne {
 
     private  float moyenne;
     private String mail;
+    @Column(name = "auth0_id")
+    private String auth0Id;
 
-    public Personne(String prenom, String nom, LocalDate naissance, String nationalite, String adresse, String sexe, String statut, List<Matiere> matieres, List<Inscription> inscriptions, List<Absence> absences, List<Vacance> vacances, List<Note> notes,float moyenne,String mail) {
+    public Personne(String prenom, String nom, LocalDate naissance, String nationalite, String adresse, String sexe, String statut, List<Matiere> matieres, List<Inscription> inscriptions, List<Absence> absences, List<Vacance> vacances, List<Note> notes,float moyenne,String mail, String auth0Id ) {
         this.prenom = prenom;
         this.nom = nom;
         this.naissance = naissance;
@@ -86,12 +88,13 @@ public class Personne {
         this.notes = notes;
         this.moyenne = moyenne;
         this.mail = mail;
+        this.auth0Id = auth0Id;
     }
 
     public Personne() {
     }
 
-    public Personne(String prenom, String nom, LocalDate naissance, String nationalite, String adresse, String sexe, String statut,float moyenne, String mail) {
+    public Personne(String prenom, String nom, LocalDate naissance, String nationalite, String adresse, String sexe, String statut,float moyenne, String mail, String auth0Id) {
         this.prenom = prenom;
         this.nom = nom;
         this.naissance = naissance;
@@ -101,6 +104,7 @@ public class Personne {
         this.statut = statut;
         this.moyenne = moyenne;
         this.mail = mail;
+        this.auth0Id = auth0Id;
     }
 
     public Personne(String uuid) {
@@ -192,6 +196,14 @@ public class Personne {
 
     public void setMoyenne(float moyenne) {
         this.moyenne = moyenne;
+    }
+
+    public String getAuth0Id() {
+        return auth0Id;
+    }
+
+    public void setAuth0Id(String auth0Id) {
+        this.auth0Id = auth0Id;
     }
 
     public void calculerMoyenne() {

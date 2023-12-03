@@ -38,7 +38,7 @@ public class Matiere {
     @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "professeur_id")
-    private Personne professeur_id;
+    private Personne professeur;
 
     @NotEmpty
     @Pattern(regexp = "^\\s*[A-Za-z][A-Za-z\\d\\s./]*\\s*$", message = "le local doit avoir une lettre au début")
@@ -52,20 +52,23 @@ public class Matiere {
     @Pattern(regexp = "^[1-6] secondaire$", message = "La valeur doit être entre '1 secondaire' et '6 secondaire'")
     @Column(name = "secondaire")
     private String secondaire;
+    @Column(name = "professeurauth0")
+    private  String professeurAuth0Id;
 
     public Matiere() {
     }
 
-    public Matiere(String nom, LocalDate debut, LocalDate fin, Personne professeur_id, LocalTime debutime, LocalTime fintime, String local, String jour, String secondaire) {
+    public Matiere(String nom, LocalDate debut, LocalDate fin, Personne professeur, LocalTime debutime, LocalTime fintime, String local, String jour, String secondaire, String professeurAuth0Id) {
         this.nom = nom;
         this.debut = debut;
         this.fin = fin;
-        this.professeur_id = professeur_id;
+        this.professeur = professeur;
         this.debutime = debutime;
         this.fintime = fintime;
         this.local = local;
         this.jour = jour;
         this.secondaire = secondaire;
+        this.professeurAuth0Id = professeurAuth0Id;
     }
 
 
@@ -118,11 +121,11 @@ public class Matiere {
     }
 
     public Personne getPersonne() {
-        return professeur_id;
+        return professeur;
     }
 
-    public void setPersonne(Personne professeur_id) {
-        this.professeur_id = professeur_id;
+    public void setPersonne(Personne professeur) {
+        this.professeur = professeur;
     }
 
     public String getLocal() {
@@ -147,5 +150,13 @@ public class Matiere {
 
     public void setSecondaire(String secondaire) {
         this.secondaire = secondaire;
+    }
+
+    public String getProfesseurAuth0Id() {
+        return professeurAuth0Id;
+    }
+
+    public void setProfesseurAuth0Id(String professeurAuth0Id) {
+        this.professeurAuth0Id = professeurAuth0Id;
     }
 }
