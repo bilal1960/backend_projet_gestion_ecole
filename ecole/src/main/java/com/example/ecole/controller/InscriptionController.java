@@ -87,7 +87,6 @@ public class InscriptionController {
             LocalDate deadline = LocalDate.of(2023,9,7);
 
             if (!isDateValid(inscription.getDate_inscrit())) {
-                logger.debug("La date d'inscription n'est pas dans le mois juillet ou août.");
                 return ResponseEntity
                         .status(HttpStatus.BAD_REQUEST)
                         .body(Collections.singletonMap("erreur", "La date d'inscription doit être 03/07/2023 au 07/07/2023, 10/07/2023 au 14/07/2023 ou 14/08/2023 au 18/08/2023, 21/08/2023 au 25/08/2023."));

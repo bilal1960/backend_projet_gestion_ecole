@@ -183,7 +183,7 @@ public class MatiereController {
 
     @GetMapping("/mesMatieres")
     public ResponseEntity<Page<Matiere>> getMatieresDuProfesseur(Authentication authentication, Pageable pageable) {
-        if (hasAuthority(authentication, "SCOPE_read:matiere")) {
+        if (hasAuthority(authentication, "SCOPE_read:cours")) {
             if (authentication instanceof JwtAuthenticationToken) {
                 JwtAuthenticationToken jwtAuth = (JwtAuthenticationToken) authentication;
                 String professeurAuth0Id = jwtAuth.getToken().getClaims().get("sub").toString();
