@@ -17,7 +17,7 @@ public class InscriptionTest {
     @BeforeEach
     public void setUp() {
 
-        personne = new Personne("maria", "Lolo", date, "Belge", "123 rue Test", "homme", "professeur",30.00f,"reginecamille@hotmail.com");
+        personne = new Personne("maria", "Lolo", date, "Belge", "123 rue Test", "homme", "professeur",30.00f,"reginecamille@hotmail.com","a7555be7-6af7-4154-850d-ff71990dc924");
         inscription = new Inscription("Uccle", 500.00f, personne, date_inscrit,50.0f, "General", "4 secondaire");
     }
 

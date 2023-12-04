@@ -32,9 +32,9 @@ public class InscriptionRepositoryTest {
 
     @BeforeEach
     public void setUp() {
-        personne = new Personne("lolo", "laura", date, "Belge", "rue Test/70", "homme", "etudiant",50.00f,"rginecamille@hotmail.com");
+        personne = new Personne("lolo", "laura", date, "Belge", "rue Test/70", "homme", "etudiant",50.00f,"rginecamille@hotmail.com","");
         inscription = new Inscription("Uccle", 500.0f, personne, date_inscrit, 50.0f, "General", "4 secondaire");
-        personnenotexist = new Personne("laura", "Lulu", date, "Belge", "rue du parc/50", "femme", "etudiant",60.0f,"lolo@hotmail.com");
+        personnenotexist = new Personne("laura", "Lulu", date, "Belge", "rue du parc/50", "femme", "etudiant",60.0f,"lolo@hotmail.com","");
 
     }
 

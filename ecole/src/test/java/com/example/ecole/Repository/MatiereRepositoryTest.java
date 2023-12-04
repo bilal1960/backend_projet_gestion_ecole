@@ -36,9 +36,9 @@ public class MatiereRepositoryTest {
 
     @BeforeEach
     public void setUp() {
-        professeur = new Personne("lolo", "laura", birthDate, "Belge", "rue du royal/50", "homme", "professeur",0.0f,"prof@hotmail.com");
-        matiere = new Matiere("Mathématiques", datedbut, datefin, professeur, debutime, fintime, "A400", "lundi", "3 secondaire");
-        professeurNotExist = new Personne("lolo", "laura", birthDate, "Belge", "rue Test/80", "homme", "professeur",0.0f,"proffesseur@hotmail.com");
+        professeur = new Personne("lolo", "laura", birthDate, "Belge", "rue du royal/50", "homme", "professeur",0.0f,"prof@hotmail.com","a7555be7-6af7-4154-850d-ff71990dc924");
+        matiere = new Matiere("Mathématiques", datedbut, datefin, professeur, debutime, fintime, "A400", "lundi", "3 secondaire","");
+        professeurNotExist = new Personne("lolo", "laura", birthDate, "Belge", "rue Test/80", "homme", "professeur",0.0f,"proffesseur@hotmail.com","a7555be7-6af7-4154-850d-ff71990dc924");
     }
 
     @Test

@@ -94,7 +94,6 @@ public class InscriptionController {
             }
 
             if(inscription.getMinerval() >300){
-                logger.debug("Le minerval doit être <=300");
                 return ResponseEntity
                         .status(HttpStatus.BAD_REQUEST)
                         .body(Collections.singletonMap("erreur", "Le minerval doit être inférieur ou égal à 300"));
@@ -107,16 +106,13 @@ public class InscriptionController {
                 inscriptions.add(inscription);
                 personne.setInscriptions(inscriptions);
                 URI location = builder.path("/add/inscriptions/{id}").buildAndExpand(inscription.getId()).toUri();
-                logger.debug("Succès de l'ajout des données ");
                 emailService.sendRegistrationConfirmationEmail(personne.getMail(), deadline);
                 return ResponseEntity.created(location).body(inscription);
             } else {
-                logger.debug("La personne ou la matiere correspondante n'a pas été trouvée");
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
             }
 
         } else {
-            logger.debug("Échec mauvaise permission");
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
     }
