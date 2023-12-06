@@ -24,13 +24,13 @@ public class EmailService {
         mailSender.send(message);
     }
 
-    public void sendRegistrationConfirmationEmail(String to, LocalDate deadline) {
+    public void sendRegistrationConfirmationEmail(String to, LocalDate deadline, String section, String secondaire_anne) {
         String subject = "Confirmation d'Inscription à l'École";
         String content = String.format("Cher/Chère Étudiant,\n\n" +
-                        "Nous vous confirmons votre préinscription à notre école. " +
-                        "Veuillez noter que vous devez finaliser votre inscription en personne avant le %s à  Rue Ernest Laude 29 1030 Schaerbeek.\n\n" +
-                        "Cordialement,\n L'Équipe Administrative de l'École",
-                deadline.format(DateTimeFormatter.ofPattern("dd MMMM yyyy")));
+                        "Nous vous confirmons votre préinscription à notre école en Humanité %s pour l'année secondaire: %s. " +
+                        "Veuillez noter que vous devez finaliser votre inscription en personne avant le %s à Rue Ernest Laude 29 1030 Schaerbeek.\n\n" +
+                        "Cordialement,\nL'Équipe Administrative de l'École",
+                section, secondaire_anne, deadline.format(DateTimeFormatter.ofPattern("dd MMMM yyyy")));
 
         sendEmail(to, subject, content);
     }

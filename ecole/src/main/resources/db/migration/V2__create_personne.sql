@@ -20,5 +20,7 @@ ALTER TABLE personne
 
 INSERT INTO personne (id, prenom, nom, naissance, nationalite, adresse, sexe, moyenne, mail, auth0_id, statut)
 VALUES ('a7555be7-6af7-4154-850d-ff71990dc924', 'bilal', 'barbe', '1996-08-09', 'belge', 'rue de la pacification 44', 'homme', 0.0, 'bilal45001@hotmail.com', 'auth0|6491063c4a5f17311d5691fb', 'professeur');
+INSERT INTO personne (id, prenom, nom, naissance, nationalite, adresse, sexe, moyenne, mail, auth0_id, statut)
+VALUES ('a7555be7-6af7-4154-850d-ff71990dc923', 'Loic', 'Max', '1999-08-09', 'belge', 'rue avenu general derach', 'homme', 0.0, 'bilal45001@hotmail.com', 'auth0|649105eeb9a8a80a47e56923', 'etudiant');
 
 

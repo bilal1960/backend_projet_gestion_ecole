@@ -105,7 +105,7 @@ public class InscriptionController {
                 inscriptions.add(inscription);
                 personne.setInscriptions(inscriptions);
                 URI location = builder.path("/add/inscriptions/{id}").buildAndExpand(inscription.getId()).toUri();
-                emailService.sendRegistrationConfirmationEmail(personne.getMail(), deadline);
+                emailService.sendRegistrationConfirmationEmail(personne.getMail(),deadline,inscription.getSection(),inscription.getSecondaire_anne());
                 return ResponseEntity.created(location).body(inscription);
             } else {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
